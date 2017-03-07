@@ -94,6 +94,7 @@
     <None Include="res\Toolbar.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\audio.cpp">
@@ -129,7 +130,7 @@
     <ClCompile Include="Source\CBouncingBall.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
-    <ClCompile Include="Y:\oopcourse65\game4.10\Source\CEnemy.cpp">
+    <ClCompile Include="Source\CEnemy.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,7 +171,7 @@
     <ClInclude Include="Source\CBouncingBall.h">
       <Filter>MyGame</Filter>
     </ClInclude>
-    <ClInclude Include="Y:\oopcourse65\game4.10\Source\CEnemy.h">
+    <ClInclude Include="Source\CEnemy.h">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
