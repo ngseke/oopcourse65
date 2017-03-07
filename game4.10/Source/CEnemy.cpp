@@ -39,7 +39,7 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    bmp.LoadBitmap(IDB_MUSHROOM, RGB(0, 0, 0));			// 載入球的圖形
+    bmp.LoadBitmap(IDB_BALL, RGB(0, 0, 0));			// 載入球的圖形
     bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
 }
 
@@ -54,6 +54,7 @@ void CEnemy::OnMove() {
         //
         // 計算球向對於圓心的位移量dx, dy
         //
+        /*
         const int STEPS = 18;
         static const int DIFFX[] = { 35, 32, 26, 17, 6, -6, -17, -26, -32, -34, -32, -26, -17, -6, 6, 17, 26, 32, };
         static const int DIFFY[] = { 0, 11, 22, 30, 34, 34, 30, 22, 11, 0, -11, -22, -30, -34, -34, -30, -22, -11, };
@@ -64,6 +65,18 @@ void CEnemy::OnMove() {
 
         dx = DIFFX[index];
         dy = DIFFY[index];
+        */
+        const int STEPS = SIZE_Y / 10;
+        index++;
+
+        if (index >= STEPS)
+            index = 0;
+
+        // dx = index;
+        dy = index * 10;
+        //if (background.Top() > SIZE_Y)
+        //   background.SetTopLeft(60, -background.Height());
+        //background.SetTopLeft(background.Left(), background.Top() + 1);
     }
 }
 

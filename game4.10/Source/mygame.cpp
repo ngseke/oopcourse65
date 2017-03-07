@@ -183,10 +183,14 @@ void CGameStateOver::OnShow() {
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28) {
     ball = new CBall [NUMBALLS];
+    ///////
+    enemy = new CEnemy[1];
 }
 
 CGameStateRun::~CGameStateRun() {
     delete [] ball;
+    ////////
+    delete [] enemy;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -215,6 +219,10 @@ void CGameStateRun::OnBeginState() {
     CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
+    ///////
+    enemy[0].SetXY(100, 0);
+    enemy[0].SetDelay(10);
+    enemy[0].SetIsAlive(1);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -225,7 +233,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     // 移動背景圖的座標
     //
-    if (background.Top() > SIZE_Y)
+    if (background.Top() > SIZE_Y)  // 當資訊工程系掉落到底部後 回到上面
         background.SetTopLeft(60, -background.Height());
 
     background.SetTopLeft(background.Left(), background.Top() + 1);
@@ -237,6 +245,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (i = 0; i < NUMBALLS; i++)
         ball[i].OnMove();
 
+    ////////////
+    enemy[0].OnMove();
+    /////////////
     //
     // 移動擦子
     //
@@ -281,6 +292,9 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     for (i = 0; i < NUMBALLS; i++)
         ball[i].LoadBitmap();								// 載入第i個球的圖形
 
+    ////////
+    enemy[0].LoadBitmap();
+    ////////
     eraser.LoadBitmap();
     background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
@@ -378,6 +392,9 @@ void CGameStateRun::OnShow() {
     for (int i = 0; i < NUMBALLS; i++)
         ball[i].OnShow();				// 貼上第i號球
 
+    /////////
+    enemy[0].OnShow();
+    /////////
     bball.OnShow();						// 貼上彈跳的球
     eraser.OnShow();					// 貼上擦子
     //
