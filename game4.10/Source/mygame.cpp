@@ -293,7 +293,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));				// 載入說明的圖形
     corner.LoadBitmap(IDB_CORNER);							// 載入角落圖形
-    corner.ShowBitmap(background);							// 將corner貼到background
+    //corner.ShowBitmap(background);							// 將corner貼到background
     bball.LoadBitmap();										// 載入圖形
     hits_left.LoadBitmap();
     CAudio::Instance()->Load(AUDIO_DING,  "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
