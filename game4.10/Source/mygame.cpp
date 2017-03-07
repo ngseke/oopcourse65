@@ -184,7 +184,7 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28) {
     ball = new CBall [NUMBALLS];
     ///////
-    enemy = new CEnemy[1];
+    enemy = new CEnemy[10];
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -220,9 +220,13 @@ void CGameStateRun::OnBeginState() {
     CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
     ///////
-    enemy[0].SetXY(100, 0);
-    enemy[0].SetDelay(10);
-    enemy[0].SetIsAlive(1);
+	for (int i = 0; i < 10; i++) {
+		enemy[i].SetXY(100+50*i, 10);
+		enemy[i].SetDelay(10);
+		enemy[i].SetIsAlive(1);
+	}
+	
+
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -246,7 +250,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         ball[i].OnMove();
 
     ////////////
-    enemy[0].OnMove();
+	for(int i=0;i<10;i++)
+		enemy[i].OnMove();
     /////////////
     //
     // 移動擦子
@@ -293,7 +298,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
         ball[i].LoadBitmap();								// 載入第i個球的圖形
 
     ////////
-    enemy[0].LoadBitmap();
+	for(int i=0;i<10;i++)
+		enemy[i].LoadBitmap();
     ////////
     eraser.LoadBitmap();
     background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
@@ -393,7 +399,8 @@ void CGameStateRun::OnShow() {
         ball[i].OnShow();				// 貼上第i號球
 
     /////////
-    enemy[0].OnShow();
+	for(int i=0;i<10;i++)
+		enemy[i].OnShow();
     /////////
     bball.OnShow();						// 貼上彈跳的球
     eraser.OnShow();					// 貼上擦子
