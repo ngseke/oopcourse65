@@ -104,6 +104,9 @@ class CGameStateRun : public CGameState {
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
         CEnemy*			enemy;
+        CEnemy*			enemy1;
+
+        int counter = 0, maxCounter = 50, currEnemy = 0;  //不標準寫法!!!!之後改
 
 };
 

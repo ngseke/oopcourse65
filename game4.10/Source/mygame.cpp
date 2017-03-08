@@ -78,7 +78,7 @@ void CGameStateInit::OnInit() {
     // 開始載入資料
     //
     logo.LoadBitmap(IDB_BACKGROUND);
-    Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+    Sleep(0);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -185,12 +185,14 @@ CGameStateRun::CGameStateRun(CGame* g)
     ball = new CBall [NUMBALLS];
     ///////
     enemy = new CEnemy[10];
+    enemy1 = new CEnemy[20];
 }
 
 CGameStateRun::~CGameStateRun() {
     delete [] ball;
     ////////
     delete [] enemy;
+    //delete [] enemy1;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -219,14 +221,19 @@ void CGameStateRun::OnBeginState() {
     CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
-    ///////
-	for (int i = 0; i < 10; i++) {
-		enemy[i].SetXY(100+50*i, 10);
-		enemy[i].SetDelay(10);
-		enemy[i].SetIsAlive(1);
-	}
-	
 
+    /////// SET Eneny's 初始值
+    for (int i = 0; i < 10; i++) {
+        enemy[i].SetXY(i * 50, 0);
+        enemy[i].SetDelay(10);
+        enemy[i].SetIsAlive(1);
+    }
+
+    for (int i = 0; i < 20; i++) {
+        enemy1[i].SetXY(i * 50, 0);
+        enemy1[i].SetDelay(20);
+        enemy1[i].SetIsAlive(0);
+    }
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -250,8 +257,25 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         ball[i].OnMove();
 
     ////////////
-	for(int i=0;i<10;i++)
-		enemy[i].OnMove();
+    for (int i = 0; i < 10; i++)  // Let 10 Enemys move
+        enemy[i].OnMove();
+
+    ////////
+    counter--;
+
+    if (counter < 0 && currEnemy < 20) {
+        counter = maxCounter;
+        int randX = (rand() % SIZE_X) + 1;
+        enemy1[currEnemy].SetXY(randX, 0);
+        enemy1[currEnemy].SetDelay(10);
+        enemy1[currEnemy].SetIsAlive(1);
+        currEnemy++;
+    }
+
+    for (int i = 0; i < 20; i++)
+        enemy1[i].OnMove();
+
+    ///////////
     /////////////
     //
     // 移動擦子
@@ -298,8 +322,13 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
         ball[i].LoadBitmap();								// 載入第i個球的圖形
 
     ////////
-	for(int i=0;i<10;i++)
-		enemy[i].LoadBitmap();
+    for (int i = 0; i < 10; i++)
+        enemy[i].LoadBitmap();
+
+    ////////
+    for (int i = 0; i < 20; i++)
+        enemy1[i].LoadBitmap();
+
     ////////
     eraser.LoadBitmap();
     background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
@@ -307,7 +336,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     // 完成部分Loading動作，提高進度
     //
     ShowInitProgress(50);
-    Sleep(300); // 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+    Sleep(0); // 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 繼續載入其他資料
     //
@@ -323,7 +352,6 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
 }
-
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT  = 0x25; // keyboard左箭頭
     const char KEY_UP    = 0x26; // keyboard上箭頭
@@ -342,7 +370,6 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(true);
 }
-
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT  = 0x25; // keyboard左箭頭
     const char KEY_UP    = 0x26; // keyboard上箭頭
@@ -361,27 +388,21 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(false);
 }
-
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
     eraser.SetMovingLeft(true);
 }
-
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
     eraser.SetMovingLeft(false);
 }
-
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
     // 沒事。如果需要處理滑鼠移動的話，寫code在這裡
 }
-
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
     eraser.SetMovingRight(true);
 }
-
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
     eraser.SetMovingRight(false);
 }
-
 void CGameStateRun::OnShow() {
     //
     //  注意：Show裡面千萬不要移動任何物件的座標，移動座標的工作應由Move做才對，
@@ -395,12 +416,17 @@ void CGameStateRun::OnShow() {
     help.ShowBitmap();					// 貼上說明圖
     hits_left.ShowBitmap();
 
-    for (int i = 0; i < NUMBALLS; i++)
+    for (int i = 10000; i < NUMBALLS; i++)  // 暫時設定100000
         ball[i].OnShow();				// 貼上第i號球
 
     /////////
-	for(int i=0;i<10;i++)
-		enemy[i].OnShow();
+
+    for (int i = 10000; i < 10; i++) // 貼上所有Enemy
+        enemy[i].OnShow();
+
+    for (int i = 0; i < 20; i++)
+        enemy1[i].OnShow();
+
     /////////
     bball.OnShow();						// 貼上彈跳的球
     eraser.OnShow();					// 貼上擦子
