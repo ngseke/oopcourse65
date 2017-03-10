@@ -187,5 +187,20 @@
     <Image Include="res\mushroom.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="C:\Users\sean\Desktop\blue.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\blue1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\green.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\green1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\blue.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

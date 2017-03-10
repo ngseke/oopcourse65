@@ -97,7 +97,7 @@ void CEnemy::OnShow() {
     if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
-        bmp_center.SetTopLeft(x, y);
+        bmp_center.SetTopLeft(x + dx, y + dy);
         bmp_center.ShowBitmap();
     }
 }

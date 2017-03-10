@@ -326,7 +326,12 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="C:\Users\sean\Desktop\blue.bmp" />
     <Image Include="res\bitmap3.bmp" />
+    <Image Include="res\blue.bmp" />
+    <Image Include="res\blue1.bmp" />
+    <Image Include="res\green.bmp" />
+    <Image Include="res\green1.bmp" />
     <Image Include="res\mushroom.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

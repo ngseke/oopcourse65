@@ -37,6 +37,10 @@
 #define IDB_LOADING                     156
 #define IDB_BITMAP3                     157
 #define IDB_MUSHROOM                    157
+#define IDB_BITMAP4                     159
+#define IDB_GREEN                       160
+#define IDB_GREEN1                      161
+#define IDB_BLUE                        161
 #define IDC_README                      1001
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
@@ -49,7 +53,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        158
+#define _APS_NEXT_RESOURCE_VALUE        160
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

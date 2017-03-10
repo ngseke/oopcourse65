@@ -106,6 +106,10 @@ IDB_LOADING             BITMAP                  "..\\res\\loading.bmp"
 
 IDB_MUSHROOM            BITMAP                  "..\\res\\mushroom.bmp"
 
+IDB_GREEN               BITMAP                  "..\\res\\green.bmp"
+
+IDB_BLUE                BITMAP                  "..\\res\\blue.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

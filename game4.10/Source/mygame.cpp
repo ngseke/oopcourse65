@@ -184,6 +184,7 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28) {
     ball = new CBall [NUMBALLS];
     ///////
+    picX = picY = 0;
     enemy = new CEnemy[10];
     enemy1 = new CEnemy[20];
 }
@@ -192,7 +193,7 @@ CGameStateRun::~CGameStateRun() {
     delete [] ball;
     ////////
     delete [] enemy;
-    //delete [] enemy1;
+    delete [] enemy1;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -260,6 +261,18 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (int i = 0; i < 10; i++)  // Let 10 Enemys move
         enemy[i].OnMove();
 
+    //
+    if (picX <= SIZE_Y) {
+        picX += 5;
+        picY += 5;
+    }
+    else {
+        picX = picY = 0;
+    }
+
+    practice.SetTopLeft(picX, picY);
+    c_practice.OnMove();
+    //
     ////////
     counter--;
 
@@ -275,6 +288,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (int i = 0; i < 20; i++)
         enemy1[i].OnMove();
 
+    gamemap.OnMove();
     ///////////
     /////////////
     //
@@ -329,9 +343,12 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     for (int i = 0; i < 20; i++)
         enemy1[i].LoadBitmap();
 
+    practice.LoadBitmap("Bitmaps\\pink.bmp", RGB(255, 255, 255));
     ////////
     eraser.LoadBitmap();
+    gamemap.LoadBitmap();
     background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
+    c_practice.LoadBitmap();
     //
     // 完成部分Loading動作，提高進度
     //
@@ -369,6 +386,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(true);
+
+    /////////////
+    gamemap.OnKeyDown(nChar);
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT  = 0x25; // keyboard左箭頭
@@ -417,16 +437,19 @@ void CGameStateRun::OnShow() {
     hits_left.ShowBitmap();
 
     for (int i = 10000; i < NUMBALLS; i++)  // 暫時設定100000
-        ball[i].OnShow();				// 貼上第i號球
+        ball[i].OnShow();				// 貼上第i號球(香菇)
 
     /////////
 
-    for (int i = 10000; i < 10; i++) // 貼上所有Enemy
+    for (int i = 10; i < 10; i++) // 貼上所有Enemy
         enemy[i].OnShow();
 
     for (int i = 0; i < 20; i++)
         enemy1[i].OnShow();
 
+    gamemap.OnShow();
+    //practice.ShowBitmap();
+    //c_practice.OnShow();
     /////////
     bball.OnShow();						// 貼上彈跳的球
     eraser.OnShow();					// 貼上擦子
@@ -437,5 +460,106 @@ void CGameStateRun::OnShow() {
     corner.ShowBitmap();
     corner.SetTopLeft(SIZE_X - corner.Width(), SIZE_Y - corner.Height());
     corner.ShowBitmap();
+}
+
+
+///////////practice
+CPracitce::CPracitce() {
+    x = y = 0;
+}
+void CPracitce::LoadBitmap() {
+    pic.LoadBitmap("Bitmaps/shake.bmp");
+}
+
+void CPracitce::OnMove() {
+    if (y <= SIZE_Y) {
+        x += 3;
+        y += 3;
+    }
+    else {
+        x = y = 0;
+    }
+}
+void CPracitce::OnShow() {
+    pic.SetTopLeft(x, y);
+    pic.ShowBitmap();
+}
+
+CGameMap::CGameMap() : X(20), Y(40), MW(120), MH(100) {
+    int map_init[4][5] = { {0, 0, 1, 0, 0},
+        {0, 1, 2, 1, 0},
+        {1, 2, 1, 2, 1},
+        {2, 1, 2, 1, 2}
+    };
+
+    for (int i = 0; i < 4 ; i++)
+        for (int j = 0; j < 5; j++)
+            map[i][j] = map_init[i][j];
+
+    random_num = 0;
+    bballs = NULL;
+}
+void CGameMap::LoadBitmap() {
+    blue.LoadBitmap(IDB_BLUE);
+    green.LoadBitmap(IDB_GREEN);
+}
+void CGameMap::OnShow() {
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 4; j++) {
+            switch (map[j][i]) {
+                case 0:
+                    break;
+
+                case 1:
+                    blue.SetTopLeft(X + (MW * i), Y + (MH * j));
+                    blue.ShowBitmap();
+                    break;
+
+                case 2:
+                    green.SetTopLeft(X + (MW * i), Y + (MH * j));
+                    green.ShowBitmap();
+                    break;
+
+                default:
+                    ASSERT(0);
+            }
+        }
+
+    for (int i = 0; i < random_num; i++) bballs[i].OnShow();
+}
+void CGameMap::InitializeBouncingBall(int ini_index, int row, int col) {
+    const int VELOCITY = 10;
+    const int BALL_PIC_HEIGHT = 15;
+    int floor = Y + (row + 1) * MH - BALL_PIC_HEIGHT;
+    bballs[ini_index].LoadBitmap();
+    bballs[ini_index].SetFloor(floor);
+    bballs[ini_index].SetVelocity(VELOCITY + col);
+    bballs[ini_index].SetXY(X + col * MW + MW / 2, floor);
+}
+void CGameMap::RandomBouncingBall() {
+    const int MAX_RAND_NUM = 10;
+    random_num = (rand() % MAX_RAND_NUM) + 1;
+    delete[]bballs;
+    bballs = new CBouncingBall[random_num];
+    int ini_index = 0;
+
+    for (int row = 0; row < 4; row++)
+        for (int col = 0; col < 5; col++) {
+            if (map[row][col] != 0 && ini_index < random_num) {
+                InitializeBouncingBall(ini_index, row, col);
+                ini_index++;
+            }
+        }
+}
+void CGameMap::OnKeyDown(UINT nChar) {
+    const int KEY_SPACE = 0x20;
+
+    if (nChar == KEY_SPACE)RandomBouncingBall();
+}
+void CGameMap::OnMove() {
+    for (int i = 0; i < random_num; i++)bballs[i].OnMove();
+}
+CGameMap:: ~CGameMap() {
+    delete[] bballs;
 }
 }
