@@ -15,6 +15,9 @@ namespace game_framework {
 CEnemy::CEnemy() {
     is_alive = true;
     x = y = dx = dy = index = delay_counter = 0;
+    vocab = "vocabulary"; // 暫時給vocab一個單字
+    length = vocab.GetLength();
+    TRACE("\nvocab length: %d\n", length);  //輸出字數
 }
 
 bool CEnemy::HitEraser(CEraser* eraser) {
@@ -66,7 +69,7 @@ void CEnemy::OnMove() {
         dx = DIFFX[index];
         dy = DIFFY[index];
         */
-        const int STEPS = SIZE_Y / 10;
+        const int STEPS = SIZE_Y / 20;
         index++;
 
         if (index >= STEPS)
@@ -99,6 +102,17 @@ void CEnemy::OnShow() {
         bmp.ShowBitmap();
         bmp_center.SetTopLeft(x + dx, y + dy);
         bmp_center.ShowBitmap();
+        /////////
+        //////////// Display FONT
+        CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
+        CFont f, *fp;
+        f.CreatePointFont(160, "Arial");	// 產生 font f; 160表示16 point的字
+        fp = pDC->SelectObject(&f);					// 選用 font f
+        pDC->SetBkColor(RGB(0, 0, 0));
+        pDC->SetTextColor(RGB(255, 255, 0));
+        pDC->TextOut(x + dx + 10, y + dy + 10, vocab); //顯示vocab
+        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
     }
 }
 }

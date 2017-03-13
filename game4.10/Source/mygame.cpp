@@ -78,6 +78,7 @@ void CGameStateInit::OnInit() {
     // 開始載入資料
     //
     logo.LoadBitmap(IDB_BACKGROUND);
+    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 0, 0));
     Sleep(0);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
@@ -107,17 +108,18 @@ void CGameStateInit::OnShow() {
     //
     logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
     logo.ShowBitmap();
+    typing_logo.SetTopLeft(120, 180);
+    typing_logo.ShowBitmap();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
-    f.CreatePointFont(160, "Times New Roman");	// 產生 font f; 160表示16 point的字
+    f.CreatePointFont(160, "Arial");	// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
     pDC->SetBkColor(RGB(0, 0, 0));
-    pDC->SetTextColor(RGB(255, 255, 0));
-    pDC->TextOut(120, 220, "Please click mouse or press SPACE to begin.");
-    pDC->TextOut(5, 395, "Press Ctrl-F to switch in between window mode and full screen mode.");
+    pDC->SetTextColor(RGB(41, 171, 226 ));
+    pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
 
     if (ENABLE_GAME_PAUSE)
         pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
@@ -185,14 +187,12 @@ CGameStateRun::CGameStateRun(CGame* g)
     ball = new CBall [NUMBALLS];
     ///////
     picX = picY = 0;
-    enemy = new CEnemy[10];
     enemy1 = new CEnemy[20];
 }
 
 CGameStateRun::~CGameStateRun() {
     delete [] ball;
     ////////
-    delete [] enemy;
     delete [] enemy1;
 }
 
@@ -224,15 +224,10 @@ void CGameStateRun::OnBeginState() {
     CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
 
     /////// SET Eneny's 初始值
-    for (int i = 0; i < 10; i++) {
-        enemy[i].SetXY(i * 50, 0);
-        enemy[i].SetDelay(10);
-        enemy[i].SetIsAlive(1);
-    }
 
     for (int i = 0; i < 20; i++) {
         enemy1[i].SetXY(i * 50, 0);
-        enemy1[i].SetDelay(20);
+        enemy1[i].SetDelay(10);
         enemy1[i].SetIsAlive(0);
     }
 }
@@ -258,10 +253,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         ball[i].OnMove();
 
     ////////////
-    for (int i = 0; i < 10; i++)  // Let 10 Enemys move
-        enemy[i].OnMove();
 
-    //
     if (picX <= SIZE_Y) {
         picX += 5;
         picY += 5;
@@ -270,9 +262,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         picX = picY = 0;
     }
 
-    practice.SetTopLeft(picX, picY);
     c_practice.OnMove();
-    //
     ////////
     counter--;
 
@@ -280,7 +270,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         counter = maxCounter;
         int randX = (rand() % SIZE_X) + 1;
         enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(10);
+        enemy1[currEnemy].SetDelay(20);
         enemy1[currEnemy].SetIsAlive(1);
         currEnemy++;
     }
@@ -336,14 +326,9 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
         ball[i].LoadBitmap();								// 載入第i個球的圖形
 
     ////////
-    for (int i = 0; i < 10; i++)
-        enemy[i].LoadBitmap();
-
-    ////////
     for (int i = 0; i < 20; i++)
         enemy1[i].LoadBitmap();
 
-    practice.LoadBitmap("Bitmaps\\pink.bmp", RGB(255, 255, 255));
     ////////
     eraser.LoadBitmap();
     gamemap.LoadBitmap();
@@ -441,13 +426,10 @@ void CGameStateRun::OnShow() {
 
     /////////
 
-    for (int i = 10; i < 10; i++) // 貼上所有Enemy
-        enemy[i].OnShow();
-
     for (int i = 0; i < 20; i++)
         enemy1[i].OnShow();
 
-    gamemap.OnShow();
+    //gamemap.OnShow();
     //practice.ShowBitmap();
     //c_practice.OnShow();
     /////////

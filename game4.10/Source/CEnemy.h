@@ -24,6 +24,10 @@ class CEnemy {
         int delay_counter;			// 調整旋轉速度的計數器
         int delay;					// 旋轉的速度
         bool is_alive;				// 是否活著
+        ////////////
+        CString vocab;				// 儲存單字
+        int length;					// 單字總長度
+
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 };
