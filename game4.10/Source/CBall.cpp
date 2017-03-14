@@ -39,7 +39,7 @@ bool CBall::IsAlive() {
 }
 
 void CBall::LoadBitmap() {
-    bmp.LoadBitmap(IDB_MUSHROOM, RGB(0, 0, 0));			// 載入球的圖形
+    bmp.LoadBitmap(IDB_MUSHROOM, RGB(255, 255, 255));			// 載入球的圖形
     bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
 }
 

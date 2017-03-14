@@ -27,6 +27,7 @@ class CEnemy {
         ////////////
         CString vocab;				// 儲存單字
         int length;					// 單字總長度
+        int xMoveDistance;			// 怪物X位移的總距離
 
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形

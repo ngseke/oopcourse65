@@ -139,8 +139,7 @@ class CGameStateRun : public CGameState {
         CInteger		hits_left;	// 剩下的撞擊數
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
-        CPracitce c_practice;
-        CMovingBitmap	practice;
+
         CGameMap gamemap;
         int				picX, picY;
         CEnemy*			enemy;

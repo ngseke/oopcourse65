@@ -108,7 +108,7 @@ void CGameStateInit::OnShow() {
     //
     logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
     logo.ShowBitmap();
-    typing_logo.SetTopLeft(120, 180);
+    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 180);
     typing_logo.ShowBitmap();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
@@ -118,7 +118,7 @@ void CGameStateInit::OnShow() {
     f.CreatePointFont(160, "Arial");	// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
     pDC->SetBkColor(RGB(0, 0, 0));
-    pDC->SetTextColor(RGB(41, 171, 226 ));
+    pDC->SetTextColor(RGB(41, 171, 226));
     pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
 
     if (ENABLE_GAME_PAUSE)
@@ -172,7 +172,7 @@ void CGameStateOver::OnShow() {
     pDC->SetBkColor(RGB(0, 0, 0));
     pDC->SetTextColor(RGB(255, 255, 0));
     char str[80];								// Demo 數字對字串的轉換
-    sprintf(str, "Game Over ! (%d)", counter / 30);
+    sprintf(str, "你 死 了 ! (%d)", counter / 30);
     pDC->TextOut(240, 210, str);
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
@@ -264,7 +264,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         picX = picY = 0;
     }
 
-    c_practice.OnMove();
     ////////
     counter--;
 
@@ -272,7 +271,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         counter = maxCounter;
         int randX = (rand() % (SIZE_X - 50)) + 1;
         enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(10);
+        enemy1[currEnemy].SetDelay(1);
         enemy1[currEnemy].SetIsAlive(1);
         currEnemy++;
     }
@@ -281,7 +280,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemy1[i].OnMove();
 
     gamemap.OnMove();
-    ///////////
     /////////////
     //
     // 移動擦子
@@ -335,7 +333,6 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     eraser.LoadBitmap();
     gamemap.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
-    c_practice.LoadBitmap();
     //
     // 完成部分Loading動作，提高進度
     //
@@ -423,7 +420,7 @@ void CGameStateRun::OnShow() {
     help.ShowBitmap();					// 貼上說明圖
     hits_left.ShowBitmap();
 
-    for (int i = 10000; i < NUMBALLS; i++)  // 暫時設定100000
+    for (int i = 0; i < NUMBALLS; i++) // 暫時設定100000
         ball[i].OnShow();				// 貼上第i號球(香菇)
 
     /////////
@@ -432,8 +429,6 @@ void CGameStateRun::OnShow() {
         enemy1[i].OnShow();
 
     //gamemap.OnShow();
-    //practice.ShowBitmap();
-    //c_practice.OnShow();
     /////////
     bball.OnShow();						// 貼上彈跳的球
     eraser.OnShow();					// 貼上擦子
@@ -447,27 +442,6 @@ void CGameStateRun::OnShow() {
 }
 
 
-///////////practice
-CPracitce::CPracitce() {
-    x = y = 0;
-}
-void CPracitce::LoadBitmap() {
-    pic.LoadBitmap("Bitmaps/shake.bmp");
-}
-
-void CPracitce::OnMove() {
-    if (y <= SIZE_Y) {
-        x += 3;
-        y += 3;
-    }
-    else {
-        x = y = 0;
-    }
-}
-void CPracitce::OnShow() {
-    pic.SetTopLeft(x, y);
-    pic.ShowBitmap();
-}
 
 CGameMap::CGameMap() : X(20), Y(40), MW(120), MH(100) {
     int map_init[4][5] = { {0, 0, 1, 0, 0},

@@ -51,6 +51,7 @@ void CEnemy::OnMove() {
         return;
 
     delay_counter--;
+    xMoveDistance = x - (SIZE_X / 2);
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -75,7 +76,7 @@ void CEnemy::OnMove() {
         if (index >= STEPS)
             index = 0;
 
-        // dx = index;
+        dx = - xMoveDistance / STEPS * index;
         dy = index * 10;   // index(0~STEPS) * ²¾°Ê®æ¼Æ
         //if (background.Top() > SIZE_Y)
         //   background.SetTopLeft(60, -background.Height());
