@@ -215,13 +215,13 @@ void CGameStateRun::OnBeginState() {
     }
 
     eraser.Initialize();
-    background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
+    //background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
     hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
     hits_left.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);		// 指定剩下撞擊數的座標
     CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
-    CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
+    //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
 
     /////// SET Eneny's 初始值
 
@@ -240,10 +240,12 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     // 移動背景圖的座標
     //
+    /*
     if (background.Top() > SIZE_Y)  // 當資訊工程系掉落到底部後 回到上面
         background.SetTopLeft(60, -background.Height());
 
     background.SetTopLeft(background.Left(), background.Top() + 1);
+    */
     //
     // 移動球
     //
@@ -268,9 +270,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     if (counter < 0 && currEnemy < 20) {
         counter = maxCounter;
-        int randX = (rand() % SIZE_X) + 1;
+        int randX = (rand() % (SIZE_X - 50)) + 1;
         enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(20);
+        enemy1[currEnemy].SetDelay(10);
         enemy1[currEnemy].SetIsAlive(1);
         currEnemy++;
     }
@@ -332,7 +334,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     ////////
     eraser.LoadBitmap();
     gamemap.LoadBitmap();
-    background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
+    //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     c_practice.LoadBitmap();
     //
     // 完成部分Loading動作，提高進度
@@ -417,7 +419,7 @@ void CGameStateRun::OnShow() {
     //
     //  貼上背景圖、撞擊數、球、擦子、彈跳的球
     //
-    background.ShowBitmap();			// 貼上背景圖
+    //background.ShowBitmap();			// 貼上背景圖
     help.ShowBitmap();					// 貼上說明圖
     hits_left.ShowBitmap();
 

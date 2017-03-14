@@ -42,8 +42,8 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    bmp.LoadBitmap(IDB_BALL, RGB(0, 0, 0));			// 載入球的圖形
-    bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
+    bmp.LoadBitmap("Bitmaps/face1.bmp", RGB(128, 128, 128));			// 載入球的圖形
+    // bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
 }
 
 void CEnemy::OnMove() {
@@ -69,14 +69,14 @@ void CEnemy::OnMove() {
         dx = DIFFX[index];
         dy = DIFFY[index];
         */
-        const int STEPS = SIZE_Y / 20;
+        const int STEPS = SIZE_Y / 10 ;
         index++;
 
         if (index >= STEPS)
             index = 0;
 
         // dx = index;
-        dy = index * 10;
+        dy = index * 10;   // index(0~STEPS) * 移動格數
         //if (background.Top() > SIZE_Y)
         //   background.SetTopLeft(60, -background.Height());
         //background.SetTopLeft(background.Left(), background.Top() + 1);
@@ -100,17 +100,17 @@ void CEnemy::OnShow() {
     if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
-        bmp_center.SetTopLeft(x + dx, y + dy);
-        bmp_center.ShowBitmap();
+        //bmp_center.SetTopLeft(x + dx, y + dy);
+        //bmp_center.ShowBitmap();
         /////////
         //////////// Display FONT
         CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
         CFont f, *fp;
-        f.CreatePointFont(160, "Arial");	// 產生 font f; 160表示16 point的字
+        f.CreatePointFont(120, "Arial");	// 產生 font f; 160表示16 point的字
         fp = pDC->SelectObject(&f);					// 選用 font f
         pDC->SetBkColor(RGB(0, 0, 0));
-        pDC->SetTextColor(RGB(255, 255, 0));
-        pDC->TextOut(x + dx + 10, y + dy + 10, vocab); //顯示vocab
+        pDC->SetTextColor(RGB(255, 255, 255));
+        pDC->TextOut(x + dx + 40, y + dy + 5, vocab); //顯示vocab
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
     }
