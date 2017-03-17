@@ -133,7 +133,7 @@
     <ClCompile Include="Source\CEnemy.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CDict .cpp">
+    <ClCompile Include="Source\CDict.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
   </ItemGroup>
