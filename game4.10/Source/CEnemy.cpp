@@ -6,6 +6,8 @@
 #include "gamelib.h"
 #include "CEraser.h"
 #include "CEnemy.h"
+#include "CDict.h"
+#
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -15,9 +17,8 @@ namespace game_framework {
 CEnemy::CEnemy() {
     is_alive = true;
     x = y = dx = dy = index = delay_counter = 0;
-    vocab = "vocabulary"; // 暫時給vocab一個單字
-    length = vocab.GetLength();
     TRACE("\nvocab length: %d\n", length);  //輸出字數
+    SetVocab();
 }
 
 bool CEnemy::HitEraser(CEraser* eraser) {
@@ -107,13 +108,27 @@ void CEnemy::OnShow() {
         //////////// Display FONT
         CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
         CFont f, *fp;
-        f.CreatePointFont(120, "Arial");	// 產生 font f; 160表示16 point的字
+        f.CreatePointFont(120, "Arial");	// 產生 font f;
         fp = pDC->SelectObject(&f);					// 選用 font f
         pDC->SetBkColor(RGB(0, 0, 0));
         pDC->SetTextColor(RGB(255, 255, 255));
-        pDC->TextOut(x + dx + 40, y + dy + 5, vocab); //顯示vocab
+        pDC->TextOut(x + dx + 40, y + dy + 5, vocab.c_str()); // 顯示vocab  ( 轉換: vocab.c_str() )
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
     }
 }
+////////////
+string CEnemy::GetVocab() {  //回傳整組單字(ex: "apple")
+    return vocab;
+}
+char CEnemy::GetFirstWord() { //以char回傳遞一個字 (ex: 'a')
+    return vocab[0];
+}
+void  CEnemy::SetVocab() {
+    CDict* dict = new CDict;
+    vocab = dict->GetText();// 暫時給vocab一個單字
+    length = vocab.length();
+    free(dict);
+}
+
 }

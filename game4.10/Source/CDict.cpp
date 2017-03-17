@@ -12,18 +12,21 @@
 #include <vector>
 namespace game_framework {
 
-	void CDict::GetText() {
-		fstream file;
-		file.open("text.txt", ios::in);
-		string text;
-		vector<string> temp;
-		if (!file) {}
-		else {
-			while (file >> text) {
-				temp.push_back(text);
-			}
-		}
-	}
+CDict::CDict() {
+    fstream file;
+    file.open("Source/text.txt", ios::in); //讀取字典檔
 
+    if (!file) {}
+    else {
+        while (file >> temp) {
+            dictionary.push_back(temp);  //將字典檔讀入
+        }
+    }
 
+    file.close();
+}
+string CDict::GetText() { //每次GetText()時 都隨機return一個單字
+    int rnd = rand() % dictionary.size();  //rnd 從 1~字典字數 隨機抓數字
+    return dictionary[rnd];
+}
 }

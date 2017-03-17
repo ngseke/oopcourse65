@@ -15,6 +15,10 @@ class CEnemy {
         void SetXY(int nx, int ny);								// 設定圓心的座標
         void SetIsAlive(bool alive);							// 設定是否活著
         void SetDelay(int d);									// 設定旋轉的速度
+        void SetVocab();
+        string GetVocab();
+        char GetFirstWord();
+
     protected:
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
@@ -25,7 +29,7 @@ class CEnemy {
         int delay;					// 旋轉的速度
         bool is_alive;				// 是否活著
         ////////////
-        CString vocab;				// 儲存單字
+        string vocab;				// 儲存單字
         int length;					// 單字總長度
         int xMoveDistance;			// 怪物X位移的總距離
 

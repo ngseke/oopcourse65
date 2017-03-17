@@ -269,9 +269,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     if (counter < 0 && currEnemy < 20) {
         counter = maxCounter;
-        int randX = (rand() % (SIZE_X - 50)) + 1;
+        int randX = (rand() % (SIZE_X )) + 1;
         enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(1);
+        enemy1[currEnemy].SetDelay(1 + rand() % 10);
         enemy1[currEnemy].SetIsAlive(1);
         currEnemy++;
     }
@@ -359,6 +359,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN  = 0x28; // keyboard下箭頭
 
+    // for (i = 0; i < changshangMX; i++)
+    // if (nChar == enemy[i].GetFirstWord)
     if (nChar == KEY_LEFT)
         eraser.SetMovingLeft(true);
 

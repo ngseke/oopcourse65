@@ -1,12 +1,11 @@
 namespace game_framework {
 
-	class CDict
-	{
-	public:
-		void GetText();
-
-	private:
-		CString text;
-		vector<CString> temp;
-	};
+class CDict {
+    public:
+        CDict();
+        string GetText();
+    private:
+        string temp;
+        vector<string> dictionary;
+};
 }
