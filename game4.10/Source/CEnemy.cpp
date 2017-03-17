@@ -45,7 +45,7 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    bmp.LoadBitmap("Bitmaps/face1.bmp", RGB(128, 128, 128));			// 載入球的圖形
+    bmp.LoadBitmap("Bitmaps/shake.bmp", RGB(0, 255, 0));			// 載入球的圖形
     // bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
 }
 
@@ -120,17 +120,25 @@ void CEnemy::OnShow() {
     }
 }
 ////////////
-string CEnemy::GetVocab() {  //回傳整組單字(ex: "apple")
-    return vocab;
-}
-char CEnemy::GetFirstWord() { //以char回傳遞一個字 (ex: 'a')
-    return vocab[0];
-}
-void  CEnemy::SetVocab() {
+void  CEnemy::SetVocab() {  //隨機從dict中抓取一個單字到vocab裡面
     CDict* dict = new CDict;
     vocab = dict->GetText();// 給vocab一個單字
     length = vocab.length();
-    free(dict);
+    free(dict); // 釋放掉dict記憶體
+}
+
+string CEnemy::GetVocab() {  //回傳整組單字(ex: "apple")
+    return vocab;
+}
+char CEnemy::GetFirstWord() { //以char回傳一個字 (ex: 'a')
+    return vocab[0];
+}
+
+void CEnemy::AddCurrWord() {
+    currWord++;
+}
+int CEnemy::GetCurrWord() {
+    return currWord;
 }
 
 }

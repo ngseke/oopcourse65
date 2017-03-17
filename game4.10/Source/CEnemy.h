@@ -17,9 +17,11 @@ class CEnemy {
         void SetDelay(int d);									// 設定旋轉的速度
         /////////////
 
-        void SetVocab();
-        string GetVocab();
-        char GetFirstWord();
+        void SetVocab();										//隨機從dict中抓取一個單字到vocab裡面
+        string GetVocab();										//回傳整組單字(ex: "apple")
+        char GetFirstWord();									//以char回傳一個字 (ex: 'a')
+        void AddCurrWord();										//CurrWord++
+        int GetCurrWord();										//回傳int型態的CurrWord
 
     protected:
         CMovingBitmap bmp;			// 球的圖
