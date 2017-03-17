@@ -17,6 +17,8 @@ namespace game_framework {
 CEnemy::CEnemy() {
     is_alive = true;
     x = y = dx = dy = index = delay_counter = 0;
+    currWord = 0;  // 當前的游標在0 還未輸入的意思 (ex: ""apple)
+    //若currWord = 1 (ex: "a"pple)
     TRACE("\nvocab length: %d\n", length);  //輸出字數
     SetVocab();
 }
@@ -126,7 +128,7 @@ char CEnemy::GetFirstWord() { //以char回傳遞一個字 (ex: 'a')
 }
 void  CEnemy::SetVocab() {
     CDict* dict = new CDict;
-    vocab = dict->GetText();// 暫時給vocab一個單字
+    vocab = dict->GetText();// 給vocab一個單字
     length = vocab.length();
     free(dict);
 }

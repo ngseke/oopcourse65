@@ -15,6 +15,8 @@ class CEnemy {
         void SetXY(int nx, int ny);								// 設定圓心的座標
         void SetIsAlive(bool alive);							// 設定是否活著
         void SetDelay(int d);									// 設定旋轉的速度
+        /////////////
+
         void SetVocab();
         string GetVocab();
         char GetFirstWord();
@@ -31,7 +33,9 @@ class CEnemy {
         ////////////
         string vocab;				// 儲存單字
         int length;					// 單字總長度
+        int currWord;				// 當前輸入文字的字元
         int xMoveDistance;			// 怪物X位移的總距離
+
 
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
