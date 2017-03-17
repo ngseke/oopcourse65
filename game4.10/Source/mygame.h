@@ -146,6 +146,8 @@ class CGameStateRun : public CGameState {
         CEnemy*			enemy1;
 
         int counter = 50, maxCounter = 50, currEnemy = 0; //不標準寫法!!!!之後改
+		bool luck=false; //判斷是否鎖住第一個字母了
+
 
 };
 

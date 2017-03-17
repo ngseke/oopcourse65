@@ -20,8 +20,9 @@ class CEnemy {
         void SetVocab();										//隨機從dict中抓取一個單字到vocab裡面
         string GetVocab();										//回傳整組單字(ex: "apple")
         char GetFirstWord();									//以char回傳一個字 (ex: 'a')
-        void AddCurrWord();										//CurrWord++
-        int GetCurrWord();										//回傳int型態的CurrWord
+        void AddCurrWordLeng();										//CurrWord++
+        int GetCurrWordLeng();										//回傳int型態的CurrWord
+		int GetVocabLeng();
 
     protected:
         CMovingBitmap bmp;			// 球的圖
@@ -35,7 +36,7 @@ class CEnemy {
         ////////////
         string vocab;				// 儲存單字
         int length;					// 單字總長度
-        int currWord;				// 當前輸入文字的字元
+        int currWordLeng;				// 當前輸入文字的字元
         int xMoveDistance;			// 怪物X位移的總距離
 
 

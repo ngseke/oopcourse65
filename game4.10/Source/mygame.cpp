@@ -359,8 +359,33 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN  = 0x28; // keyboard下箭頭
 
-    // for (i = 0; i < changshangMX; i++)
-    // if (nChar == enemy[i].GetFirstWord)
+	for (int i = 0; i < currEnemy; i++) {					//跑目前關卡怪物的數量
+		if (enemy[i].IsAlive() == true) {					//回傳當前怪物是否存在
+			if (luck == false) {							//尚未鎖定了
+				if (nChar == enemy[i].GetFirstWord()) {		//若等於第一個字母:鎖住 and 目前字元位置+1
+					luck = true;							
+					enemy[i].AddCurrWordLeng();				
+				}
+			}
+			else {											//若已鎖定
+				if (nChar == enemy[i].GetVocab()[enemy[i].GetCurrWordLeng()-1]) {	//若等於當前字母
+
+					enemy[i].AddCurrWordLeng();
+
+					if (enemy[i].GetCurrWordLeng() == enemy[i].GetVocabLeng() + 1) {//若當前長度 等於 字母的長度
+						enemy[i].SetIsAlive(false);
+						luck = false;
+					}
+				}
+			}
+		}
+		else {
+			continue;
+		}
+
+
+	}
+
     if (nChar == KEY_LEFT)
         eraser.SetMovingLeft(true);
 
