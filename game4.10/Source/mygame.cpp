@@ -77,9 +77,8 @@ void CGameStateInit::OnInit() {
     //
     // 開始載入資料
     //
-    logo.LoadBitmap(IDB_BACKGROUND);
-    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 0, 0));
-    Sleep(0);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+    //logo.LoadBitmap(IDB_BACKGROUND);
+    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(128, 128, 128));
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -106,9 +105,9 @@ void CGameStateInit::OnShow() {
     //
     // 貼上logo
     //
-    logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
-    logo.ShowBitmap();
-    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 180);
+    //logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
+    //logo.ShowBitmap();
+    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 40);
     typing_logo.ShowBitmap();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
@@ -184,16 +183,16 @@ void CGameStateOver::OnShow() {
 
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28) {
-    ball = new CBall [NUMBALLS];
+    ball = new CBall[NUMBALLS];
     ///////
     picX = picY = 0;
     enemy1 = new CEnemy[20];
 }
 
 CGameStateRun::~CGameStateRun() {
-    delete [] ball;
+    delete[] ball;
     ////////
-    delete [] enemy1;
+    delete[] enemy1;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -217,8 +216,8 @@ void CGameStateRun::OnBeginState() {
     eraser.Initialize();
     //background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
-    hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
-    hits_left.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);		// 指定剩下撞擊數的座標
+    //hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
+    //hits_left.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);		// 指定剩下撞擊數的座標
     CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
@@ -228,8 +227,11 @@ void CGameStateRun::OnBeginState() {
     for (int i = 0; i < 20; i++) {
         enemy1[i].SetXY(i * 50, 0);
         enemy1[i].SetDelay(10);
-        enemy1[i].SetIsAlive(0);
+        enemy1[i].SetIsAlive(false);
     }
+
+    score.SetInteger(0); //設定SCORE為0;
+    score.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -242,7 +244,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     /*
     if (background.Top() > SIZE_Y)  // 當資訊工程系掉落到底部後 回到上面
-        background.SetTopLeft(60, -background.Height());
+    	background.SetTopLeft(60, -background.Height());
 
     background.SetTopLeft(background.Left(), background.Top() + 1);
     */
@@ -269,17 +271,16 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     if (counter < 0 && currEnemy < 20) {
         counter = maxCounter;
-        int randX = (rand() % (SIZE_X )) + 1;
+        int randX = (rand() % (SIZE_X)) + 1;
         enemy1[currEnemy].SetXY(randX, 0);
         enemy1[currEnemy].SetDelay(1 + rand() % 10);
-        enemy1[currEnemy].SetIsAlive(1);
+        enemy1[currEnemy].SetIsAlive(true);
         currEnemy++;
     }
 
     for (int i = 0; i < 20; i++)
         enemy1[i].OnMove();
 
-    gamemap.OnMove();
     /////////////
     //
     // 移動擦子
@@ -320,9 +321,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     // 開始載入資料
     //
-    int i;
 
-    for (i = 0; i < NUMBALLS; i++)
+    for (int i = 0; i < NUMBALLS; i++)
         ball[i].LoadBitmap();								// 載入第i個球的圖形
 
     ////////
@@ -331,7 +331,6 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
 
     ////////
     eraser.LoadBitmap();
-    gamemap.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
     // 完成部分Loading動作，提高進度
@@ -345,46 +344,46 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     corner.LoadBitmap(IDB_CORNER);							// 載入角落圖形
     //corner.ShowBitmap(background);							// 將corner貼到background
     bball.LoadBitmap();										// 載入圖形
-    hits_left.LoadBitmap();
-    CAudio::Instance()->Load(AUDIO_DING,  "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
-    CAudio::Instance()->Load(AUDIO_LAKE,  "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
-    CAudio::Instance()->Load(AUDIO_NTUT,  "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
+    //hits_left.LoadBitmap();
+    score.LoadBitmap();
+    CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
+    CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
+    CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
 }
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    const char KEY_LEFT  = 0x25; // keyboard左箭頭
-    const char KEY_UP    = 0x26; // keyboard上箭頭
+    const char KEY_LEFT = 0x25; // keyboard左箭頭
+    const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
-    const char KEY_DOWN  = 0x28; // keyboard下箭頭
+    const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-	for (int i = 0; i < currEnemy; i++) {					//跑目前關卡怪物的數量
-		if (enemy[i].IsAlive() == true) {					//回傳當前怪物是否存在
-			if (luck == false) {							//尚未鎖定了
-				if (nChar == enemy[i].GetFirstWord()) {		//若等於第一個字母:鎖住 and 目前字元位置+1
-					luck = true;							
-					enemy[i].AddCurrWordLeng();				
-				}
-			}
-			else {											//若已鎖定
-				if (nChar == enemy[i].GetVocab()[enemy[i].GetCurrWordLeng()-1]) {	//若等於當前字母
+    for (int i = 0; i < 20; i++) {					//跑目前關卡怪物的數量
+        if (enemy1[i].IsAlive()) {					//回傳當前怪物是否存在
+            if (luck == false) {							//尚未鎖定了
+                if (nChar + 32 == enemy1[i].GetFirstWord()) {		//若等於第一個字母:鎖住 and 目前字元位置+1
+                    luck = true;
+                    targetEnemy = &enemy1[i];      // targetEnemy為指標->正在攻擊的敵人
+                    targetEnemy->AddCurrWordLeng();
+                }
+            }
+            else {											//若已鎖定
+                if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	//若等於當前字母
+                    targetEnemy->AddCurrWordLeng();
 
-					enemy[i].AddCurrWordLeng();
-
-					if (enemy[i].GetCurrWordLeng() == enemy[i].GetVocabLeng() + 1) {//若當前長度 等於 字母的長度
-						enemy[i].SetIsAlive(false);
-						luck = false;
-					}
-				}
-			}
-		}
-		else {
-			continue;
-		}
-
-
-	}
+                    if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) { //若當前長度 等於 字母的長度
+                        targetEnemy->SetIsAlive(false);// 成功殺害怪物
+                        luck = false;
+                        score.Add(targetEnemy->GetCurrWordLeng());
+                    }
+                }
+            }
+        }
+        else {
+            continue;
+        }
+    }
 
     if (nChar == KEY_LEFT)
         eraser.SetMovingLeft(true);
@@ -399,13 +398,12 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
         eraser.SetMovingDown(true);
 
     /////////////
-    gamemap.OnKeyDown(nChar);
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    const char KEY_LEFT  = 0x25; // keyboard左箭頭
-    const char KEY_UP    = 0x26; // keyboard上箭頭
+    const char KEY_LEFT = 0x25; // keyboard左箭頭
+    const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
-    const char KEY_DOWN  = 0x28; // keyboard下箭頭
+    const char KEY_DOWN = 0x28; // keyboard下箭頭
 
     if (nChar == KEY_LEFT)
         eraser.SetMovingLeft(false);
@@ -445,9 +443,9 @@ void CGameStateRun::OnShow() {
     //
     //background.ShowBitmap();			// 貼上背景圖
     help.ShowBitmap();					// 貼上說明圖
-    hits_left.ShowBitmap();
+    //hits_left.ShowBitmap();
 
-    for (int i = 0; i < NUMBALLS; i++) // 暫時設定100000
+    for (int i = 100; i < NUMBALLS; i++) // 暫時設定100
         ball[i].OnShow();				// 貼上第i號球(香菇)
 
     /////////
@@ -455,9 +453,9 @@ void CGameStateRun::OnShow() {
     for (int i = 0; i < 20; i++)
         enemy1[i].OnShow();
 
-    //gamemap.OnShow();
+    score.ShowBitmap();
     /////////
-    bball.OnShow();						// 貼上彈跳的球
+    //bball.OnShow();						// 貼上彈跳的球
     eraser.OnShow();					// 貼上擦子
     //
     //  貼上左上及右下角落的圖
@@ -467,84 +465,8 @@ void CGameStateRun::OnShow() {
     corner.SetTopLeft(SIZE_X - corner.Width(), SIZE_Y - corner.Height());
     corner.ShowBitmap();
 }
-
-
-
-CGameMap::CGameMap() : X(20), Y(40), MW(120), MH(100) {
-    int map_init[4][5] = { {0, 0, 1, 0, 0},
-        {0, 1, 2, 1, 0},
-        {1, 2, 1, 2, 1},
-        {2, 1, 2, 1, 2}
-    };
-
-    for (int i = 0; i < 4 ; i++)
-        for (int j = 0; j < 5; j++)
-            map[i][j] = map_init[i][j];
-
-    random_num = 0;
-    bballs = NULL;
 }
-void CGameMap::LoadBitmap() {
-    blue.LoadBitmap(IDB_BLUE);
-    green.LoadBitmap(IDB_GREEN);
-}
-void CGameMap::OnShow() {
-    for (int i = 0; i < 5; i++)
-        for (int j = 0; j < 4; j++) {
-            switch (map[j][i]) {
-                case 0:
-                    break;
-
-                case 1:
-                    blue.SetTopLeft(X + (MW * i), Y + (MH * j));
-                    blue.ShowBitmap();
-                    break;
-
-                case 2:
-                    green.SetTopLeft(X + (MW * i), Y + (MH * j));
-                    green.ShowBitmap();
-                    break;
-
-                default:
-                    ASSERT(0);
-            }
-        }
-
-    for (int i = 0; i < random_num; i++) bballs[i].OnShow();
-}
-void CGameMap::InitializeBouncingBall(int ini_index, int row, int col) {
-    const int VELOCITY = 10;
-    const int BALL_PIC_HEIGHT = 15;
-    int floor = Y + (row + 1) * MH - BALL_PIC_HEIGHT;
-    bballs[ini_index].LoadBitmap();
-    bballs[ini_index].SetFloor(floor);
-    bballs[ini_index].SetVelocity(VELOCITY + col);
-    bballs[ini_index].SetXY(X + col * MW + MW / 2, floor);
-}
-void CGameMap::RandomBouncingBall() {
-    const int MAX_RAND_NUM = 10;
-    random_num = (rand() % MAX_RAND_NUM) + 1;
-    delete[]bballs;
-    bballs = new CBouncingBall[random_num];
-    int ini_index = 0;
-
-    for (int row = 0; row < 4; row++)
-        for (int col = 0; col < 5; col++) {
-            if (map[row][col] != 0 && ini_index < random_num) {
-                InitializeBouncingBall(ini_index, row, col);
-                ini_index++;
-            }
-        }
-}
-void CGameMap::OnKeyDown(UINT nChar) {
-    const int KEY_SPACE = 0x20;
-
-    if (nChar == KEY_SPACE)RandomBouncingBall();
-}
-void CGameMap::OnMove() {
-    for (int i = 0; i < random_num; i++)bballs[i].OnMove();
-}
-CGameMap:: ~CGameMap() {
-    delete[] bballs;
-}
-}
+/*
+發現的BUG :		1. 當有連續的單字(bee), 打到第二個e就會直接消失, 感覺是因為把程式寫在keydown的關係
+		 		2.
+*/

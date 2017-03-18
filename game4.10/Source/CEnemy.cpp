@@ -15,9 +15,9 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CEnemy::CEnemy() {
-    is_alive = true;
+    is_alive = false;
     x = y = dx = dy = index = delay_counter = 0;
-	currWordLeng = 0;  // 當前的游標在0 還未輸入的意思 (ex: ""apple)
+    currWordLeng = 0;  // 當前的游標在0 還未輸入的意思 (ex: ""apple)
     //若currWord = 1 (ex: "a"pple)
     TRACE("\nvocab length: %d\n", length);  //輸出字數
     SetVocab();
@@ -45,7 +45,7 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    bmp.LoadBitmap("Bitmaps/shake.bmp", RGB(0, 255, 0));			// 載入球的圖形
+    bmp.LoadBitmap("Bitmaps/face1.bmp", RGB(0, 255, 0));			// 載入球的圖形
     // bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
 }
 
@@ -114,7 +114,10 @@ void CEnemy::OnShow() {
         fp = pDC->SelectObject(&f);					// 選用 font f
         pDC->SetBkColor(RGB(0, 0, 0));
         pDC->SetTextColor(RGB(255, 255, 255));
+        char str[50];
+        sprintf(str, "(%d)", currWordLeng);
         pDC->TextOut(x + dx + 40, y + dy + 5, vocab.c_str()); // 顯示vocab  ( 轉換: vocab.c_str() )
+        pDC->TextOut(x + dx + 40, y + dy + 20, str); // 顯示vocab  ( 轉換: vocab.c_str() )
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
     }
@@ -142,7 +145,7 @@ int CEnemy::GetCurrWordLeng() {
 }
 
 int CEnemy::GetVocabLeng() {
-	return length;
+    return length;
 }
 
 }

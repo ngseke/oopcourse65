@@ -1,8 +1,4 @@
 namespace game_framework {
-/////////////////////////////////////////////////////////////////////////////
-// 這個class提供繞圈圈的球
-// 看懂就可以改寫成自己的程式了
-/////////////////////////////////////////////////////////////////////////////
 
 class CEnemy {
     public:
@@ -22,7 +18,7 @@ class CEnemy {
         char GetFirstWord();									//以char回傳一個字 (ex: 'a')
         void AddCurrWordLeng();										//CurrWord++
         int GetCurrWordLeng();										//回傳int型態的CurrWord
-		int GetVocabLeng();
+        int GetVocabLeng();
 
     protected:
         CMovingBitmap bmp;			// 球的圖
@@ -36,8 +32,9 @@ class CEnemy {
         ////////////
         string vocab;				// 儲存單字
         int length;					// 單字總長度
-        int currWordLeng;				// 當前輸入文字的字元
+        int currWordLeng;			// 當前輸入文字的字元
         int xMoveDistance;			// 怪物X位移的總距離
+
 
 
     private:

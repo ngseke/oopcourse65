@@ -62,37 +62,8 @@ enum AUDIO_ID {				// 定義各種音效的編號
 
 //////// 下面practice
 
-class CPracitce {
-    public:
-        CPracitce();
-        void LoadBitmap();
-        void OnMove();
-        void OnShow();
-    private:
-        CMovingBitmap pic;
-        int x, y;
-};
 
-class CGameMap {
-    public:
-        CGameMap();
-        void LoadBitmap();
-        void OnShow();
-        void OnMove();
-        void OnKeyDown(UINT);
-        void RandomBouncingBall();
-        void InitializeBouncingBall(int, int, int);
-        ~CGameMap();
 
-    protected:
-        CMovingBitmap blue, green;
-        int map[4][5];
-        const int X, Y;
-        const int MW, MH;
-        CBouncingBall* bballs;
-        int random_num;
-
-};
 ///////// 上面practice
 class CGameStateInit : public CGameState {
     public:
@@ -140,13 +111,14 @@ class CGameStateRun : public CGameState {
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
 
-        CGameMap gamemap;
+
         int				picX, picY;
         CEnemy*			enemy;
         CEnemy*			enemy1;
-
+        CEnemy*			targetEnemy;
+        CInteger		score;
         int counter = 50, maxCounter = 50, currEnemy = 0; //不標準寫法!!!!之後改
-		bool luck=false; //判斷是否鎖住第一個字母了
+        bool luck = false; //判斷是否鎖住第一個字母了
 
 
 };
