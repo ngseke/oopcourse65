@@ -27,7 +27,7 @@ void CGameStateInit::OnInit() {
     // 開始載入資料
     //
     //logo.LoadBitmap(IDB_BACKGROUND);
-    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(128, 128, 128));
+    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
@@ -135,6 +135,7 @@ void CGameStateOver::OnShow() {
 
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
+    srand((unsigned)time(NULL));
     ball = new CBall[NUMBALLS];
     picX = picY = 0;
     enemy1 = new CEnemy[20];
@@ -174,8 +175,8 @@ void CGameStateRun::OnBeginState() {
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
     //hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
     //hits_left.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);		// 指定剩下撞擊數的座標
-    CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
-    CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
+    //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
+    //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
 
     /////// SET Eneny's 初始值
