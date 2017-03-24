@@ -17,7 +17,7 @@ namespace game_framework {
 CEnemy::CEnemy() {
     is_alive = false;
     x = y = dx = dy = index = delay_counter = 0;
-    currWordLeng = 0;  // 當前的游標在0 還未輸入的意思 (ex: ""apple)
+    currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple)
     //若currWord = 1 (ex: "a"pple)
     TRACE("\nvocab length: %d\n", length);  //輸出字數
     SetVocab();
@@ -45,7 +45,12 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    bmp.LoadBitmap("Bitmaps/face1.bmp", RGB(0, 255, 0));			// 載入球的圖形
+    string faceFile[3] = {"Bitmaps/face1.bmp", "Bitmaps/face2.bmp", "Bitmaps/face3.bmp" };		// 儲存怪物檔案路徑之陣列
+    char bitmapFile[20];
+    strcpy(bitmapFile, faceFile[(rand() % 3)].c_str()); // 將stirng轉成char
+    /////
+    bmp.LoadBitmap(bitmapFile, RGB(0, 255, 0));
+    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));
     // bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
 }
 
@@ -101,36 +106,30 @@ void CEnemy::SetXY(int nx, int ny) {
 }
 
 void CEnemy::OnShow() {
-    string temp;
-
     if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
+        textCursor.SetTopLeft(x + dx + 30 + (currWordLeng * 9), y + dy);	// 顯示光標
+
+        if (currWordLeng != 0) textCursor.ShowBitmap();
+
+        ///
         //bmp_center.SetTopLeft(x + dx, y + dy);
         //bmp_center.ShowBitmap();
+        ///
         //////////// Display FONT
+        //
         CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
         CFont f, *fp;
-        f.CreatePointFont(120, "Arial");		// 產生 font f;
+        f.CreatePointFont(120, "Courier");			// 產生 font f; 字體選用"Fixedsys" 因為它是等寬字
         fp = pDC->SelectObject(&f);					// 選用 font f
-        pDC->SetBkColor(RGB(0, 0, 0));
-        pDC->SetBkMode(TRANSPARENT);
-        pDC->SetTextColor(RGB(255, 255, 255));
-        char str[50];
-        sprintf(str, "(%d)", currWordLeng);
-
-        for (int i = 0; i <	length; i++) {
-            if (i == currWordLeng )temp += "[";
-            else if (i == currWordLeng + 1)temp += "]";
-            else temp += " ";
-
-            temp += vocab[i];
-            temp += " ";
-        }
-
-        pDC->TextOut(x + dx + 40, y + dy + 5, temp.c_str());
-        //pDC->TextOut(x + dx + 40, y + dy + 5, vocab.c_str()); // 顯示vocab  ( 轉換: vocab.c_str() )
+        pDC->SetBkMode(TRANSPARENT);				// TEXT背景設定為透明
+        pDC->SetTextColor(RGB(20, 20, 20));
+        char str[10];
+        sprintf(str, "curr %d", currWordLeng);
+        pDC->TextOut(x + dx + 30, y + dy + 2, vocab.c_str());
         pDC->TextOut(x + dx + 40, y + dy + 20, str);
+        //pDC->TextOut(x + dx + 40, y + dy + 5, vocab.c_str()); // 顯示vocab  ( 轉換: vocab.c_str() )
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plaisn 的 CDC
     }
@@ -138,15 +137,21 @@ void CEnemy::OnShow() {
 ////////////
 void  CEnemy::SetVocab() {  //隨機從dict中抓取一個單字到vocab裡面
     CDict* dict = new CDict;
-    vocab = dict->GetText();// 給vocab一個單字
-    length = vocab.length();
+
+    while (1) {
+        vocab = dict->GetText();// 給vocab一個單字
+        length = vocab.length();
+
+        if (length <= 7)break;
+    }
+
     free(dict); // 釋放掉dict記憶體
 }
 
-string CEnemy::GetVocab() {  //回傳整組單字(ex: "apple")
+string CEnemy::GetVocab() {		  //回傳整組單字(ex: "apple")
     return vocab;
 }
-char CEnemy::GetFirstWord() { //以char回傳一個字 (ex: 'a')
+char CEnemy::GetFirstWord()		{ //以char回傳一個字 (ex: 'a')
     return vocab[0];
 }
 

@@ -23,6 +23,8 @@ class CEnemy {
     protected:
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
+        CMovingBitmap textCursor;	// 文字光標 圖
+        CMovingBitmap talkBox;	// 對話框 圖
         int x, y;					// 圓心的座標
         int dx, dy;					// 球距離圓心的位移量
         int index;					// 球的「角度」，0-17表示0-360度

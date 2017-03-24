@@ -14,12 +14,20 @@ namespace game_framework {
 
 CDict::CDict() {
     fstream file;
+    bool chongdie;	//重疊
     file.open("Source/text.txt", ios::in); //讀取字典檔
 
     if (!file) {}
     else {
         while (file >> temp) {
-            dictionary.push_back(temp);  //將字典檔讀入
+            chongdie = 0;
+
+            //以下用於判斷讀入的單字 在字典裡是否已重複
+            for (unsigned int i = 0; i < dictionary.size(); i++) {
+                if (temp == dictionary[i])chongdie = 1;
+            }
+
+            if (chongdie != 1)dictionary.push_back(temp); //將字典檔讀入
         }
     }
 

@@ -118,10 +118,11 @@ class CGameStateRun : public CGameState {
         CEnemy*			enemy1;
         CEnemy*			targetEnemy;
         CInteger		score;
-        int counter = 50, maxCounter = 50, currEnemy = 0;
-        bool lock = false; //判斷是否鎖住第一個字母了
-
-
+        const int		LEVEL;											//關卡總數
+        int				counter, maxCounter, currEnemy;
+        bool			lock;											//判斷是否鎖住第一個字母了
+        int				currLevel;										//當前關卡
+        int				levelEnemyNum[5] = { 20, 25, 30, 35, 40 };		//該關卡最大的敵人數
 
 };
 
