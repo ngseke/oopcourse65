@@ -77,6 +77,7 @@ class CGameStateInit : public CGameState {
     private:
         CMovingBitmap logo;								// csie的logo
         CMovingBitmap typing_logo;
+        CMovingBitmap text1;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -117,8 +118,9 @@ class CGameStateRun : public CGameState {
         CEnemy*			enemy1;
         CEnemy*			targetEnemy;
         CInteger		score;
-        int counter = 50, maxCounter = 50, currEnemy = 0; //不標準寫法!!!!之後改
-        bool luck = false; //判斷是否鎖住第一個字母了
+        int counter = 50, maxCounter = 50, currEnemy = 0;
+        bool lock = false; //判斷是否鎖住第一個字母了
+
 
 
 };

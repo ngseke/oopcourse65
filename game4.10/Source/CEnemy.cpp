@@ -2,12 +2,12 @@
 #include "Resource.h"
 #include <mmsystem.h>
 #include <ddraw.h>
+#include <time.h>
 #include "audio.h"
 #include "gamelib.h"
 #include "CEraser.h"
 #include "CEnemy.h"
 #include "CDict.h"
-#
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -101,25 +101,38 @@ void CEnemy::SetXY(int nx, int ny) {
 }
 
 void CEnemy::OnShow() {
+    string temp;
+
     if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
         //bmp_center.SetTopLeft(x + dx, y + dy);
         //bmp_center.ShowBitmap();
-        /////////
         //////////// Display FONT
         CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
         CFont f, *fp;
-        f.CreatePointFont(120, "Arial");	// 產生 font f;
+        f.CreatePointFont(120, "Arial");		// 產生 font f;
         fp = pDC->SelectObject(&f);					// 選用 font f
         pDC->SetBkColor(RGB(0, 0, 0));
+        pDC->SetBkMode(TRANSPARENT);
         pDC->SetTextColor(RGB(255, 255, 255));
         char str[50];
         sprintf(str, "(%d)", currWordLeng);
-        pDC->TextOut(x + dx + 40, y + dy + 5, vocab.c_str()); // 顯示vocab  ( 轉換: vocab.c_str() )
-        pDC->TextOut(x + dx + 40, y + dy + 20, str); // 顯示vocab  ( 轉換: vocab.c_str() )
+
+        for (int i = 0; i <	length; i++) {
+            if (i == currWordLeng )temp += "[";
+            else if (i == currWordLeng + 1)temp += "]";
+            else temp += " ";
+
+            temp += vocab[i];
+            temp += " ";
+        }
+
+        pDC->TextOut(x + dx + 40, y + dy + 5, temp.c_str());
+        //pDC->TextOut(x + dx + 40, y + dy + 5, vocab.c_str()); // 顯示vocab  ( 轉換: vocab.c_str() )
+        pDC->TextOut(x + dx + 40, y + dy + 20, str);
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+        CDDraw::ReleaseBackCDC();					// 放掉 Back Plaisn 的 CDC
     }
 }
 ////////////

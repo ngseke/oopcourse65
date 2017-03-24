@@ -55,6 +55,7 @@
 #include "Resource.h"
 #include <mmsystem.h>
 #include <ddraw.h>
+#include <time.h>
 #include "audio.h"
 #include "gamelib.h"
 #include "mygame.h"
@@ -79,6 +80,7 @@ void CGameStateInit::OnInit() {
     //
     //logo.LoadBitmap(IDB_BACKGROUND);
     typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(128, 128, 128));
+    text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -109,6 +111,8 @@ void CGameStateInit::OnShow() {
     //logo.ShowBitmap();
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 40);
     typing_logo.ShowBitmap();
+    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, 300);
+    text1.ShowBitmap();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //
@@ -118,7 +122,7 @@ void CGameStateInit::OnShow() {
     fp = pDC->SelectObject(&f);					// 選用 font f
     pDC->SetBkColor(RGB(0, 0, 0));
     pDC->SetTextColor(RGB(41, 171, 226));
-    pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
+    //pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
 
     if (ENABLE_GAME_PAUSE)
         pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
@@ -361,9 +365,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     for (int i = 0; i < 20; i++) {					//跑目前關卡怪物的數量
         if (enemy1[i].IsAlive()) {					//回傳當前怪物是否存在
-            if (luck == false) {							//尚未鎖定了
+            if (lock == false) {							//尚未鎖定了
                 if (nChar + 32 == enemy1[i].GetFirstWord()) {		//若等於第一個字母:鎖住 and 目前字元位置+1
-                    luck = true;
+                    lock = true;
                     targetEnemy = &enemy1[i];      // targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
                 }
@@ -374,7 +378,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) { //若當前長度 等於 字母的長度
                         targetEnemy->SetIsAlive(false);// 成功殺害怪物
-                        luck = false;
+                        lock = false;
                         score.Add(targetEnemy->GetCurrWordLeng());
                     }
                 }
