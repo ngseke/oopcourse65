@@ -18,10 +18,6 @@ CGameStateInit::CGameStateInit(CGame* g)
 }
 
 void CGameStateInit::OnInit() {
-    //
-    // 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
-    //     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
-    //
     ShowInitProgress(0);	// 一開始的loading進度為0%
     //
     // 開始載入資料
@@ -66,9 +62,10 @@ void CGameStateInit::OnShow() {
     //
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
-    f.CreatePointFont(160, "Arial");	// 產生 font f; 160表示16 point的字
+    f.CreatePointFont(160, "Consolas");	// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
     pDC->SetBkColor(RGB(0, 0, 0));
+    pDC->SetBkMode(TRANSPARENT);
     pDC->SetTextColor(RGB(41, 171, 226));
     //pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
 
@@ -76,6 +73,7 @@ void CGameStateInit::OnShow() {
         pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
 
     pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
+    ////
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
@@ -125,6 +123,11 @@ void CGameStateOver::OnShow() {
     char str[80];								// Demo 數字對字串的轉換
     sprintf(str, "你 死 了 ! (%d)", counter / 30);
     pDC->TextOut(240, 210, str);
+    //	顯示分數 (not done)
+    // char scoreChr[80];
+    // sprintf(str, "SCORE: %d", score);
+    pDC->TextOut(240, 250, str);
+    //
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
@@ -195,7 +198,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     // 如果希望修改cursor的樣式，則將下面程式的commment取消即可
     //
-    // SetCursor(AfxGetApp()->LoadCursor(IDC_GAMECURSOR));
+    //SetCursor(AfxGetApp()->LoadCursor(IDC_GAMECURSOR));
     //
     // 移動背景圖的座標
     //
@@ -224,13 +227,27 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     ////////
-    counter--;
+    counter--;	//每隻怪物 生成間隔 之 counter (50~0)
 
-    if (counter < 0 && currEnemy < levelEnemyNum[currLevel]) {
-        counter = maxCounter;
-        int randX = (rand() % (SIZE_X)) + 1;
+    if (counter < 0 && currEnemy < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
+        counter = maxCounter;									// 把counter 調回max繼續數
+        int randX = (rand() % (SIZE_X - 100)) ;					// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(1 + rand() % 10);
+        enemy1[currEnemy].SetDelay(10);							// 從0數到這個數字才會動
+        ////
+        bool firstWordBounceFlag = 0;
+
+        while (1) {
+            for (int i = currEnemy - 1; i >= 0 ; i--) {
+                if (enemy1[currEnemy].GetFirstWord() == enemy1[i].GetFirstWord())
+                    firstWordBounceFlag = 1;
+            }
+
+            break;
+            //if (firstWordBounceFlag == 1) enemy1[currEnemy].SetVocab();
+            //else break;
+        }
+
         enemy1[currEnemy].SetIsAlive(true);
         currEnemy++;
     }

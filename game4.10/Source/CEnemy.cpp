@@ -44,14 +44,12 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    string faceFile[6] = {"Bitmaps/face1.bmp", "Bitmaps/face2.bmp", "Bitmaps/face3.bmp", "Bitmaps/face4.bmp", "Bitmaps/face5.bmp", "Bitmaps/face6.bmp" };		// 儲存怪物檔案路徑之陣列
-    char bitmapFile[20];
-    strcpy(bitmapFile, faceFile[(rand() % 6)].c_str()); // 將stirng轉成char
+    char* faceFile[] = {"Bitmaps/face1.bmp", "Bitmaps/face2.bmp", "Bitmaps/face3.bmp", "Bitmaps/face4.bmp", "Bitmaps/face5.bmp", "Bitmaps/face6.bmp", "Bitmaps/face7.bmp" };		// 儲存怪物檔案路徑之陣列
     /////
-    bmp.LoadBitmap(bitmapFile, RGB(0, 255, 0));
-    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));
+    bmp.LoadBitmap(faceFile[(rand() % 7)], RGB(0, 255, 0)); // 載入 怪物SKIN
+    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
 
-    // 根據單字長度 載入不同寬度bmp
+    // 根據單字長度 載入不同寬度對話框
     if (length <= 3)talkBox.LoadBitmap("Bitmaps/talk_box_3words.bmp", RGB(0, 255, 0));
     else if (length <= 5)talkBox.LoadBitmap("Bitmaps/talk_box_5words.bmp", RGB(0, 255, 0));
     else talkBox.LoadBitmap("Bitmaps/talk_box_10words.bmp", RGB(0, 255, 0));
@@ -82,14 +80,14 @@ void CEnemy::OnMove() {
         dx = DIFFX[index];
         dy = DIFFY[index];
         */
-        const int STEPS = SIZE_Y / 10 ;
+        const int STEPS = SIZE_Y / 5 ; // 每次移動5格
         index++;
 
         if (index >= STEPS)
             index = 0;
 
         dx = - xMoveDistance / STEPS * index;
-        dy = index * 10;   // index(0~STEPS) * 移動格數
+        dy = index * 5;  // index(0~STEPS) * 移動格數
         //if (background.Top() > SIZE_Y)
         //   background.SetTopLeft(60, -background.Height());
         //background.SetTopLeft(background.Left(), background.Top() + 1);
@@ -111,7 +109,7 @@ void CEnemy::OnShow() {
         bmp.ShowBitmap();
         talkBox.SetTopLeft(x + dx + bmp.Width(), y + dy);
         talkBox.ShowBitmap();
-        textCursor.SetTopLeft(x + dx + 33 + (currWordLeng * 9), y + dy);	// 顯示光標
+        textCursor.SetTopLeft(x + dx + bmp.Width() + 5 + (currWordLeng * 9), y + dy);	// 顯示光標
 
         if (currWordLeng != 0) textCursor.ShowBitmap();
 
@@ -125,7 +123,7 @@ void CEnemy::OnShow() {
         pDC->SetTextColor(RGB(20, 20, 20));
         char str[10];
         sprintf(str, "curr %d", currWordLeng);
-        pDC->TextOut(x + dx + 33, y + dy, vocab.c_str());	// 顯示單字
+        pDC->TextOut(x + dx + bmp.Width() + 13, y + dy, vocab.c_str());	// 顯示單字
         //pDC->TextOut(x + dx + 40, y + dy + 20, str);			// 暫時DEBUG用:顯示CURR
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plaisn 的 CDC
@@ -137,11 +135,11 @@ void  CEnemy::SetVocab() {  //隨機從dict中抓取一個單字到vocab裡面
 
     while (1) {
         vocab = dict->GetText();// 給vocab一個單字
-        length = vocab.length();
 
-        if (length <= 10)break;
+        if (length <= 100)break;
     }
 
+    length = vocab.length();
     free(dict); // 釋放掉dict記憶體
 }
 string CEnemy::GetVocab() {		  //回傳整組單字(ex: "apple")
