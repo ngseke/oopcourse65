@@ -260,6 +260,7 @@
     <ClCompile Include="Source\audio.cpp" />
     <ClCompile Include="Source\CBall.cpp" />
     <ClCompile Include="Source\CBouncingBall.cpp" />
+    <ClCompile Include="Source\CBullet.cpp" />
     <ClCompile Include="Source\CDict.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
     <ClCompile Include="Source\CEraser.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="Source\audio.h" />
     <ClInclude Include="Source\CBall.h" />
     <ClInclude Include="Source\CBouncingBall.h" />
+    <ClInclude Include="Source\CBullet.h" />
     <ClInclude Include="Source\CDict.h" />
     <ClInclude Include="Source\CEnemy.h" />
     <ClInclude Include="Source\CEraser.h" />

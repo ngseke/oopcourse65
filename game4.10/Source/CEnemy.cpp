@@ -44,17 +44,19 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    char* faceFile[] = {"Bitmaps/face1.bmp", "Bitmaps/face2.bmp", "Bitmaps/face3.bmp", "Bitmaps/face4.bmp", "Bitmaps/face5.bmp", "Bitmaps/face6.bmp", "Bitmaps/face7.bmp" };		// 儲存怪物檔案路徑之陣列
-    /////
+    char* faceFile[] = { "Bitmaps/face1.bmp", "Bitmaps/face2.bmp", "Bitmaps/face3.bmp", "Bitmaps/face4.bmp", "Bitmaps/face5.bmp", "Bitmaps/face6.bmp", "Bitmaps/face7.bmp" };		// 儲存怪物檔案路徑之陣列
     bmp.LoadBitmap(faceFile[(rand() % 7)], RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
-
+    /////
     // 根據單字長度 載入不同寬度對話框
-    if (length <= 3)talkBox.LoadBitmap("Bitmaps/talk_box_3words.bmp", RGB(0, 255, 0));
-    else if (length <= 5)talkBox.LoadBitmap("Bitmaps/talk_box_5words.bmp", RGB(0, 255, 0));
-    else talkBox.LoadBitmap("Bitmaps/talk_box_10words.bmp", RGB(0, 255, 0));
-
-    // bmp_center.LoadBitmap(IDB_CENTER, RGB(0, 0, 0));	// 載入球圓心的圖形
+    /*
+    if (length <= 3)
+        talkBox.LoadBitmap("Bitmaps/talk_box_3words.bmp", RGB(0, 255, 0));
+    else if (length <= 5)
+        talkBox.LoadBitmap("Bitmaps/talk_box_5words.bmp", RGB(0, 255, 0));
+    else
+    */
+    talkBox.LoadBitmap("Bitmaps/talk_box_10words.bmp", RGB(0, 255, 0));
 }
 void CEnemy::OnMove() {
     if (!is_alive)
@@ -135,11 +137,12 @@ void  CEnemy::SetVocab() {  //隨機從dict中抓取一個單字到vocab裡面
 
     while (1) {
         vocab = dict->GetText();// 給vocab一個單字
+        length = vocab.length();
 
-        if (length <= 100)break;
+        if (length <= 100)
+            break;
     }
 
-    length = vocab.length();
     free(dict); // 釋放掉dict記憶體
 }
 string CEnemy::GetVocab() {		  //回傳整組單字(ex: "apple")

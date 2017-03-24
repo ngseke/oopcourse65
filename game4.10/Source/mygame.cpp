@@ -1,4 +1,12 @@
+/*
+3/24
+已知BUG :		1. 當有連續的單字(bee), 打到第二個e就會直接消失. 可能是keydown太靈敏.
+				2. 比如場上兩隻單字頂真(appl"e" "e"gg), 在打完apple最後的"e"時, 他會直接接到egg開頭的"e"
+				3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
+	    		   這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
+			       後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
 
+*/
 #include "stdafx.h"
 #include "Resource.h"
 #include <mmsystem.h>
@@ -138,9 +146,9 @@ void CGameStateOver::OnShow() {
 
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
-    srand((unsigned)time(NULL));
-    ball = new CBall[NUMBALLS];
+    srand((unsigned)time(NULL));	//亂數種子
     picX = picY = 0;
+    //ball = new CBall[NUMBALLS];
     enemy1 = new CEnemy[20];
     ///////
     counter = maxCounter = 40;
@@ -150,7 +158,7 @@ CGameStateRun::CGameStateRun(CGame* g)
 }
 
 CGameStateRun::~CGameStateRun() {
-    delete[] ball;
+    //delete[] ball;
     ////////
     delete[] enemy1;
 }
@@ -164,7 +172,7 @@ void CGameStateRun::OnBeginState() {
     const int HITS_LEFT_Y = 0;
     const int BACKGROUND_X = 60;
     const int ANIMATION_SPEED = 15;
-
+    /* 老師的示範球
     for (int i = 0; i < NUMBALLS; i++) {				// 設定球的起始座標
         int x_pos = i % BALL_PER_ROW;
         int y_pos = i / BALL_PER_ROW;
@@ -172,7 +180,7 @@ void CGameStateRun::OnBeginState() {
         ball[i].SetDelay(x_pos);
         ball[i].SetIsAlive(true);
     }
-
+    */
     eraser.Initialize();
     //background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
@@ -211,13 +219,12 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     // 移動球
     //
-    int i;
 
-    for (i = 0; i < NUMBALLS; i++)
+    /*
+    for (int i = 0; i < NUMBALLS; i++)
         ball[i].OnMove();
-
+    */
     ////////////
-
     if (picX <= SIZE_Y) {
         picX += 5;
         picY += 5;
@@ -235,17 +242,17 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemy1[currEnemy].SetXY(randX, 0);
         enemy1[currEnemy].SetDelay(10);							// 從0數到這個數字才會動
         ////
-        bool firstWordBounceFlag = 0;
 
-        while (1) {
+        while (1) {												// 此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
+            bool firstWordBounceFlag = 0;
+
             for (int i = currEnemy - 1; i >= 0 ; i--) {
-                if (enemy1[currEnemy].GetFirstWord() == enemy1[i].GetFirstWord())
+                if (enemy1[currEnemy].GetFirstWord() == enemy1[i].GetFirstWord() && enemy1[i].IsAlive())
                     firstWordBounceFlag = 1;
             }
 
-            break;
-            //if (firstWordBounceFlag == 1) enemy1[currEnemy].SetVocab();
-            //else break;
+            if (firstWordBounceFlag ) enemy1[currEnemy].SetVocab();
+            else break;
         }
 
         enemy1[currEnemy].SetIsAlive(true);
@@ -260,11 +267,11 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     // 移動擦子
     //
     eraser.OnMove();
-
     //
     // 判斷擦子是否碰到球
     //
-    for (i = 0; i < NUMBALLS; i++)
+    /*
+    for (int i = 0; i < NUMBALLS; i++)
         if (ball[i].IsAlive() && ball[i].HitEraser(&eraser)) {
             ball[i].SetIsAlive(false);
             CAudio::Instance()->Play(AUDIO_DING);
@@ -279,7 +286,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
                 GotoGameState(GAME_STATE_OVER);
             }
         }
-
+    */
     //
     // 移動彈跳的球
     //
@@ -291,14 +298,16 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     // 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
     //     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
     //
+    srand((unsigned)time(NULL));
     ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
+
     //
     // 開始載入資料
     //
-
+    /*
     for (int i = 0; i < NUMBALLS; i++)
         ball[i].LoadBitmap();								// 載入第i個球的圖形
-
+    */
     ////////
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
         enemy1[i].LoadBitmap();
@@ -333,29 +342,26 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {					//跑目前關卡怪物的數量
-        if (enemy1[i].IsAlive()) {					//回傳當前怪物是否存在
-            if (lock == false) {							//尚未鎖定了
-                if (nChar + 32 == enemy1[i].GetFirstWord()) {		//若等於第一個字母:鎖住 and 目前字元位置+1
+    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {		// 跑目前關卡怪物的數量
+        if (enemy1[i].IsAlive()) {								// 回傳當前怪物是否存在
+            if (!lock) {										// 尚未鎖定了
+                if (nChar + 32 == enemy1[i].GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
                     lock = true;
-                    targetEnemy = &enemy1[i];      // targetEnemy為指標->正在攻擊的敵人
+                    targetEnemy = &enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
                 }
             }
-            else {											//若已鎖定
-                if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	//若等於當前字母
+            else {											// 若已鎖定
+                if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
                     targetEnemy->AddCurrWordLeng();
 
-                    if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) { //若當前長度 等於 字母的長度
-                        targetEnemy->SetIsAlive(false);// 成功殺害怪物
+                    if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) { // 若當前長度 等於 字母的長度
+                        targetEnemy->SetIsAlive(false);									// 成功殺害怪物
                         lock = false;
-                        score.Add(targetEnemy->GetCurrWordLeng());
+                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
                     }
                 }
             }
-        }
-        else {
-            continue;
         }
     }
 
@@ -418,10 +424,10 @@ void CGameStateRun::OnShow() {
     //background.ShowBitmap();			// 貼上背景圖
     help.ShowBitmap();					// 貼上說明圖
     //hits_left.ShowBitmap();
-
-    for (int i = 100; i < NUMBALLS; i++) // 暫時設定100
+    /*
+    for (int i = 0; i < NUMBALLS; i++) // 暫時設定100
         ball[i].OnShow();				// 貼上第i號球(香菇)
-
+    */
     /////////
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
@@ -440,6 +446,3 @@ void CGameStateRun::OnShow() {
     corner.ShowBitmap();
 }
 }
-/*
-發現的BUG :		1. 當有連續的單字(bee), 打到第二個e就會直接消失, 感覺是因為把程式寫在keydown的關係
-*/

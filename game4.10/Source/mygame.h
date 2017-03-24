@@ -2,6 +2,7 @@
 #include "CBall.h"
 #include "CBouncingBall.h"
 #include "CEnemy.h"
+#include "CBullet.h"
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
