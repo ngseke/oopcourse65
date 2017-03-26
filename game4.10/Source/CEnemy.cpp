@@ -48,15 +48,17 @@ void CEnemy::LoadBitmap() {
     bmp.LoadBitmap(faceFile[(rand() % 7)], RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
+}
+void CEnemy::LoadTextbox() {
     // 根據單字長度 載入不同寬度對話框
-    /*
     if (length <= 3)
         talkBox.LoadBitmap("Bitmaps/talk_box_3words.bmp", RGB(0, 255, 0));
     else if (length <= 5)
         talkBox.LoadBitmap("Bitmaps/talk_box_5words.bmp", RGB(0, 255, 0));
+    else if (length <= 10)
+        talkBox.LoadBitmap("Bitmaps/talk_box_10words.bmp", RGB(0, 255, 0));
     else
-    */
-    talkBox.LoadBitmap("Bitmaps/talk_box_10words.bmp", RGB(0, 255, 0));
+        talkBox.LoadBitmap("Bitmaps/talk_box_15words.bmp", RGB(0, 255, 0));
 }
 void CEnemy::OnMove() {
     if (!is_alive)
@@ -119,7 +121,7 @@ void CEnemy::OnShow() {
         //
         CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
         CFont f, *fp;
-        f.CreatePointFont(120, "Consolas");			// 產生 font f; 字體選用等寬字 Consolas Courier
+        f.CreatePointFont(120, "Consolas");			// 產生 font f; 字體選用等寬字 Consolas,或 Courier
         fp = pDC->SelectObject(&f);					// 選用 font f
         pDC->SetBkMode(TRANSPARENT);				// TEXT背景設定為透明
         pDC->SetTextColor(RGB(20, 20, 20));

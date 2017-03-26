@@ -2,7 +2,7 @@
 3/24
 已知BUG :		1. 當有連續的單字(bee), 打到第二個e就會直接消失. 可能是keydown太靈敏.
 				2. 比如場上兩隻單字頂真(appl"e" "e"gg), 在打完apple最後的"e"時, 他會直接接到egg開頭的"e"
-				3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
+				[解決了3.] 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
 	    		   這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
 			       後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
 */
@@ -250,16 +250,19 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag ) enemy1[currEnemy].SetVocab();
-            else break;
+            if (firstWordBounceFlag) enemy1[currEnemy].SetVocab();
+            else {
+                break;
+            }
         }
 
+        enemy1[currEnemy].LoadTextbox();	// 確定單字是是什麼後 才讀取textbox的bitmap
         enemy1[currEnemy].SetIsAlive(true);
         currEnemy++;
     }
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        enemy1[i].OnMove();
+        if (enemy1[i].IsAlive())enemy1[i].OnMove();
 
     /////////////
     //
@@ -303,15 +306,10 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     // 開始載入資料
     //
-    /*
-    for (int i = 0; i < NUMBALLS; i++)
-        ball[i].LoadBitmap();								// 載入第i個球的圖形
-    */
-    ////////
+
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
         enemy1[i].LoadBitmap();
 
-    ////////
     eraser.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
@@ -430,7 +428,7 @@ void CGameStateRun::OnShow() {
     /////////
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        enemy1[i].OnShow();
+        if (enemy1[i].IsAlive())enemy1[i].OnShow();
 
     score.ShowBitmap();
     /////////

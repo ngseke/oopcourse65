@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <cctype>
 
 namespace game_framework {
 
@@ -36,7 +37,8 @@ CDict::CDict() {
     file.close();
 }
 string CDict::GetText() { //–ΩGetText() 常繦诀return虫
-    int rnd = rand() % dictionary.size();  //rnd 眖 1~ㄥ计 繦诀ъ计
+    int rnd = rand() % dictionary.size();  //rnd 眖 0~ㄥ计 繦诀ъ计
     return dictionary[rnd];
 }
+
 }

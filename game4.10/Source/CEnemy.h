@@ -20,6 +20,8 @@ class CEnemy {
         int GetCurrWordLeng();										//回傳int型態的CurrWord
         int GetVocabLeng();
 
+        void LoadTextbox();
+
     protected:
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
