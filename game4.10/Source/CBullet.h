@@ -13,12 +13,16 @@ class CBullet {
         void SetFloor(int);
         void SetXY(int, int);
         void SetVelocity(int);
+        void SetEndXY(int, int);
     private:
-        int x, y;					// 圖形座標
+        int x, y;					// 圖形座標  where ZHUJIAO is
         int floor;					// 地板的Y座標
         bool rising;				// true表上升、false表下降
         int initial_velocity;		// 初始速度
         int velocity;				// 目前的速度(點/次)
         CAnimation animation;		// 利用動畫作圖形
+        int endX, endY;             // where X & Y should end, it's the position of the enemy.
+        int dX, dY;
+        int delay, delay_counter;   //delay_counter=delay; ;delay--
 };
 }

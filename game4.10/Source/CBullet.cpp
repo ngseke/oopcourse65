@@ -17,6 +17,9 @@ CBullet::CBullet() {
     x = 95;
     y = FLOOR - 1;				// y座標比地板高1點(站在地板上)
     */
+    /////
+    delay = delay_counter = 10;
+    /////
     rising = true;
     initial_velocity = INITIAL_VELOCITY;
     velocity = initial_velocity;
@@ -72,5 +75,8 @@ void CBullet::SetFloor(int floor) {
 void CBullet::SetVelocity(int velocity) {
     this->velocity = velocity;
     this->initial_velocity = velocity;
+}
+
+void CBullet::SetEndXY(int x, int y) {
 }
 }

@@ -113,7 +113,7 @@ void CEnemy::OnShow() {
         bmp.ShowBitmap();
         talkBox.SetTopLeft(x + dx + bmp.Width(), y + dy);
         talkBox.ShowBitmap();
-        textCursor.SetTopLeft(x + dx + bmp.Width() + 5 + (currWordLeng * 9), y + dy);	// 顯示光標
+        textCursor.SetTopLeft(x + dx + bmp.Width() + 5 + ((currWordLeng + 1) * 9), y + dy);	// 顯示光標
 
         if (currWordLeng != 0) textCursor.ShowBitmap();
 
