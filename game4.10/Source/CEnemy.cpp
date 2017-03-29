@@ -23,7 +23,8 @@ CEnemy::CEnemy() {
 }
 
 bool CEnemy::HitEraser(CEraser* eraser) {
-    // 檢測擦子所構成的矩形是否碰到球
+    // 檢測(擦子所構成的矩形)是否碰到球
+    // 檢查怪物是否碰到主角
     return HitRectangle(eraser->GetX1(), eraser->GetY1(),
                         eraser->GetX2(), eraser->GetY2());
 }
@@ -161,5 +162,10 @@ int CEnemy::GetCurrWordLeng() {
 }
 int CEnemy::GetVocabLeng() {
     return length;
+}
+int CEnemy::GetX() {
+    return x + dx;
+} int CEnemy::GetY() {
+    return y + dy;
 }
 }

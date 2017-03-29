@@ -6,23 +6,20 @@ namespace game_framework {
 
 class CBullet {
     public:
-        CBullet();
+        CBullet(int endX, int endY);
         void LoadBitmap();			// 載入圖形
         void OnMove();				// 移動
         void OnShow();				// 將圖形貼到畫面
-        void SetFloor(int);
         void SetXY(int, int);
-        void SetVelocity(int);
+
         void SetEndXY(int, int);
+        bool IsAlive();
     private:
         int x, y;					// 圖形座標  where ZHUJIAO is
-        int floor;					// 地板的Y座標
-        bool rising;				// true表上升、false表下降
-        int initial_velocity;		// 初始速度
-        int velocity;				// 目前的速度(點/次)
         CAnimation animation;		// 利用動畫作圖形
         int endX, endY;             // where X & Y should end, it's the position of the enemy.
-        int dX, dY;
-        int delay, delay_counter;   //delay_counter=delay; ;delay--
+        int dx, dy;					// 位移量
+        int delay, delay_counter, index;   //delay_counter=delay; ;delay--
+        bool is_alive;
 };
 }

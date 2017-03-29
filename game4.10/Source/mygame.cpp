@@ -266,6 +266,15 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
         if (enemy1[i].IsAlive())enemy1[i].OnMove();
 
+    for (unsigned int i = 0; i < bulletList.size(); i++) {
+        bulletList[i]->OnMove();	// 移動bullet
+    }
+
+    for (int i = bulletList.size() - 1; i >= 0; i--) {
+        //若bullet IsAlive=0, 則從vector中移除
+        if (!bulletList[i]->IsAlive())bulletList.erase(bulletList.begin());       //(不確定是不是這麼寫)
+    }
+
     /////////////
     //
     // 移動擦子
@@ -379,11 +388,13 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     lock = true;
                     targetEnemy = &enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
+                    bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));
                 }
             }
             else {											// 若已鎖定
                 if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
                     targetEnemy->AddCurrWordLeng();
+                    bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->SetIsAlive(false);									// 成功殺害怪物
@@ -419,9 +430,7 @@ void CGameStateRun::OnShow() {
     //        說，Move負責MVC中的Model，Show負責View，而View不應更動Model。
     //
     //
-    //  貼上背景圖、撞擊數、球、擦子、彈跳的球
     //
-    //background.ShowBitmap();			// 貼上背景圖
     help.ShowBitmap();					// 貼上說明圖
     //hits_left.ShowBitmap();
     /*
@@ -432,6 +441,10 @@ void CGameStateRun::OnShow() {
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
         if (enemy1[i].IsAlive())enemy1[i].OnShow();
+
+    for (unsigned int i = 0; i < bulletList.size(); i++) {
+        bulletList[i]->OnShow();
+    }
 
     score.ShowBitmap();
     /////////

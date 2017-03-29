@@ -9,59 +9,49 @@
 namespace game_framework {
 
 
-CBullet::CBullet() {
-    const int INITIAL_VELOCITY = 20;	// 初始上升速度
-    const int FLOOR = 400;				// 地板座標
-    floor = FLOOR;
-    /*
-    x = 95;
-    y = FLOOR - 1;				// y座標比地板高1點(站在地板上)
-    */
+CBullet::CBullet(int endX, int endY) {
     /////
-    delay = delay_counter = 10;
+    delay = delay_counter = 1;
+    dx = dy = index = 0;
+    is_alive = 1;
+    this->endX = endX;
+    this->endY = endY;
     /////
-    rising = true;
-    initial_velocity = INITIAL_VELOCITY;
-    velocity = initial_velocity;
+    x = SIZE_X / 2;				// 暫時設為中間底部
+    y = SIZE_Y;
+    LoadBitmap();
 }
 
 void CBullet::LoadBitmap() {
-    char* filename[4] = { ".\\bitmaps\\bullet1.bmp", ".\\bitmaps\\ball2.bmp", ".\\bitmaps\\ball3.bmp", ".\\bitmaps\\ball4.bmp" };
+    char* filename[2] = { ".\\bitmaps\\bullet1.bmp", ".\\bitmaps\\bullet2.bmp"};
 
-    for (int i = 0; i < 4; i++)	// 載入動畫(由4張圖形構成)
-        animation.AddBitmap(filename[i], RGB(0, 0, 0));
+    for (int i = 0; i < 2; i++)		// 載入動畫(由4張圖形構成)
+        animation.AddBitmap(filename[i], RGB(0, 255, 0));
 }
 
 void CBullet::OnMove() {
-    /*
-    if (rising) {			// 上升狀態
-        if (velocity > 0) {
-            y -= velocity;	// 當速度 > 0時，y軸上升(移動velocity個點，velocity的單位為 點/次)
-            velocity--;		// 受重力影響，下次的上升速度降低
-        }
-        else {
-            rising = false; // 當速度 <= 0，上升終止，下次改為下降
-            velocity = 1;	// 下降的初速(velocity)為1
-        }
-    }
-    else {				// 下降狀態
-        if (y < floor - 1) {  // 當y座標還沒碰到地板
-            y += velocity;	// y軸下降(移動velocity個點，velocity的單位為 點/次)
-            velocity++;		// 受重力影響，下次的下降速度增加
-        }
-        else {
-            y = floor - 1;  // 當y座標低於地板，更正為地板上
-            rising = true;	// 探底反彈，下次改為上升
-            velocity = initial_velocity; // 重設上升初始速度
-        }
-    }
-    */
+    delay_counter--;
     animation.OnMove();		// 執行一次animation.OnMove()，animation才會換圖
+    const int STEPS = 10;
+
+    if (delay_counter <= 0 && is_alive) {
+        index++;
+
+        if (index  >= STEPS ) {
+            is_alive = 0;
+        }
+
+        dx = -(x - endX) / STEPS * index;
+        dy = -(y - endY) / STEPS * index;
+        delay_counter = delay;		// 計數器歸回原位
+    }
 }
 
 void CBullet::OnShow() {
-    animation.SetTopLeft(x, y);
-    animation.OnShow();
+    if (is_alive) {
+        animation.SetTopLeft(x + dx, y + dy);
+        animation.OnShow();
+    }
 }
 
 void CBullet::SetXY(int x, int y) {
@@ -69,16 +59,11 @@ void CBullet::SetXY(int x, int y) {
     this->y = y;
 }
 
-void CBullet::SetFloor(int floor) {
-    this->floor = floor;
-}
-void CBullet::SetVelocity(int velocity) {
-    this->velocity = velocity;
-    this->initial_velocity = velocity;
-}
-
 void CBullet::SetEndXY(int x, int y) {
     this->endX = x;
     this->endY = y;
+}
+bool CBullet::IsAlive() {
+    return is_alive;
 }
 }
