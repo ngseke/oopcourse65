@@ -78,5 +78,7 @@ void CBullet::SetVelocity(int velocity) {
 }
 
 void CBullet::SetEndXY(int x, int y) {
+    this->endX = x;
+    this->endY = y;
 }
 }

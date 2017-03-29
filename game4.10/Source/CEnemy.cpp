@@ -141,7 +141,7 @@ void  CEnemy::SetVocab() {  //隨機從dict中抓取一個單字到vocab裡面
         vocab = dict->GetText();// 給vocab一個單字
         length = vocab.length();
 
-        if (length <= 100)
+        if (length <= 100) // 條件成立,使用break跳出迴圈 確定生成此單字
             break;
     }
 
