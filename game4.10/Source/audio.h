@@ -50,7 +50,8 @@
  *      1. Rename Move() and Show() as OnMove and OnShow() to emphasize that they are
  *         event driven.
  *      2. Fix bug: audio is now correctly recovered after a sleep or suspension of windows.
- *      3. Support ENABLE_GAME_PAUSE.
+ *      3. Support ENABLE_GAME_
+ .
  *   2008-02-15 V4.4
  *      1. Add setup project for Visual studio 2005.
  *      2. Support bitmap scaling when ShowBitmap(scale) is called.

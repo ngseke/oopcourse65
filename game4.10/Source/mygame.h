@@ -33,7 +33,7 @@ class CGameStateInit : public CGameState {
     private:
         CMovingBitmap logo;								// csie的logo
         CMovingBitmap typing_logo;						// typing-typing 精美的LOGO
-        CMovingBitmap text1;							//	說明文字1
+        CMovingBitmap text1, note1;						//	說明文字1
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ class CGameStateRun : public CGameState {
         int				counter, maxCounter, currEnemy;
         bool			lock;											//判斷是否鎖住第一個字母了
         int				currLevel;										//當前關卡
-        int				levelEnemyNum[5] = { 20, 25, 30, 35, 40 };		//該關卡最大的敵人數
+        int				levelEnemyNum[5] = { 100, 25, 30, 35, 40 };		//該關卡最大的敵人數
 
 };
 

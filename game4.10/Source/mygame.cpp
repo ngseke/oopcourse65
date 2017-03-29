@@ -32,6 +32,7 @@ void CGameStateInit::OnInit() {
     //logo.LoadBitmap(IDB_BACKGROUND);
     typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));
+    note1.LoadBitmap("Bitmaps/note1_start.bmp", RGB(0, 255, 0));
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -60,10 +61,12 @@ void CGameStateInit::OnShow() {
     //
     //logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
     //logo.ShowBitmap();
-    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 40);
+    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
     typing_logo.ShowBitmap();
-    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, 300);
+    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 150);
     text1.ShowBitmap();
+    note1.SetTopLeft((SIZE_X - text1.Width()) / 6, SIZE_Y / 5 + typing_logo.Height());
+    note1.ShowBitmap();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //
@@ -75,11 +78,9 @@ void CGameStateInit::OnShow() {
     pDC->SetBkMode(TRANSPARENT);
     pDC->SetTextColor(RGB(41, 171, 226));
     //pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
-
-    if (ENABLE_GAME_PAUSE)
-        pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
-
-    pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
+    //if (ENABLE_GAME_PAUSE)
+    //    pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
+    //pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
     ////
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
@@ -148,12 +149,13 @@ CGameStateRun::CGameStateRun(CGame* g)
     srand((unsigned)time(NULL));	//亂數種子
     picX = picY = 0;
     //ball = new CBall[NUMBALLS];
-    enemy1 = new CEnemy[20];
-    ///////
+    //
     counter = maxCounter = 40;
     currEnemy = 0;
     lock = 0;
     currLevel = 0;
+    //
+    enemy1 = new CEnemy[levelEnemyNum[currLevel]];
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -167,8 +169,8 @@ void CGameStateRun::OnBeginState() {
     const int BALL_XY_OFFSET = 45;
     const int BALL_PER_ROW = 7;
     const int HITS_LEFT = 10;
-    const int HITS_LEFT_X = 590;
-    const int HITS_LEFT_Y = 0;
+    const int HITS_LEFT_X = SIZE_X - 100;
+    const int HITS_LEFT_Y = 20;
     const int BACKGROUND_X = 60;
     const int ANIMATION_SPEED = 15;
     /* 老師的示範球
@@ -193,7 +195,7 @@ void CGameStateRun::OnBeginState() {
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
         enemy1[i].SetXY(i * 50, 0);
-        enemy1[i].SetDelay(10);
+        enemy1[i].SetDelay(10); //useless
         enemy1[i].SetIsAlive(false);
     }
 
@@ -239,7 +241,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         counter = maxCounter;									// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;					// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(10);							// 從0數到這個數字才會動
+        enemy1[currEnemy].SetDelay(5);							// 從0數到這個數字才會動
         ////
 
         while (1) {												// 此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
@@ -268,7 +270,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     // 移動擦子
     //
-    eraser.OnMove();
+    //eraser.OnMove();
     //
     // 判斷擦子是否碰到球
     //
@@ -310,7 +312,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
         enemy1[i].LoadBitmap();
 
-    eraser.LoadBitmap();
+    //eraser.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
     // 完成部分Loading動作，提高進度
@@ -338,30 +340,6 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
-
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {		// 跑目前關卡怪物的數量
-        if (enemy1[i].IsAlive()) {								// 回傳當前怪物是否存在
-            if (!lock) {										// 尚未鎖定了
-                if (nChar + 32 == enemy1[i].GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
-                    lock = true;
-                    targetEnemy = &enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
-                    targetEnemy->AddCurrWordLeng();
-                }
-            }
-            else {											// 若已鎖定
-                if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
-                    targetEnemy->AddCurrWordLeng();
-
-                    if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) { // 若當前長度 等於 字母的長度
-                        targetEnemy->SetIsAlive(false);									// 成功殺害怪物
-                        lock = false;
-                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
-                    }
-                }
-            }
-        }
-    }
-
     /*
     if (nChar == KEY_LEFT)
         eraser.SetMovingLeft(true);
@@ -393,21 +371,46 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(false);
+
+    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {		// 跑目前關卡怪物的數量
+        if (enemy1[i].IsAlive()) {								// 回傳當前怪物是否存在
+            if (!lock) {										// 尚未鎖定了
+                if (nChar + 32 == enemy1[i].GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
+                    lock = true;
+                    targetEnemy = &enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
+                    targetEnemy->AddCurrWordLeng();
+                }
+            }
+            else {											// 若已鎖定
+                if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
+                    targetEnemy->AddCurrWordLeng();
+
+                    if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
+                        targetEnemy->SetIsAlive(false);									// 成功殺害怪物
+                        lock = false;
+                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
 }
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
-    eraser.SetMovingLeft(true);
+    //eraser.SetMovingLeft(true);
 }
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
-    eraser.SetMovingLeft(false);
+    //eraser.SetMovingLeft(false);
 }
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
     // 沒事。如果需要處理滑鼠移動的話，寫code在這裡
 }
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
-    eraser.SetMovingRight(true);
+    //eraser.SetMovingRight(true);
 }
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
-    eraser.SetMovingRight(false);
+    //eraser.SetMovingRight(false);
 }
 void CGameStateRun::OnShow() {
     //
@@ -433,7 +436,7 @@ void CGameStateRun::OnShow() {
     score.ShowBitmap();
     /////////
     //bball.OnShow();						// 貼上彈跳的球
-    eraser.OnShow();					// 貼上擦子
+    //eraser.OnShow();					// 貼上擦子
     //
     //  貼上左上及右下角落的圖
     //
