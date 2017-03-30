@@ -1,8 +1,12 @@
+
+
 namespace game_framework {
 
 class CEnemy {
     public:
         CEnemy();
+        CEnemy(int x, int y, int delay, bool alive);
+
         bool HitEraser(CEraser* eraser);						// 是否碰到擦子
         bool IsAlive();											// 是否活著
         void LoadBitmap();										// 載入圖形
@@ -16,8 +20,8 @@ class CEnemy {
         void SetVocab();										//隨機從dict中抓取一個單字到vocab裡面
         string GetVocab();										//回傳整組單字(ex: "apple")
         char GetFirstWord();									//以char回傳一個字 (ex: 'a')
-        void AddCurrWordLeng();										//CurrWord++
-        int GetCurrWordLeng();										//回傳int型態的CurrWord
+        void AddCurrWordLeng();									//CurrWord++
+        int GetCurrWordLeng();									//回傳int型態的CurrWord
         int GetVocabLeng();
         void LoadTextbox();
         int GetX(), GetY();
@@ -42,6 +46,7 @@ class CEnemy {
 
 
     private:
+        //CDict* useDict;	//罪魁禍首
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 };
 }

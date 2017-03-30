@@ -3,6 +3,7 @@
 #include "CBouncingBall.h"
 #include "CEnemy.h"
 #include "CBullet.h"
+#include "CDict.h"
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -72,16 +73,18 @@ class CGameStateRun : public CGameState {
 
         int				picX, picY;
         CEnemy*			enemy;
-        //CEnemy*			enemy1;
         vector<CEnemy*>	enemy1;
         CEnemy*			targetEnemy;
         CInteger		score;
-        const int		LEVEL;											//關卡總數
-        int				counter, maxCounter, currEnemy;
-        bool			lock;											//判斷是否鎖住第一個字母了
-        int				currLevel;										//當前關卡
-        int				levelEnemyNum[5] = { 100, 25, 30, 35, 40 };		//該關卡最大的敵人數
+        const int		LEVEL;											// 關卡總數
+        int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔
+        int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
+        bool			lock;											// 判斷是否鎖住第一個字母了
+        int				currLevel;										// 當前關卡
+        int				levelEnemyNum[5] = { 100, 25, 30, 35, 40 };		// 該關卡最大的敵人數
         vector<CBullet*>	bulletList;
+        CDict			dictionary;
+
 
 };
 

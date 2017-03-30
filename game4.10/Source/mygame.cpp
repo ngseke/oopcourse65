@@ -5,6 +5,10 @@
 				[解決了]3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
 	    		   這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
 			       後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
+				4. 怪物越多的時候會開始當掉
+
+[Q&A]			1. ERROR: "將警告視為錯誤處理 - 沒有產生 'object' 檔案",
+					可能是使用for迴圈和.size()時, 沒有把跑迴圈用的i設定成 unsigned int.
 */
 #include "stdafx.h"
 #include "Resource.h"
@@ -33,7 +37,7 @@ void CGameStateInit::OnInit() {
     typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));
     // note1.LoadBitmap("Bitmaps/note1_start.bmp", RGB(0, 255, 0));
-    char* note1_filename[6] = { "Bitmaps/note1_start_1.bmp",
+    char* note1_filename[6] = { "Bitmaps/note1_start_1.bmp",		//開頭說明圖片d
                                 "Bitmaps/note1_start_2.bmp",
                                 "Bitmaps/note1_start_3.bmp",
                                 "Bitmaps/note1_start_4.bmp",
@@ -161,23 +165,21 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	//亂數種子
     picX = picY = 0;
-    //ball = new CBall[NUMBALLS];
-    //
-    counter = maxCounter = 40;
-    currEnemy = 0;
+    callEnemyCounter = maxCallEnemyCounter = 40;
+    currEnemyNum = 0;
     lock = 0;
     currLevel = 0;
 
     //
     for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
-        enemy1.push_back(new CEnemy);
+        //enemy1.push_back(new CEnemy());
     }
 }
 
 CGameStateRun::~CGameStateRun() {
     //delete[] ball;
     ////////
-    delete[] & enemy1;
+    //delete[] &enemy1;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -210,9 +212,9 @@ void CGameStateRun::OnBeginState() {
     /////// SET Eneny's 初始值
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
-        enemy1[i]->SetXY(i * 50, 0);
-        enemy1[i]->SetDelay(10); //useless
-        enemy1[i]->SetIsAlive(false);
+        //enemy1[i]->SetXY(0, 0);		//useless
+        //enemy1[i]->SetDelay(10); //useless
+        //enemy1[i]->SetIsAlive(false);
     }
 
     score.SetInteger(0);			//設定SCORE為0;
@@ -251,44 +253,57 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     ////////
-    counter--;	//每隻怪物 生成間隔 之 counter (50~0)
+    callEnemyCounter--;	//每隻怪物 生成間隔 之 counter (50~0)
 
-    if (counter < 0 && currEnemy < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
-        counter = maxCounter;									// 把counter 調回max繼續數
+    if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
+        callEnemyCounter = maxCallEnemyCounter;									// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;					// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemy1[currEnemy]->SetXY(randX, 0);
-        enemy1[currEnemy]->SetDelay(5);							// 從0數到這個數字才會動
+        ////
+        //省喬改用把怪物放入vector的作法
+        enemy1.push_back(new CEnemy(randX, 0, 5, 0));
+        enemy1.back()->LoadBitmap();
+        ////
+        //enemy1[currEnemyNum]->SetXY(randX, 0);
+        //enemy1[currEnemyNum]->SetDelay(5);							// 從0數到這個數字才會動
         ////
 
-        while (1) {												// 此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
+        while (1) {								// 此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
             bool firstWordBounceFlag = 0;
 
-            for (int i = currEnemy - 1; i >= 0 ; i--) {
-                if (enemy1[currEnemy]->GetFirstWord() == enemy1[i]->GetFirstWord() && enemy1[i]->IsAlive())
+            for (int i = enemy1.size() - 1; i >= 0 ; i--) {
+                if (enemy1.back()->GetFirstWord() == enemy1[i]->GetFirstWord() && enemy1[i]->IsAlive())
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag) enemy1[currEnemy]->SetVocab();
+            if (firstWordBounceFlag) enemy1.back()->SetVocab();
             else {
                 break;
             }
         }
 
-        enemy1[currEnemy]->LoadTextbox();	// 確定單字是是什麼後 才讀取textbox的bitmap
-        enemy1[currEnemy]->SetIsAlive(true);
-        currEnemy++;
+        enemy1.back()->LoadTextbox();	// 確定單字是是什麼後 才讀取textbox的bitmap
+        enemy1.back()->SetIsAlive(true);
+        currEnemyNum++;
     }
 
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        if (enemy1[i]->IsAlive())enemy1[i]->OnMove();
+    for (unsigned int i = 0; i < enemy1.size(); i++)
+        if (enemy1[i]->IsAlive())	enemy1[i]->OnMove();
 
-    for (unsigned int i = 0; i < bulletList.size(); i++) {
+    for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnMove();	// 移動bullet
+
+    vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
+
+    for (unsigned int i = 0; i < enemy1.size(); i++) {
+        //若Enemy IsAlive=0, 則從vector中移除 但寫法不確定
+        if (!enemy1[i]->IsAlive())	enemy1.erase(iterEnemy1 + i);
+
+        break;
     }
 
     for (int i = bulletList.size() - 1; i >= 0; i--) {
         //若bullet IsAlive=0, 則從vector中移除
-        if (!bulletList[i]->IsAlive())bulletList.erase(bulletList.begin());       //(不確定是不是這麼寫)
+        if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());       //(不確定是不是這麼寫)
     }
 
     /////////////
@@ -329,14 +344,9 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     srand((unsigned)time(NULL));
     ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
-
     //
     // 開始載入資料
     //
-
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        enemy1[i]->LoadBitmap();
-
     //eraser.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
@@ -397,7 +407,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(false);
 
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {		// 跑目前關卡怪物的數量
+    for (int unsigned i = 0; i < enemy1.size(); i++) {		// 跑目前關卡怪物的數量
         if (enemy1[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
                 if (nChar + 32 == enemy1[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
@@ -455,7 +465,7 @@ void CGameStateRun::OnShow() {
     */
     /////////
 
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++)
+    for (unsigned int i = 0; i < enemy1.size(); i++)
         if (enemy1[i]->IsAlive())enemy1[i]->OnShow();
 
     for (unsigned int i = 0; i < bulletList.size(); i++) {

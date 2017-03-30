@@ -18,10 +18,18 @@ CEnemy::CEnemy() {
     is_alive = false;
     x = y = dx = dy = index = delay_counter = 0;
     currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
-    TRACE("\nvocab length: %d\n", length);  //輸出字數
     SetVocab();
 }
-
+CEnemy::CEnemy(int x, int y, int delay, bool alive) {
+    dx = dy = index = delay_counter = 0;
+    currWordLeng = 0;
+    ////
+    SetXY(x, y);
+    SetDelay(delay);
+    SetIsAlive(alive);
+    //useDict =  dict;
+    SetVocab();
+}
 bool CEnemy::HitEraser(CEraser* eraser) {
     // 檢測(擦子所構成的矩形)是否碰到球ㄦ
     // 檢查怪物是否碰到主角

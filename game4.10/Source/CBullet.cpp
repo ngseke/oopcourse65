@@ -32,7 +32,7 @@ void CBullet::LoadBitmap() {
 void CBullet::OnMove() {
     delay_counter--;
     animation.OnMove();		// 執行一次animation.OnMove()，animation才會換圖
-    const int STEPS = 10;
+    const int STEPS = 5;
 
     if (delay_counter <= 0 && is_alive) {
         index++;
