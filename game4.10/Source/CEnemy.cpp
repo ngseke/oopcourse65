@@ -31,7 +31,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive) {
     SetVocab();
 }
 bool CEnemy::HitEraser(CEraser* eraser) {
-    // 檢測(擦子所構成的矩形)是否碰到球ㄦ
+    // 檢測(擦子所構成的矩形)是否碰到球
     // 檢查怪物是否碰到主角
     return HitRectangle(eraser->GetX1(), eraser->GetY1(),
                         eraser->GetX2(), eraser->GetY2());
@@ -40,8 +40,8 @@ bool CEnemy::HitEraser(CEraser* eraser) {
 bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
     int x1 = x + dx;				// 球的左上角x座標
     int y1 = y + dy;				// 球的左上角y座標
-    int x2 = x1 + bmp.Width();	// 球的右下角x座標
-    int y2 = y1 + bmp.Height();	// 球的右下角y座標
+    int x2 = x1 + bmp.Width();		// 球的右下角x座標
+    int y2 = y1 + bmp.Height();		// 球的右下角y座標
     //
     // 檢測球的矩形與參數矩形是否有交集
     //
@@ -81,29 +81,14 @@ void CEnemy::OnMove() {
         //
         // 計算球向對於圓心的位移量dx, dy
         //
-        /*
-        const int STEPS = 18;
-        static const int DIFFX[] = { 35, 32, 26, 17, 6, -6, -17, -26, -32, -34, -32, -26, -17, -6, 6, 17, 26, 32, };
-        static const int DIFFY[] = { 0, 11, 22, 30, 34, 34, 30, 22, 11, 0, -11, -22, -30, -34, -34, -30, -22, -11, };
-        index++;
-
-        if (index >= STEPS)
-            index = 0;
-
-        dx = DIFFX[index];
-        dy = DIFFY[index];
-        */
-        const int STEPS = SIZE_Y / 5 ; // 每次移動5格
+        const int STEPS = SIZE_Y / 3 ; // 每次移動5格
         index++;
 
         if (index >= STEPS)
             index = 0;
 
         dx = - xMoveDistance / STEPS * index;
-        dy = index * 5;  // index(0~STEPS) * 移動格數
-        //if (background.Top() > SIZE_Y)
-        //   background.SetTopLeft(60, -background.Height());
-        //background.SetTopLeft(background.Left(), background.Top() + 1);
+        dy = index * 3;  // index(0~STEPS) * 移動格數
     }
 }
 void CEnemy::SetDelay(int d) {
@@ -142,24 +127,25 @@ void CEnemy::OnShow() {
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plaisn 的 CDC
     }
 }
+
 ////////////
-void  CEnemy::SetVocab() {  //隨機從dict中抓取一個單字到vocab裡面
+void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
     CDict* dict = new CDict;
 
     while (1) {
-        vocab = dict->GetText();// 給vocab一個單字
+        vocab = dict->GetText();	// 給vocab一個單字
         length = vocab.length();
 
-        if (length <= 100) // 條件成立,使用break跳出迴圈 確定生成此單字
+        if (length <= 100)			// 條件成立,使用break跳出迴圈 確定生成此單字
             break;
     }
 
-    free(dict); // 釋放掉dict記憶體
+    free(dict);		// 釋放掉dict記憶體
 }
-string CEnemy::GetVocab() {		  //回傳整組單字(ex: "apple")
+string CEnemy::GetVocab() {		  // 回傳整組單字(ex: "apple")
     return vocab;
 }
-char CEnemy::GetFirstWord()		{ //以char回傳一個字 (ex: 'a')
+char CEnemy::GetFirstWord()		{ // 以char回傳一個字 (ex: 'a')
     return vocab[0];
 }
 void CEnemy::AddCurrWordLeng() {

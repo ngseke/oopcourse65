@@ -165,7 +165,7 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	//亂數種子
     picX = picY = 0;
-    callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
+    callEnemyCounter = maxCallEnemyCounter = 60;	// maxCallEnemyCounter 決定怪物生成速度
     currEnemyNum = 0;
     lock = 0;
     currLevel = 0;
@@ -203,17 +203,16 @@ void CGameStateRun::OnBeginState() {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
-
     /////// SET Eneny's 初始值
-
+    /*
     for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
-        //enemy1[i]->SetXY(0, 0);		//useless
-        //enemy1[i]->SetDelay(10); //useless
-        //enemy1[i]->SetIsAlive(false);
+        enemy1[i]->SetXY(0, 0);		//useless
+        enemy1[i]->SetDelay(10); //useless
+        enemy1[i]->SetIsAlive(false);
     }
-
-    score.SetInteger(0);			//設定SCORE為0;
-    score.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);
+    */
+    score.SetInteger(0);			//設定SCORE為0
+    score.SetTopLeft(240, 240);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -248,35 +247,30 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     ////////
-    callEnemyCounter--;	//每隻怪物 生成間隔 之 counter (50~0)
+    callEnemyCounter--;	//每隻怪物 生成間隔 之 counter
 
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
-        callEnemyCounter = maxCallEnemyCounter;									// 把counter 調回max繼續數
+        callEnemyCounter = maxCallEnemyCounter;								// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;					// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        ////
-        //省喬改用把怪物放入vector的作法
-        enemy1.push_back(new CEnemy(randX, 0, 5, 0));
+        //	省喬改用把怪物放入vector的作法
+        enemy1.push_back(new CEnemy(randX, 0, 2, 0));
         enemy1.back()->LoadBitmap();
         ////
-        //enemy1[currEnemyNum]->SetXY(randX, 0);
-        //enemy1[currEnemyNum]->SetDelay(5);							// 從0數到這個數字才會動
-        ////
+        // 注意: 下面enemy1.back()指的都是剛新增的那隻怪物
 
-        while (1) {								// 此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
-            bool firstWordBounceFlag = 0;
+        while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
+            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
 
             for (int i = enemy1.size() - 1; i >= 0 ; i--) {
                 if (enemy1.back()->GetFirstWord() == enemy1[i]->GetFirstWord() && enemy1[i]->IsAlive())
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag) enemy1.back()->SetVocab();
-            else {
-                break;
-            }
+            if (firstWordBounceFlag && !(enemy1.size() >= 26)) enemy1.back()->SetVocab();
+            else break;
         }
 
-        enemy1.back()->LoadTextbox();	// 確定單字是是什麼後 才讀取textbox的bitmap
+        enemy1.back()->LoadTextbox();			// 確定單字是是什麼後 才讀取textbox的bitmap
         enemy1.back()->SetIsAlive(true);
         currEnemyNum++;
     }
@@ -447,15 +441,14 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
 }
 void CGameStateRun::OnShow() {
     //
-    //  注意：Show裡面千萬不要移動任何物件的座標，移動座標的工作應由Move做才對，
+    //  注意：Show裡面千萬不要移動任何物件的座標，移動座標的工作應由Move做才對，d
     //        否則當視窗重新繪圖時(OnDraw)，物件就會移動，看起來會很怪。換個術語
     //        說，Move負責MVC中的Model，Show負責View，而View不應更動Model。
     //
     //
     //
     help.ShowBitmap();					// 貼上說明圖
-    //hits_left.ShowBitmap();
-
+    score.ShowBitmap();					// 貼上分數
     /////////
 
     for (unsigned int i = 0; i < enemy1.size(); i++)
@@ -465,18 +458,18 @@ void CGameStateRun::OnShow() {
         bulletList[i]->OnShow();
     }
 
-    score.ShowBitmap();
     /////////
     //bball.OnShow();						// 貼上彈跳的球
     //eraser.OnShow();					// 貼上擦子
     //
     //  貼上左上及右下角落的圖
     //
+    /*
     corner.SetTopLeft(0, 0);
     corner.ShowBitmap();
     corner.SetTopLeft(SIZE_X - corner.Width(), SIZE_Y - corner.Height());
     corner.ShowBitmap();
-
+    */
     //
     //
     //////debug yong
@@ -496,7 +489,7 @@ void CGameStateRun::OnShow() {
         for (unsigned int i = 0; i < enemy1.size(); i++) {	// 顯示場上怪物之 單字,curr/length
             char temp[30];
             sprintf(temp, "%s %d/%d", enemy1[i]->GetVocab().c_str(), enemy1[i]->GetCurrWordLeng(), enemy1[i]->GetVocabLeng());
-            pDC->SetTextColor(RGB(200 + i, 200 + i, 200 + i));
+            pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
             pDC->TextOut(20, i * 14 + 40, temp);
         }
 

@@ -248,7 +248,19 @@ void CInteger::LoadBitmap() {
     // digit[i]為class varibale，所以必須避免重複LoadBitmap
     //
     if (!isBmpLoaded) {
-        int d[11] = {IDB_0, IDB_1, IDB_2, IDB_3, IDB_4, IDB_5, IDB_6, IDB_7, IDB_8, IDB_9, IDB_MINUS};
+        //int d[11] = {IDB_0, IDB_1, IDB_2, IDB_3, IDB_4, IDB_5, IDB_6, IDB_7, IDB_8, IDB_9, IDB_MINUS};
+        char* d[11] = { "Bitmaps/num/num0.bmp",
+                        "Bitmaps/num/num1.bmp",
+                        "Bitmaps/num/num2.bmp",
+                        "Bitmaps/num/num3.bmp",
+                        "Bitmaps/num/num4.bmp",
+                        "Bitmaps/num/num5.bmp",
+                        "Bitmaps/num/num6.bmp",
+                        "Bitmaps/num/num7.bmp",
+                        "Bitmaps/num/num8.bmp",
+                        "Bitmaps/num/num9.bmp",
+                        "Bitmaps/num/nummiuns.bmp",
+                      };
 
         for (int i = 0; i < 11; i++)
             digit[i].LoadBitmap(d[i], RGB(0, 0, 0));

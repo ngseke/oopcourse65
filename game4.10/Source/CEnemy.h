@@ -30,14 +30,14 @@ class CEnemy {
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
         CMovingBitmap textCursor;	// 文字光標 圖
-        CMovingBitmap talkBox;	// 對話框 圖
+        CMovingBitmap talkBox;		// 對話框 圖
         int x, y;					// 圓心的座標
         int dx, dy;					// 球距離圓心的位移量
         int index;					// 球的「角度」，0-17表示0-360度
         int delay_counter;			// 調整旋轉速度的計數器
         int delay;					// 旋轉的速度
         bool is_alive;				// 是否活著
-        ////////////
+        /////////
         string vocab;				// 儲存單字
         int length;					// 單字總長度
         int currWordLeng;			// 當前輸入文字的字元
