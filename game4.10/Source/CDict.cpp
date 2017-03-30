@@ -15,7 +15,7 @@ namespace game_framework {
 CDict::CDict() {
     fstream file;
     bool chongfu;	//­«½Æ
-    file.open("Source/text.txt", ios::in); //Åª¨ú¦r¨åÀÉ
+    file.open("dict/text.txt", ios::in); //Åª¨ú¦r¨åÀÉ
 
     if (!file) {}
     else {
