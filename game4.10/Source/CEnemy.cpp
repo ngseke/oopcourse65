@@ -23,7 +23,7 @@ CEnemy::CEnemy() {
 }
 
 bool CEnemy::HitEraser(CEraser* eraser) {
-    // 檢測(擦子所構成的矩形)是否碰到球
+    // 檢測(擦子所構成的矩形)是否碰到球ㄦ
     // 檢查怪物是否碰到主角
     return HitRectangle(eraser->GetX1(), eraser->GetY1(),
                         eraser->GetX2(), eraser->GetY2());

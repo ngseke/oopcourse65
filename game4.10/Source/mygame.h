@@ -28,12 +28,14 @@ class CGameStateInit : public CGameState {
         void OnBeginState();							// 設定每次重玩所需的變數
         void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
         void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnMove();
     protected:
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         CMovingBitmap logo;								// csie的logo
         CMovingBitmap typing_logo;						// typing-typing 精美的LOGO
-        CMovingBitmap text1, note1;						//	說明文字1
+        CMovingBitmap text1;							//	說明文字1
+        CAnimation		note1;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -68,10 +70,10 @@ class CGameStateRun : public CGameState {
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
 
-
         int				picX, picY;
         CEnemy*			enemy;
-        CEnemy*			enemy1;
+        //CEnemy*			enemy1;
+        vector<CEnemy*>	enemy1;
         CEnemy*			targetEnemy;
         CInteger		score;
         const int		LEVEL;											//關卡總數

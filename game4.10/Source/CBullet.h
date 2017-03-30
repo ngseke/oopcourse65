@@ -11,7 +11,6 @@ class CBullet {
         void OnMove();				// 移動
         void OnShow();				// 將圖形貼到畫面
         void SetXY(int, int);
-
         void SetEndXY(int, int);
         bool IsAlive();
     private:

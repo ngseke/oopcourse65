@@ -1,8 +1,8 @@
 /*
 3/24
-已知BUG :		1. 當有連續的單字(bee), 打到第二個e就會直接消失. 可能是keydown太靈敏.
-				2. 比如場上兩隻單字頂真(appl"e" "e"gg), 在打完apple最後的"e"時, 他會直接接到egg開頭的"e"
-				[解決了3.] 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
+已知BUG :		[解決了]1. 當有連續的單字(bee), 打到第二個e就會直接消失. 可能是keydown太靈敏.
+				[解決了]2. 比如場上兩隻單字頂真(appl"e" "e"gg), 在打完apple最後的"e"時, 他會直接接到egg開頭的"e"
+				[解決了]3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
 	    		   這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
 			       後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
 */
@@ -32,7 +32,18 @@ void CGameStateInit::OnInit() {
     //logo.LoadBitmap(IDB_BACKGROUND);
     typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));
-    note1.LoadBitmap("Bitmaps/note1_start.bmp", RGB(0, 255, 0));
+    // note1.LoadBitmap("Bitmaps/note1_start.bmp", RGB(0, 255, 0));
+    char* note1_filename[6] = { "Bitmaps/note1_start_1.bmp",
+                                "Bitmaps/note1_start_2.bmp",
+                                "Bitmaps/note1_start_3.bmp",
+                                "Bitmaps/note1_start_4.bmp",
+                                "Bitmaps/note1_start_5.bmp",
+                                "Bitmaps/note1_start_6.bmp",
+                              };
+
+    for (int i = 0; i < 6; i++)		// 載入動畫(由4張圖形構成)
+        note1.AddBitmap(note1_filename[i], RGB(0, 255, 0));
+
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -54,7 +65,9 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
     GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
-
+void CGameStateInit::OnMove() {
+    note1.OnMove();
+}
 void CGameStateInit::OnShow() {
     //
     // 貼上logo
@@ -63,10 +76,10 @@ void CGameStateInit::OnShow() {
     //logo.ShowBitmap();
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
     typing_logo.ShowBitmap();
-    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 150);
+    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
     text1.ShowBitmap();
-    note1.SetTopLeft((SIZE_X - text1.Width()) / 6, SIZE_Y / 5 + typing_logo.Height());
-    note1.ShowBitmap();
+    note1.SetTopLeft((SIZE_X - text1.Width()) / 8, SIZE_Y / 5 + typing_logo.Height());
+    note1.OnShow();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //
@@ -154,14 +167,17 @@ CGameStateRun::CGameStateRun(CGame* g)
     currEnemy = 0;
     lock = 0;
     currLevel = 0;
+
     //
-    enemy1 = new CEnemy[levelEnemyNum[currLevel]];
+    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
+        enemy1.push_back(new CEnemy);
+    }
 }
 
 CGameStateRun::~CGameStateRun() {
     //delete[] ball;
     ////////
-    delete[] enemy1;
+    delete[] & enemy1;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -194,9 +210,9 @@ void CGameStateRun::OnBeginState() {
     /////// SET Eneny's 初始值
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
-        enemy1[i].SetXY(i * 50, 0);
-        enemy1[i].SetDelay(10); //useless
-        enemy1[i].SetIsAlive(false);
+        enemy1[i]->SetXY(i * 50, 0);
+        enemy1[i]->SetDelay(10); //useless
+        enemy1[i]->SetIsAlive(false);
     }
 
     score.SetInteger(0);			//設定SCORE為0;
@@ -240,31 +256,31 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (counter < 0 && currEnemy < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         counter = maxCounter;									// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;					// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemy1[currEnemy].SetXY(randX, 0);
-        enemy1[currEnemy].SetDelay(5);							// 從0數到這個數字才會動
+        enemy1[currEnemy]->SetXY(randX, 0);
+        enemy1[currEnemy]->SetDelay(5);							// 從0數到這個數字才會動
         ////
 
         while (1) {												// 此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
             bool firstWordBounceFlag = 0;
 
             for (int i = currEnemy - 1; i >= 0 ; i--) {
-                if (enemy1[currEnemy].GetFirstWord() == enemy1[i].GetFirstWord() && enemy1[i].IsAlive())
+                if (enemy1[currEnemy]->GetFirstWord() == enemy1[i]->GetFirstWord() && enemy1[i]->IsAlive())
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag) enemy1[currEnemy].SetVocab();
+            if (firstWordBounceFlag) enemy1[currEnemy]->SetVocab();
             else {
                 break;
             }
         }
 
-        enemy1[currEnemy].LoadTextbox();	// 確定單字是是什麼後 才讀取textbox的bitmap
-        enemy1[currEnemy].SetIsAlive(true);
+        enemy1[currEnemy]->LoadTextbox();	// 確定單字是是什麼後 才讀取textbox的bitmap
+        enemy1[currEnemy]->SetIsAlive(true);
         currEnemy++;
     }
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        if (enemy1[i].IsAlive())enemy1[i].OnMove();
+        if (enemy1[i]->IsAlive())enemy1[i]->OnMove();
 
     for (unsigned int i = 0; i < bulletList.size(); i++) {
         bulletList[i]->OnMove();	// 移動bullet
@@ -319,7 +335,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        enemy1[i].LoadBitmap();
+        enemy1[i]->LoadBitmap();
 
     //eraser.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
@@ -382,11 +398,11 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         eraser.SetMovingDown(false);
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++) {		// 跑目前關卡怪物的數量
-        if (enemy1[i].IsAlive()) {								// 回傳當前怪物是否存在
+        if (enemy1[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
-                if (nChar + 32 == enemy1[i].GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
+                if (nChar + 32 == enemy1[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
                     lock = true;
-                    targetEnemy = &enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
+                    targetEnemy = enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));
                 }
@@ -440,7 +456,7 @@ void CGameStateRun::OnShow() {
     /////////
 
     for (int i = 0; i < levelEnemyNum[currLevel]; i++)
-        if (enemy1[i].IsAlive())enemy1[i].OnShow();
+        if (enemy1[i]->IsAlive())enemy1[i]->OnShow();
 
     for (unsigned int i = 0; i < bulletList.size(); i++) {
         bulletList[i]->OnShow();
