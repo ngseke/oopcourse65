@@ -62,6 +62,7 @@ class CGameStateRun : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int		NUMBALLS;	// 球的總數
+
         CMovingBitmap	background;	// 背景圖
         CMovingBitmap	help;		// 說明圖
         CBall*			ball;		// 球的陣列
@@ -70,14 +71,14 @@ class CGameStateRun : public CGameState {
         CInteger		hits_left;	// 剩下的撞擊數
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
-
+        const bool		SHOW_DEBUG = 1;	// 是否顯示debug資訊
         int				picX, picY;
         CEnemy*			enemy;
         vector<CEnemy*>	enemy1;
         CEnemy*			targetEnemy;
         CInteger		score;
         const int		LEVEL;											// 關卡總數
-        int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔
+        int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快
         int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡

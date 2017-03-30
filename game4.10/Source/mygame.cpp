@@ -165,15 +165,10 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	//亂數種子
     picX = picY = 0;
-    callEnemyCounter = maxCallEnemyCounter = 40;
+    callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
     currEnemyNum = 0;
     lock = 0;
     currLevel = 0;
-
-    //
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
-        //enemy1.push_back(new CEnemy());
-    }
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -292,13 +287,14 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnMove();	// 移動bullet
 
-    vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
-
     for (unsigned int i = 0; i < enemy1.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除 但寫法不確定
-        if (!enemy1[i]->IsAlive())	enemy1.erase(iterEnemy1 + i);
+        vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
 
-        break;
+        if (!enemy1[i]->IsAlive()) {
+            enemy1.erase(iterEnemy1 + i);
+            break;
+        }
     }
 
     for (int i = bulletList.size() - 1; i >= 0; i--) {
@@ -459,10 +455,7 @@ void CGameStateRun::OnShow() {
     //
     help.ShowBitmap();					// 貼上說明圖
     //hits_left.ShowBitmap();
-    /*
-    for (int i = 0; i < NUMBALLS; i++) // 暫時設定100
-        ball[i].OnShow();				// 貼上第i號球(香菇)
-    */
+
     /////////
 
     for (unsigned int i = 0; i < enemy1.size(); i++)
@@ -483,5 +476,36 @@ void CGameStateRun::OnShow() {
     corner.ShowBitmap();
     corner.SetTopLeft(SIZE_X - corner.Width(), SIZE_Y - corner.Height());
     corner.ShowBitmap();
+
+    //
+    //
+    //////debug yong
+    if (SHOW_DEBUG) {		// 要顯示DEBUG資訊的話 去h檔把常數SHOW_DEBUG設TRUE
+        CDC* pDC = CDDraw::GetBackCDC();
+        CFont f, *fp;
+        f.CreatePointFont(120, "New Times Roman");
+        fp = pDC->SelectObject(&f);
+        pDC->SetBkColor(RGB(0, 0, 0));
+        pDC->SetBkMode(TRANSPARENT);
+        //
+        char temp[30];
+        sprintf(temp, "Curr Enemy Numbers: %d", enemy1.size());
+        pDC->SetTextColor(RGB(200, 0, 0));
+        pDC->TextOut(20, 20, temp);
+
+        for (unsigned int i = 0; i < enemy1.size(); i++) {	// 顯示場上怪物之 單字,curr/length
+            char temp[30];
+            sprintf(temp, "%s %d/%d", enemy1[i]->GetVocab().c_str(), enemy1[i]->GetCurrWordLeng(), enemy1[i]->GetVocabLeng());
+            pDC->SetTextColor(RGB(200 + i, 200 + i, 200 + i));
+            pDC->TextOut(20, i * 14 + 40, temp);
+        }
+
+        sprintf(temp, "Bullet Numbers: %d", bulletList.size());
+        pDC->SetTextColor(RGB(200, 200, 200 ));
+        pDC->TextOut(250, 20, temp);
+        ////
+        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+    }
 }
 }
