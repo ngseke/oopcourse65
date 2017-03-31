@@ -30,8 +30,14 @@ class CEnemy {
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
         CMovingBitmap textCursor;	// 文字光標 圖
-        CMovingBitmap talkBox;		// 對話框 圖
-        CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框
+        CMovingBitmap talkBox;		// 對話框 圖	(舊的)
+        CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框 圖
+        //          <  =  = ... =  >
+        // talkBox: L  C  C ... C  R
+        // L(Left), C(Center), R(Right)
+        // 依照單字長度 生成不同數量的 talkBoxC
+        //
+        CAnimation		target;
         int x, y;					// 圓心的座標
         int dx, dy;					// 球距離圓心的位移量
         int index;					// 球的「角度」，0-17表示0-360度

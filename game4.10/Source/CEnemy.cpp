@@ -60,6 +60,11 @@ void CEnemy::LoadBitmap() {
     talkBoxL.LoadBitmap("Bitmaps/talk_box_left.bmp", RGB(0, 255, 0));
     talkBoxC.LoadBitmap("Bitmaps/talk_box_center.bmp", RGB(0, 255, 0));
     talkBoxR.LoadBitmap("Bitmaps/talk_box_right.bmp", RGB(0, 255, 0));
+    /////
+    char* filename[2] = { "Bitmaps/target_s1.bmp", "Bitmaps/target_s2.bmp" };
+
+    for (int i = 0; i < 2; i++)		// 載入動畫
+        target.AddBitmap(filename[i], RGB(0, 255, 0));
 }
 void CEnemy::LoadTextbox() {		//用不到了
     // 根據單字長度 載入不同寬度對話框
@@ -78,6 +83,7 @@ void CEnemy::OnMove() {
 
     delay_counter--;
     xMoveDistance = x - (SIZE_X / 2);
+    target.OnMove();
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -111,10 +117,8 @@ void CEnemy::OnShow() {
         /*
         // 傳統顯示talkbox方式
         talkBox.SetTopLeft(x + dx + bmp.Width(), y + dy);
-        talkBox.ShowBitmap();
+         talkBox.ShowBitmap();
         */
-        textCursor.SetTopLeft(x + dx + bmp.Width() + 5 + ((currWordLeng + 1) * 9), y + dy);	// 顯示光標
-        //////
         // 改良後顯示talkbox方式, 完全依照單字長度
         talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
         talkBoxL.ShowBitmap();
@@ -126,8 +130,15 @@ void CEnemy::OnShow() {
 
         talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
         talkBoxR.ShowBitmap();
+        ////
+        //// show target bmp
+        target.SetTopLeft(x + dx - 2, y + dy - 2);
 
-        //////
+        if (currWordLeng != 0)target.OnShow();
+
+        //
+        textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 9), y + dy);	// 顯示光標
+
         if (currWordLeng != 0) textCursor.ShowBitmap();
 
         //////////// Display FONT
@@ -144,7 +155,7 @@ void CEnemy::OnShow() {
 
         char str[10];
         sprintf(str, "curr %d", currWordLeng);
-        pDC->TextOut(x + dx + bmp.Width() + 13, y + dy, vocab.c_str());	// 顯示單字
+        pDC->TextOut(x + dx + bmp.Width() + talkBoxL.Width(), y + dy, vocab.c_str());	// 顯示單字
         pDC->SelectObject(fp);								// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();							// 放掉 Back Plaisn 的 CDC
     }
@@ -158,7 +169,7 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
         vocab = dict->GetText();	// 給vocab一個單字
         length = vocab.length();
 
-        if (length <= 100)			// 條件成立,使用break跳出迴圈 確定生成此單字
+        if (length <= 5)			// 條件成立,使用break跳出迴圈 確定生成此單字
             break;
     }
 
