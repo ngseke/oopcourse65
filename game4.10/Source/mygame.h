@@ -36,7 +36,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap logo;								// csie的logo
         CMovingBitmap typing_logo;						// typing-typing 精美的LOGO
         CMovingBitmap text1;							//	說明文字1
-        CAnimation		note1;
+        CAnimation	  note1;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -82,9 +82,9 @@ class CGameStateRun : public CGameState {
         int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
-        int				levelEnemyNum[5] = { 20, 25, 30, 35, 40 };		// 該關卡最大的敵人數
+        int				levelEnemyNum[5] = { 40, 25, 30, 35, 40 };		// 該關卡最大的敵人數
         vector<CBullet*>	bulletList;
-        CDict			dictionary;
+        CDict*			dictionary;
 
 
 };

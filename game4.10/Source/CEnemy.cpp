@@ -20,7 +20,7 @@ CEnemy::CEnemy() {
     currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
     SetVocab();
 }
-CEnemy::CEnemy(int x, int y, int delay, bool alive) {
+CEnemy::CEnemy(int x, int y, int delay, bool alive) {	//	初始值都在此處設定
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
     ////
@@ -57,8 +57,11 @@ void CEnemy::LoadBitmap() {
     bmp.LoadBitmap(faceFile[(rand() % 7)], RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
+    talkBoxL.LoadBitmap("Bitmaps/talk_box_left.bmp", RGB(0, 255, 0));
+    talkBoxC.LoadBitmap("Bitmaps/talk_box_center.bmp", RGB(0, 255, 0));
+    talkBoxR.LoadBitmap("Bitmaps/talk_box_right.bmp", RGB(0, 255, 0));
 }
-void CEnemy::LoadTextbox() {
+void CEnemy::LoadTextbox() {		//用不到了
     // 根據單字長度 載入不同寬度對話框
     if (length <= 3)
         talkBox.LoadBitmap("Bitmaps/talk_box_3words.bmp", RGB(0, 255, 0));
@@ -105,10 +108,26 @@ void CEnemy::OnShow() {
     if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
+        /*
+        // 傳統顯示talkbox方式
         talkBox.SetTopLeft(x + dx + bmp.Width(), y + dy);
         talkBox.ShowBitmap();
+        */
         textCursor.SetTopLeft(x + dx + bmp.Width() + 5 + ((currWordLeng + 1) * 9), y + dy);	// 顯示光標
+        //////
+        // 改良後顯示talkbox方式, 完全依照單字長度
+        talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
+        talkBoxL.ShowBitmap();
 
+        for (int i = 0; i < length; i++) {
+            talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
+            talkBoxC.ShowBitmap();
+        }
+
+        talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
+        talkBoxR.ShowBitmap();
+
+        //////
         if (currWordLeng != 0) textCursor.ShowBitmap();
 
         //////////// Display FONT
@@ -118,13 +137,16 @@ void CEnemy::OnShow() {
         f.CreatePointFont(120, "Consolas");			// 產生 font f; 字體選用等寬字 Consolas,或 Courier
         fp = pDC->SelectObject(&f);					// 選用 font f
         pDC->SetBkMode(TRANSPARENT);				// TEXT背景設定為透明
-        pDC->SetTextColor(RGB(20, 20, 20));
+        pDC->SetTextColor(RGB(20, 20, 20));			// 設定文字顏色
+
+        if (currWordLeng > 0)
+            pDC->SetTextColor(RGB(24, 106, 59));	// 若currWordLeng > 0 則文字顏色選為特定顏色
+
         char str[10];
         sprintf(str, "curr %d", currWordLeng);
         pDC->TextOut(x + dx + bmp.Width() + 13, y + dy, vocab.c_str());	// 顯示單字
-        //pDC->TextOut(x + dx + 40, y + dy + 20, str);			// 暫時DEBUG用:顯示CURR
-        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();					// 放掉 Back Plaisn 的 CDC
+        pDC->SelectObject(fp);								// 放掉 font f (千萬不要漏了放掉)
+        CDDraw::ReleaseBackCDC();							// 放掉 Back Plaisn 的 CDC
     }
 }
 
@@ -162,4 +184,8 @@ int CEnemy::GetX() {
 } int CEnemy::GetY() {
     return y + dy;
 }
+void CEnemy::MinusIndex(int num) {
+    index = index - num;
+}
+
 }

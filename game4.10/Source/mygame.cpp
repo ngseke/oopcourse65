@@ -165,7 +165,7 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
     picX = picY = 0;
-    callEnemyCounter = maxCallEnemyCounter = 60;	// maxCallEnemyCounter 決定怪物生成速度
+    callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
     currEnemyNum = 0;
     lock = 0;
     currLevel = 0;
@@ -250,8 +250,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     callEnemyCounter--;	//每隻怪物 生成間隔 之 counter
 
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
-        callEnemyCounter = maxCallEnemyCounter;								// 把counter 調回max繼續數
-        int randX = (rand() % (SIZE_X - 100)) ;					// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
+        callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
+        int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         //	省喬改用把怪物放入vector的作法
         enemy1.push_back(new CEnemy(randX, 0, 2, 0));
         enemy1.back()->LoadBitmap();
@@ -270,7 +270,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
             else break;
         }
 
-        enemy1.back()->LoadTextbox();			// 確定單字是是什麼後 才讀取textbox的bitmap
+        //enemy1.back()->LoadTextbox();			//(用不到了 改用改良後的textbox) 確定單字是是什麼後 才讀取textbox的bitmap
         enemy1.back()->SetIsAlive(true);
         currEnemyNum++;
     }
@@ -278,11 +278,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (unsigned int i = 0; i < enemy1.size(); i++)
         if (enemy1[i]->IsAlive())	enemy1[i]->OnMove();
 
-    for (unsigned int i = 0; i < bulletList.size(); i++)
-        bulletList[i]->OnMove();	// 移動bullet
-
     for (unsigned int i = 0; i < enemy1.size(); i++) {
-        //若Enemy IsAlive=0, 則從vector中移除 但寫法不確定
+        //若Enemy IsAlive=0, 則從vector中移除
         vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
 
         if (!enemy1[i]->IsAlive()) {
@@ -291,9 +288,12 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         }
     }
 
+    for (unsigned int i = 0; i < bulletList.size(); i++)
+        bulletList[i]->OnMove();	// 移動bullet
+
     for (int i = bulletList.size() - 1; i >= 0; i--) {
         //若bullet IsAlive=0, 則從vector中移除
-        if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());       //(不確定是不是這麼寫)
+        if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());
     }
 
     /////////////
@@ -397,7 +397,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(false);
 
-    for (int unsigned i = 0; i < enemy1.size(); i++) {		// 跑目前關卡怪物的數量
+    for (int unsigned i = 0; i < enemy1.size(); i++) {			// 跑目前關卡怪物的數量
         if (enemy1[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
                 if (nChar + 32 == enemy1[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
@@ -405,12 +405,14 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     targetEnemy = enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));
+                    targetEnemy->MinusIndex(2);		// 擊退怪物
                 }
             }
             else {											// 若已鎖定
                 if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
+                    targetEnemy->MinusIndex(2);		// 擊退怪物
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->SetIsAlive(false);									// 成功殺害怪物
@@ -476,7 +478,7 @@ void CGameStateRun::OnShow() {
     if (SHOW_DEBUG) {		// 要顯示DEBUG資訊的話 去h檔把常數SHOW_DEBUG設TRUE
         CDC* pDC = CDDraw::GetBackCDC();
         CFont f, *fp;
-        f.CreatePointFont(120, "New Times Roman");
+        f.CreatePointFont(120, "Fixedsys");
         fp = pDC->SelectObject(&f);
         pDC->SetBkColor(RGB(0, 0, 0));
         pDC->SetBkMode(TRANSPARENT);
@@ -495,7 +497,7 @@ void CGameStateRun::OnShow() {
 
         sprintf(temp, "Bullet Numbers: %d", bulletList.size());
         pDC->SetTextColor(RGB(200, 200, 200 ));
-        pDC->TextOut(250, 20, temp);
+        pDC->TextOut(20, 2, temp);
         ////
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC

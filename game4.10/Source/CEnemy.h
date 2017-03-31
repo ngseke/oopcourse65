@@ -1,5 +1,3 @@
-
-
 namespace game_framework {
 
 class CEnemy {
@@ -17,20 +15,23 @@ class CEnemy {
         void SetDelay(int d);									// 設定旋轉的速度
         /////////////
 
-        void SetVocab();										//隨機從dict中抓取一個單字到vocab裡面
-        string GetVocab();										//回傳整組單字(ex: "apple")
-        char GetFirstWord();									//以char回傳一個字 (ex: 'a')
-        void AddCurrWordLeng();									//CurrWord++
-        int GetCurrWordLeng();									//回傳int型態的CurrWord
+        void SetVocab();										// 隨機從dict中抓取一個單字到vocab裡面
+        string GetVocab();										// 回傳整組單字(ex: "apple")
+        char GetFirstWord();									// 以char回傳一個字 (ex: 'a')
+        void AddCurrWordLeng();									// CurrWord++
+        int GetCurrWordLeng();									// 回傳int型態的CurrWord
         int GetVocabLeng();
         void LoadTextbox();
         int GetX(), GetY();
+        void MinusIndex(int num);								//	擊退怪物 num為擊退多少index
+
 
     protected:
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
         CMovingBitmap textCursor;	// 文字光標 圖
         CMovingBitmap talkBox;		// 對話框 圖
+        CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框
         int x, y;					// 圓心的座標
         int dx, dy;					// 球距離圓心的位移量
         int index;					// 球的「角度」，0-17表示0-360度
@@ -43,10 +44,8 @@ class CEnemy {
         int currWordLeng;			// 當前輸入文字的字元
         int xMoveDistance;			// 怪物X位移的總距離
 
-
-
     private:
-        //CDict* useDict;	//罪魁禍首
+
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 };
 }
