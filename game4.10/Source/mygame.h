@@ -71,7 +71,7 @@ class CGameStateRun : public CGameState {
         CInteger		hits_left;	// 剩下的撞擊數
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
-        const bool		SHOW_DEBUG = 0;	// 是否顯示debug資訊
+        const bool		SHOW_DEBUG = 1;	// 是否顯示debug資訊
         int				picX, picY;
         CEnemy*			enemy;
         vector<CEnemy*>	enemy1;

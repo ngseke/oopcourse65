@@ -163,7 +163,7 @@ void CGameStateOver::OnShow() {
 
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
-    srand((unsigned)time(NULL));	//亂數種子
+    srand((unsigned)time(NULL));	// 亂數種子
     picX = picY = 0;
     callEnemyCounter = maxCallEnemyCounter = 60;	// maxCallEnemyCounter 決定怪物生成速度
     currEnemyNum = 0;
