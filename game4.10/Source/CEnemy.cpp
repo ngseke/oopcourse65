@@ -68,6 +68,7 @@ void CEnemy::LoadBitmap() {
         char str[20];
         sprintf(str, "Bitmaps/char/%c.bmp", i + 97);
         letter.back()->LoadBitmap(str, RGB(255, 255, 255));
+        //letter[i]->LoadBitmap(str, RGB(255, 255, 255));
     }
 
     for (int i = 0; i < 2; i++)		// ¸ü¤J°Êµe

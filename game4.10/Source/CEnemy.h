@@ -33,6 +33,7 @@ class CEnemy {
         //CMovingBitmap talkBox;		// 對話框 圖	(舊的)
         CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框 圖
         vector<CMovingBitmap*> letter;
+        //CMovingBitmap letter[26];
         //          <  =  = ... =  >
         // talkBox: L  C  C ... C  R
         // L(Left), C(Center), R(Right)
