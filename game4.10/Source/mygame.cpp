@@ -45,8 +45,7 @@ void CGameStateInit::OnInit() {
                                 "Bitmaps/note1_start_6.bmp",
                               };
 
-    for (int i = 0; i < 6; i++)		// 載入動畫(由4張圖形構成)
-        note1.AddBitmap(note1_filename[i], RGB(0, 255, 0));
+    for (int i = 0; i < 6; i++) note1.AddBitmap(note1_filename[i], RGB(0, 255, 0));
 
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
@@ -83,10 +82,12 @@ void CGameStateInit::OnShow() {
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
     text1.ShowBitmap();
     note1.SetTopLeft((SIZE_X - text1.Width()) / 8, SIZE_Y / 5 + typing_logo.Height());
+    note1.SetDelayCount(10);	//設定動畫撥放的速度 如不打這行預設就是10
     note1.OnShow();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //
+    /*
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
     f.CreatePointFont(160, "Consolas");	// 產生 font f; 160表示16 point的字
@@ -94,13 +95,15 @@ void CGameStateInit::OnShow() {
     pDC->SetBkColor(RGB(0, 0, 0));
     pDC->SetBkMode(TRANSPARENT);
     pDC->SetTextColor(RGB(41, 171, 226));
-    //pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
-    //if (ENABLE_GAME_PAUSE)
-    //    pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
-    //pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
-    ////
+    pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
+
+    if (ENABLE_GAME_PAUSE)
+        pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
+
+    pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+    */
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -146,7 +149,7 @@ void CGameStateOver::OnShow() {
     pDC->SetBkColor(RGB(0, 0, 0));
     pDC->SetTextColor(RGB(255, 255, 0));
     char str[80];								// Demo 數字對字串的轉換
-    sprintf(str, "你 死 了 ! (%d)", counter / 30);
+    sprintf(str, "Game Over(%d)", counter / 30);
     pDC->TextOut(240, 210, str);
     //	顯示分數 (not done)
     // char scoreChr[80];
@@ -229,14 +232,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     background.SetTopLeft(background.Left(), background.Top() + 1);
     */
-    //
-    // 移動球
-    //
 
-    /*
-    for (int i = 0; i < NUMBALLS; i++)
-        ball[i].OnMove();
-    */
     ////////////
     if (picX <= SIZE_Y) {
         picX += 5;
@@ -361,10 +357,15 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
 }
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    const char KEY_LEFT = 0x25; // keyboard左箭頭
-    const char KEY_UP = 0x26; // keyboard上箭頭
+    const char KEY_LEFT = 0x25;	// keyboard左箭頭
+    const char KEY_UP = 0x26;	// keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
+
+    if (nChar == '1')showDebug = 1;	// 按1 顯示debug
+
+    if (nChar == '2')showDebug = 0;
+
     /*
     if (nChar == KEY_LEFT)
         eraser.SetMovingLeft(true);
@@ -404,15 +405,15 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     lock = true;
                     targetEnemy = enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
-                    bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));
-                    targetEnemy->MinusIndex(2);		// 擊退怪物
+                    bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+                    targetEnemy->MinusIndex(2);					// 擊退怪物
                 }
             }
-            else {											// 若已鎖定
+            else {												// 若已鎖定
                 if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
-                    targetEnemy->MinusIndex(2);		// 擊退怪物
+                    targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->SetIsAlive(false);									// 成功殺害怪物
@@ -474,8 +475,8 @@ void CGameStateRun::OnShow() {
     */
     //
     //
-    //////debug yong
-    if (SHOW_DEBUG) {		// 要顯示DEBUG資訊的話 去h檔把常數SHOW_DEBUG設TRUE
+
+    if (showDebug) {		// 顯示debug資訊
         CDC* pDC = CDDraw::GetBackCDC();
         CFont f, *fp;
         f.CreatePointFont(120, "Fixedsys");
