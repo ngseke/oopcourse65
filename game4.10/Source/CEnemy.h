@@ -30,8 +30,9 @@ class CEnemy {
         CMovingBitmap bmp;			// 球的圖
         CMovingBitmap bmp_center;	// 圓心的圖
         CMovingBitmap textCursor;	// 文字光標 圖
-        CMovingBitmap talkBox;		// 對話框 圖	(舊的)
+        //CMovingBitmap talkBox;		// 對話框 圖	(舊的)
         CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框 圖
+        vector<CMovingBitmap*> letter;
         //          <  =  = ... =  >
         // talkBox: L  C  C ... C  R
         // L(Left), C(Center), R(Right)

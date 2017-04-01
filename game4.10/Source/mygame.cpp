@@ -5,7 +5,8 @@
 				[解決了]3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
 	    		   這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
 			       後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
-				4. 怪物越多的時候會開始當掉
+				4. 怪物越多的時候會開始當掉 -> 是因為使用老師內建顯示文字的關係,
+					應該所有單字都做成bitmap的話就可以解決我猜
 
 [Q&A]			1. ERROR: "將警告視為錯誤處理 - 沒有產生 'object' 檔案",
 					可能是使用for迴圈和.size()時, 沒有把跑迴圈用的i設定成 unsigned int.
@@ -263,7 +264,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag && !(enemy1.size() >= 26)) enemy1.back()->SetVocab();
+            if (firstWordBounceFlag && !(enemy1.size() >= 24)) enemy1.back()->SetVocab();
             else break;
         }
 
@@ -452,7 +453,7 @@ void CGameStateRun::OnShow() {
     /////////
 
     for (unsigned int i = 0; i < enemy1.size(); i++)
-        if (enemy1[i]->IsAlive())enemy1[i]->OnShow();
+        enemy1[i]->OnShow();
 
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();

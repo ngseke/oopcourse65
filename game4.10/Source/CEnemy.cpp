@@ -63,9 +63,17 @@ void CEnemy::LoadBitmap() {
     /////
     char* filename[2] = { "Bitmaps/target_s1.bmp", "Bitmaps/target_s2.bmp" };
 
+    for (int i = 0; i < 26; i++) {
+        letter.push_back(new CMovingBitmap);
+        char str[20];
+        sprintf(str, "Bitmaps/char/%c.bmp", i + 97);
+        letter.back()->LoadBitmap(str, RGB(255, 255, 255));
+    }
+
     for (int i = 0; i < 2; i++)		// 載入動畫
         target.AddBitmap(filename[i], RGB(0, 255, 0));
 }
+/*
 void CEnemy::LoadTextbox() {		//用不到了
     // 根據單字長度 載入不同寬度對話框
     if (length <= 3)
@@ -77,9 +85,9 @@ void CEnemy::LoadTextbox() {		//用不到了
     else
         talkBox.LoadBitmap("Bitmaps/talk_box_15words.bmp", RGB(0, 255, 0));
 }
+*/
 void CEnemy::OnMove() {
-    if (!is_alive)
-        return;
+    if (!is_alive) return;
 
     delay_counter--;
     xMoveDistance = x - (SIZE_X / 2);
@@ -114,11 +122,6 @@ void CEnemy::OnShow() {
     if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
-        /*
-        // 傳統顯示talkbox方式
-        talkBox.SetTopLeft(x + dx + bmp.Width(), y + dy);
-         talkBox.ShowBitmap();
-        */
         // 改良後顯示talkbox方式, 完全依照單字長度
         talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
         talkBoxL.ShowBitmap();
@@ -134,15 +137,16 @@ void CEnemy::OnShow() {
         //// show target bmp
         target.SetTopLeft(x + dx - 2, y + dy - 2);
 
-        if (currWordLeng != 0)target.OnShow();
+        if (currWordLeng != 0) target.OnShow();
 
         //
-        textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 9), y + dy);	// 顯示光標
+        textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
 
         if (currWordLeng != 0) textCursor.ShowBitmap();
 
         //////////// Display FONT
         //
+        /*
         CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
         CFont f, *fp;
         f.CreatePointFont(120, "Consolas");			// 產生 font f; 字體選用等寬字 Consolas,或 Courier
@@ -157,7 +161,17 @@ void CEnemy::OnShow() {
         sprintf(str, "curr %d", currWordLeng);
         pDC->TextOut(x + dx + bmp.Width() + talkBoxL.Width(), y + dy, vocab.c_str());	// 顯示單字
         pDC->SelectObject(fp);								// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();							// 放掉 Back Plaisn 的 CDC
+        CDDraw::ReleaseBackCDC();
+        */
+        for (int i = 0; i < length; i++) {
+            letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 3);
+            letter[vocab[i] - 97]->ShowBitmap();
+        }
+
+        for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
+            talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
+            talkBoxC.ShowBitmap();
+        }
     }
 }
 
@@ -169,7 +183,7 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
         vocab = dict->GetText();	// 給vocab一個單字
         length = vocab.length();
 
-        if (length <= 5)			// 條件成立,使用break跳出迴圈 確定生成此單字
+        if (length <= 6)			// 條件成立,使用break跳出迴圈 確定生成此單字
             break;
     }
 
@@ -192,7 +206,8 @@ int CEnemy::GetVocabLeng() {
 }
 int CEnemy::GetX() {
     return x + dx;
-} int CEnemy::GetY() {
+}
+int CEnemy::GetY() {
     return y + dy;
 }
 void CEnemy::MinusIndex(int num) {
