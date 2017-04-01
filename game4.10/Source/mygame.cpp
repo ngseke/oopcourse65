@@ -172,6 +172,7 @@ CGameStateRun::CGameStateRun(CGame* g)
     currEnemyNum = 0;
     lock = 0;
     currLevel = 0;
+    enemy1.reserve(64);
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -276,9 +277,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     for (unsigned int i = 0; i < enemy1.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
-        vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
-
         if (!enemy1[i]->IsAlive()) {
+            vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
             enemy1.erase(iterEnemy1 + i);
             break;
         }
@@ -317,10 +317,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
             }
         }
     */
-    //
-    // 移動彈跳的球
-    //
-    bball.OnMove();
+    //bball.OnMove();
 }
 
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
@@ -457,9 +454,8 @@ void CGameStateRun::OnShow() {
     for (unsigned int i = 0; i < enemy1.size(); i++)
         if (enemy1[i]->IsAlive())enemy1[i]->OnShow();
 
-    for (unsigned int i = 0; i < bulletList.size(); i++) {
+    for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
-    }
 
     /////////
     //bball.OnShow();						// 貼上彈跳的球
