@@ -264,6 +264,7 @@
     <ClCompile Include="Source\CDict.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
     <ClCompile Include="Source\CEraser.cpp" />
+    <ClCompile Include="Source\CMap.cpp" />
     <ClCompile Include="Source\game.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -313,6 +314,7 @@
     <ClInclude Include="Source\CDict.h" />
     <ClInclude Include="Source\CEnemy.h" />
     <ClInclude Include="Source\CEraser.h" />
+    <ClInclude Include="Source\CMap.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gameDoc.h" />
     <ClInclude Include="Source\gameView.h" />

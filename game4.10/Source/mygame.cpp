@@ -293,6 +293,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());
     }
 
+    map.OnMove();
     /////////////
     //
     // 移動擦子
@@ -347,6 +348,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     bball.LoadBitmap();										// 載入圖形
     //hits_left.LoadBitmap();
     score.LoadBitmap();
+    map.LoadBitmap();
     CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
     CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
     CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
@@ -448,6 +450,7 @@ void CGameStateRun::OnShow() {
     //
     //
     //
+    map.OnShow();
     help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     /////////

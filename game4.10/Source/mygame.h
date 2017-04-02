@@ -4,6 +4,7 @@
 #include "CEnemy.h"
 #include "CBullet.h"
 #include "CDict.h"
+#include "CMap.h"
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -85,6 +86,7 @@ class CGameStateRun : public CGameState {
         int				levelEnemyNum[5] = { 40, 25, 30, 35, 40 };		// 該關卡最大的敵人數
         vector<CBullet*>	bulletList;
         CDict*			dictionary;
+        CMap			map;
 
 
 };
