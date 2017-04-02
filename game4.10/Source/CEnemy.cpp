@@ -18,7 +18,7 @@ CEnemy::CEnemy() {
     is_alive = false;
     x = y = dx = dy = index = delay_counter = 0;
     currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
-    SetVocab();
+    //SetVocab();
 }
 CEnemy::CEnemy(int x, int y, int delay, bool alive) {	//	初始值都在此處設定
     dx = dy = index = delay_counter = 0;
@@ -164,11 +164,18 @@ void CEnemy::OnShow() {
         pDC->SelectObject(fp);								// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();
         */
+
         for (int i = 0; i < length; i++) {
             letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 3);
             letter[vocab[i] - 97]->ShowBitmap();
         }
 
+        /*
+        for (int i = 0; i < length; i++) {
+            letter[i]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[i]->Width() * i, y + dy + 3);
+            letter[i]->ShowBitmap();
+        }
+        */
         for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
             talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
             talkBoxC.ShowBitmap();
@@ -189,6 +196,15 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
     }
 
     free(dict);		// 釋放掉dict記憶體
+    //
+    /*
+    for (int i = 0; i < length; i++) {
+        letter.push_back(new CMovingBitmap);
+        char str[20];
+        sprintf(str, "Bitmaps/char/%c.bmp", vocab[i]);
+        letter.back()->LoadBitmap(str, RGB(255, 255, 255));
+    }
+    */
 }
 string CEnemy::GetVocab() {		  // 回傳整組單字(ex: "apple")
     return vocab;

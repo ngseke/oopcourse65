@@ -13,6 +13,7 @@ class CEnemy {
         void SetXY(int nx, int ny);								// 設定圓心的座標
         void SetIsAlive(bool alive);							// 設定是否活著
         void SetDelay(int d);									// 設定旋轉的速度
+
         /////////////
 
         void SetVocab();										// 隨機從dict中抓取一個單字到vocab裡面
