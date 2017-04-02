@@ -9,7 +9,7 @@
 
 
 namespace game_framework {
-CMap::CMap(): X(0), Y(0), MW(15), MH(15) {
+CMap::CMap(): X(0), Y(0), MW(21), MH(21) {
     delay = delay_counter = 0;
     dx = dy = 0;
 }
@@ -22,7 +22,7 @@ void CMap::OnMove() {
 
     if (delay_counter < 0) {
         delay_counter = delay;
-        const int STEPS = 15;
+        const int STEPS = 21;
         index++;
 
         if (index >= STEPS)index = 0;
@@ -32,8 +32,8 @@ void CMap::OnMove() {
 }
 void CMap::OnShow() {
     for (int i = 0; i < SIZE_X / MW; i++) {
-        for (int j = 0; j < SIZE_Y / MH + 15; j++) {
-            net.SetTopLeft(X + i * MW, Y + j * MH + dy - 15);
+        for (int j = 0; j < SIZE_Y / MH + 21; j++) {
+            net.SetTopLeft(X + i * MW, Y + j * MH + dy - 21);
             net.ShowBitmap();
         }
     }
