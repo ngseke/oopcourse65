@@ -31,6 +31,7 @@ class CGameStateInit : public CGameState {
         void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
         void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
         void OnMove();
+
     protected:
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
@@ -38,6 +39,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap typing_logo;						// typing-typing 精美的LOGO
         CMovingBitmap text1;							//	說明文字1
         CAnimation	  note1;
+        CMap			map;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -3,13 +3,12 @@
 #include <mmsystem.h>
 #include <ddraw.h>
 #include <time.h>
-#include "audio.h"
 #include "gamelib.h"
 #include "CMap.h"
 
 
 namespace game_framework {
-CMap::CMap(): X(0), Y(0), MW(21), MH(21) {
+CMap::CMap(): X(0), Y(0), MW(27), MH(27) {
     delay = delay_counter = 0;
     dx = dy = 0;
 }
@@ -22,7 +21,7 @@ void CMap::OnMove() {
 
     if (delay_counter < 0) {
         delay_counter = delay;
-        const int STEPS = 21;
+        const int STEPS = 27;
         index++;
 
         if (index >= STEPS)index = 0;
@@ -31,9 +30,9 @@ void CMap::OnMove() {
     }
 }
 void CMap::OnShow() {
-    for (int i = 0; i < SIZE_X / MW; i++) {
-        for (int j = 0; j < SIZE_Y / MH + 21; j++) {
-            net.SetTopLeft(X + i * MW, Y + j * MH + dy - 21);
+    for (int i = 0; i < (SIZE_X / MW) + 1; i++) {
+        for (int j = 0; j < SIZE_Y / MH + 27; j++) {
+            net.SetTopLeft(X + i * MW, Y + j * MH + dy - 27);
             net.ShowBitmap();
         }
     }

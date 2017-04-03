@@ -48,6 +48,7 @@ void CGameStateInit::OnInit() {
 
     for (int i = 0; i < 6; i++) note1.AddBitmap(note1_filename[i], RGB(0, 255, 0));
 
+    map.LoadBitmap();
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -71,6 +72,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
 }
 void CGameStateInit::OnMove() {
     note1.OnMove();
+    map.OnMove();
 }
 void CGameStateInit::OnShow() {
     //
@@ -78,6 +80,7 @@ void CGameStateInit::OnShow() {
     //
     //logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
     //logo.ShowBitmap();
+    map.OnShow();
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
     typing_logo.ShowBitmap();
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
