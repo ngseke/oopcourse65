@@ -174,11 +174,6 @@ CGameStateRun::CGameStateRun(CGame* g)
     srand((unsigned)time(NULL));	// 亂數種子
     picX = picY = 0;
     callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
-    currEnemyNum = 0;
-    lock = 0;
-    currLevel = 0;
-    enemy1.reserve(64);
-    lives = 3;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -213,16 +208,14 @@ void CGameStateRun::OnBeginState() {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
-    /////// SET Eneny's 初始值
-    /*
-    for (int i = 0; i < levelEnemyNum[currLevel]; i++) {
-        enemy1[i]->SetXY(0, 0);		//useless
-        enemy1[i]->SetDelay(10); //useless
-        enemy1[i]->SetIsAlive(false);
-    }
-    */
+    //
     score.SetInteger(0);			//設定SCORE為0
     score.SetTopLeft(240, 240);
+    currEnemyNum = 0;
+    lock = 0;
+    currLevel = 0;
+    enemy1.clear();
+    lives = 3;
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
