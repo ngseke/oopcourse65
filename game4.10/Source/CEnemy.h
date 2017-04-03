@@ -3,7 +3,7 @@ namespace game_framework {
 class CEnemy {
     public:
         CEnemy();
-        CEnemy(int x, int y, int delay, bool alive);
+        CEnemy(int x, int y, int delay, bool alive, CDict* dict);
 
         bool HitEraser(CEraser* eraser);						// 是否碰到擦子
         bool IsAlive();											// 是否活著
@@ -25,7 +25,7 @@ class CEnemy {
         void LoadTextbox();
         int GetX(), GetY();
         void MinusIndex(int num);								//	擊退怪物 num為擊退多少index
-
+        bool HitMe(CMe* me);
 
     protected:
         CMovingBitmap bmp;			// 球的圖
@@ -34,13 +34,12 @@ class CEnemy {
         //CMovingBitmap talkBox;		// 對話框 圖	(舊的)
         CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框 圖
         vector<CMovingBitmap*> letter;
-        //CMovingBitmap letter[26];
         //          <  =  = ... =  >
         // talkBox: L  C  C ... C  R
         // L(Left), C(Center), R(Right)
         // 依照單字長度 生成不同數量的 talkBoxC
         //
-        CAnimation		target;
+        CAnimation		target;		// 鎖定的動畫
         int x, y;					// 圓心的座標
         int dx, dy;					// 球距離圓心的位移量
         int index;					// 球的「角度」，0-17表示0-360度
@@ -51,7 +50,7 @@ class CEnemy {
         string vocab;				// 儲存單字
         int length;					// 單字總長度
         int currWordLeng;			// 當前輸入文字的字元
-        int xMoveDistance;			// 怪物X位移的總距離
+        CDict* dict;
 
     private:
 

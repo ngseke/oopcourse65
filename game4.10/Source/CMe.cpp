@@ -4,97 +4,56 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
-#include "CEraser.h"
+#include "CMe.h"
 
 namespace game_framework {
-	/////////////////////////////////////////////////////////////////////////////
-	// CEraser: Eraser class
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// CMe: еDид
+/////////////////////////////////////////////////////////////////////////////
 
-	CEraser::CEraser()
-	{
-		Initialize();
-	}
+CMe::CMe() {
+    Initialize();
+}
 
-	int CEraser::GetX1()
-	{
-		return x;
-	}
+int CMe::GetX1() {
+    return x;
+}
 
-	int CEraser::GetY1()
-	{
-		return y;
-	}
+int CMe::GetY1() {
+    return y;
+}
 
-	int CEraser::GetX2()
-	{
-		return x + animation.Width();
-	}
+int CMe::GetX2() {
+    return x + animation.Width();
+}
 
-	int CEraser::GetY2()
-	{
-		return y + animation.Height();
-	}
+int CMe::GetY2() {
+    return y + animation.Height();
+}
 
-	void CEraser::Initialize()
-	{
-		const int X_POS = 280;
-		const int Y_POS = 400;
-		x = X_POS;
-		y = Y_POS;
-		isMovingLeft = isMovingRight = isMovingUp = isMovingDown = false;
-	}
+void CMe::Initialize() {
+    const int X_POS = ( SIZE_X - 16) / 2;
+    const int Y_POS = SIZE_Y - 50;
+    x = X_POS;
+    y = Y_POS;
+    isMovingLeft = isMovingRight = isMovingUp = isMovingDown = false;
+}
 
-	void CEraser::LoadBitmap()
-	{
-		animation.AddBitmap(IDB_ERASER1, RGB(255, 255, 255));
-		animation.AddBitmap(IDB_ERASER2, RGB(255, 255, 255));
-		animation.AddBitmap(IDB_ERASER3, RGB(255, 255, 255));
-		animation.AddBitmap(IDB_ERASER2, RGB(255, 255, 255));
-	}
+void CMe::LoadBitmap() {
+    animation.AddBitmap("Bitmaps/me_cow.bmp", RGB(0, 255, 0));
+}
 
-	void CEraser::OnMove()
-	{
-		const int STEP_SIZE = 2;
-		animation.OnMove();
-		if (isMovingLeft)
-			x -= STEP_SIZE;
-		if (isMovingRight)
-			x += STEP_SIZE;
-		if (isMovingUp)
-			y -= STEP_SIZE;
-		if (isMovingDown)
-			y += STEP_SIZE;
-	}
+void CMe::OnMove() {
+}
 
-	void CEraser::SetMovingDown(bool flag)
-	{
-		isMovingDown = flag;
-	}
 
-	void CEraser::SetMovingLeft(bool flag)
-	{
-		isMovingLeft = flag;
-	}
+void CMe::SetXY(int nx, int ny) {
+    x = nx;
+    y = ny;
+}
 
-	void CEraser::SetMovingRight(bool flag)
-	{
-		isMovingRight = flag;
-	}
-
-	void CEraser::SetMovingUp(bool flag)
-	{
-		isMovingUp = flag;
-	}
-
-	void CEraser::SetXY(int nx, int ny)
-	{
-		x = nx; y = ny;
-	}
-
-	void CEraser::OnShow()
-	{
-		animation.SetTopLeft(x, y);
-		animation.OnShow();
-	}
+void CMe::OnShow() {
+    animation.SetTopLeft(x, y);
+    animation.OnShow();
+}
 }

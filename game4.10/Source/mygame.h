@@ -1,10 +1,12 @@
 #include "CEraser.h"
+#include "CMe.h"
+#include "CDict.h"
 #include "CBall.h"
 #include "CBouncingBall.h"
 #include "CEnemy.h"
 #include "CBullet.h"
-#include "CDict.h"
 #include "CMap.h"
+
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -90,8 +92,10 @@ class CGameStateRun : public CGameState {
         int				currLevel;										// 當前關卡
         int				levelEnemyNum[5] = { 40, 25, 30, 35, 40 };		// 該關卡最大的敵人數
         vector<CBullet*>	bulletList;
-        CDict*			dictionary;
+        CDict			dictionary;
         CMap			map;
+        CMe				me;
+        int				lives;
 
 
 };

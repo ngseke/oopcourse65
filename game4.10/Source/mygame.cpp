@@ -20,6 +20,7 @@
 #include "gamelib.h"
 #include "mygame.h"
 
+
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
@@ -159,7 +160,6 @@ void CGameStateOver::OnShow() {
     //	顯示分數 (not done)
     // char scoreChr[80];
     // sprintf(str, "SCORE: %d", score);
-    pDC->TextOut(240, 250, str);
     //
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
@@ -178,6 +178,7 @@ CGameStateRun::CGameStateRun(CGame* g)
     lock = 0;
     currLevel = 0;
     enemy1.reserve(64);
+    lives = 3;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -255,7 +256,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         //	省喬改用把怪物放入vector的作法
-        enemy1.push_back(new CEnemy(randX, 0, 2, 0));
+        enemy1.push_back(new CEnemy(randX, 0, 2, 0, &dictionary));
         enemy1.back()->LoadBitmap();
         ////
         // 注意: 下面enemy1.back()指的都是剛新增的那隻怪物
@@ -275,6 +276,24 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         //enemy1.back()->LoadTextbox();			//(用不到了 改用改良後的textbox) 確定單字是是什麼後 才讀取textbox的bitmap
         enemy1.back()->SetIsAlive(true);
         currEnemyNum++;
+    }
+
+    // 判斷Me是否碰到Enemy
+    for (int unsigned i = 0; i < enemy1.size(); i++) {
+        if (enemy1[i]->IsAlive() && enemy1[i]->HitMe(&me)) {
+            //enemy1[i]->SetIsAlive(false);
+            //CAudio::Instance()->Play(AUDIO_DING);
+            lives--;
+
+            //
+            // 若剩餘碰撞次數為0，則跳到Game Over狀態
+            //
+            if (lives <= 0) {
+                //CAudio::Instance()->Stop(AUDIO_LAKE);	// 停止 WAVE
+                //CAudio::Instance()->Stop(AUDIO_NTUT);	// 停止 MIDI
+                GotoGameState(GAME_STATE_OVER);
+            }
+        }
     }
 
     for (unsigned int i = 0; i < enemy1.size(); i++)
@@ -298,6 +317,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     map.OnMove();
+    me.OnMove();
     /////////////
     //
     // 移動擦子
@@ -323,7 +343,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
             }
         }
     */
-    //bball.OnMove();
 }
 
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
@@ -351,6 +370,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     bball.LoadBitmap();										// 載入圖形
     score.LoadBitmap();
     map.LoadBitmap();
+    me.LoadBitmap();
     //hits_left.LoadBitmap();
     //corner.ShowBitmap(background);							// 將corner貼到background
     CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
@@ -465,6 +485,8 @@ void CGameStateRun::OnShow() {
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
 
+    me.OnShow();
+
     /////////
     //bball.OnShow();						// 貼上彈跳的球
     //eraser.OnShow();					// 貼上擦子
@@ -488,8 +510,8 @@ void CGameStateRun::OnShow() {
         pDC->SetBkColor(RGB(0, 0, 0));
         pDC->SetBkMode(TRANSPARENT);
         //
-        char temp[30];
-        sprintf(temp, "Curr Enemy Numbers: %d", enemy1.size());
+        char temp[50];
+        sprintf(temp, "Curr Enemy Numbers: %d, Lives:%d", enemy1.size(), lives);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 20, temp);
 

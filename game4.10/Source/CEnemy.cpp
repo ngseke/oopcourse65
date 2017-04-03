@@ -5,9 +5,12 @@
 #include <time.h>
 #include "audio.h"
 #include "gamelib.h"
+#include "CDict.h"
+#include "CMe.h"
 #include "CEraser.h"
 #include "CEnemy.h"
-#include "CDict.h"
+
+
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -20,7 +23,7 @@ CEnemy::CEnemy() {
     currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
     //SetVocab();
 }
-CEnemy::CEnemy(int x, int y, int delay, bool alive) {	//	初始值都在此處設定
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d) {	//	初始值都在此處設定
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
     ////
@@ -28,6 +31,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive) {	//	初始值都在此處設定
     SetDelay(delay);
     SetIsAlive(alive);
     //useDict =  dict;
+    dict = d;
     SetVocab();
 }
 bool CEnemy::HitEraser(CEraser* eraser) {
@@ -38,12 +42,12 @@ bool CEnemy::HitEraser(CEraser* eraser) {
 }
 
 bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
-    int x1 = x + dx;				// 球的左上角x座標
-    int y1 = y + dy;				// 球的左上角y座標
-    int x2 = x1 + bmp.Width();		// 球的右下角x座標
-    int y2 = y1 + bmp.Height();		// 球的右下角y座標
+    int x1 = x + dx;				// 怪物face的左上角x座標
+    int y1 = y + dy;				// 怪物face的左上角y座標
+    int x2 = x1 + bmp.Width();		// 怪物face的右下角x座標
+    int y2 = y1 + bmp.Height();		// 怪物face的右下角y座標
     //
-    // 檢測球的矩形與參數矩形是否有交集
+    // 檢測怪物face的矩形與參數矩形是否有交集
     //
     return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
 }
@@ -91,24 +95,22 @@ void CEnemy::OnMove() {
     if (!is_alive) return;
 
     delay_counter--;
-    xMoveDistance = x - (SIZE_X / 2);
+    //xMoveDistance = x - (SIZE_X / 2);
     target.OnMove();
 
     if (delay_counter < 0) {
         delay_counter = delay;
-        //
-        // 計算球向對於圓心的位移量dx, dy
-        //
-        const int STEPS = SIZE_Y / 3 ; // 每次移動5格
+        const int STEPS = 300 ;	// 切成幾分dx
         index++;
 
         if (index >= STEPS)
             index = 0;
 
-        dx = - xMoveDistance / STEPS * index;
-        dy = index * 3;  // index(0~STEPS) * 移動格數
+        dx = -(x - (SIZE_X / 2)) / STEPS * index; // dx為 (Enemy<->Me之x總距離) / STEPS * index;
+        dy = -(y - SIZE_Y) / STEPS * index ;
     }
 }
+
 void CEnemy::SetDelay(int d) {
     delay = d;
 }
@@ -185,8 +187,7 @@ void CEnemy::OnShow() {
 
 ////////////
 void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
-    CDict* dict = new CDict;
-
+    //CDict* dict = new CDict;
     while (1) {
         vocab = dict->GetText();	// 給vocab一個單字
         length = vocab.length();
@@ -195,7 +196,7 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
             break;
     }
 
-    free(dict);		// 釋放掉dict記憶體
+    //free(dict);		// 釋放掉dict記憶體
     //
     /*
     for (int i = 0; i < length; i++) {
@@ -230,5 +231,8 @@ int CEnemy::GetY() {
 void CEnemy::MinusIndex(int num) {
     index = index - num;
 }
-
+bool CEnemy::HitMe(CMe* me) {
+    return HitRectangle(me->GetX1(), me->GetY1(),
+                        me->GetX2(), me->GetY2());
+}
 }

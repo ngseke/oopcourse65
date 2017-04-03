@@ -5,7 +5,6 @@ class CDict {
         CDict();
         string GetText();
     private:
-        string temp;
         vector<string> dictionary;
 };
 }
