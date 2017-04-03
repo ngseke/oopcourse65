@@ -8,7 +8,7 @@ class CMap {
         void OnShow();
 
     protected:
-        CMovingBitmap net;
+        CMovingBitmap net, bgColor;
         const int X, Y;
         const int MW, MH;
         int index;

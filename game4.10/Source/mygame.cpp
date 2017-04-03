@@ -5,8 +5,8 @@
 				[解決了]3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
 	    		   這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
 			       後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
-				4. 怪物越多的時候會開始當掉 -> 是因為使用老師內建顯示文字的關係,
-					應該所有單字都做成bitmap的話就可以解決我猜
+				[解決了]4. 怪物越多的時候會開始當掉 -> 是因為使用老師內建顯示文字的關係,
+					應該所有單字都做成bitmap的話就可以解決
 
 [Q&A]			1. ERROR: "將警告視為錯誤處理 - 沒有產生 'object' 檔案",
 					可能是使用for迴圈和.size()時, 沒有把跑迴圈用的i設定成 unsigned int.
@@ -26,7 +26,7 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), NOTE_TEXT_X(80), NOTE_TEXT_Y(300) {
+    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(300) {
 }
 
 void CGameStateInit::OnInit() {
@@ -346,13 +346,13 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     // 繼續載入其他資料
     //
-    help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));				// 載入說明的圖形
+    help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));			// 載入說明的圖形
     corner.LoadBitmap(IDB_CORNER);							// 載入角落圖形
-    //corner.ShowBitmap(background);							// 將corner貼到background
     bball.LoadBitmap();										// 載入圖形
-    //hits_left.LoadBitmap();
     score.LoadBitmap();
     map.LoadBitmap();
+    //hits_left.LoadBitmap();
+    //corner.ShowBitmap(background);							// 將corner貼到background
     CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
     CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
     CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid

@@ -35,12 +35,13 @@ class CGameStateInit : public CGameState {
     protected:
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-        int NOTE_TEXT_X, NOTE_TEXT_Y;
+        const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
         CMovingBitmap logo;								// csie的logo
-        CMovingBitmap typing_logo;						// typing-typing 精美的LOGO
-        CMovingBitmap text1;							//	說明文字1
-        CMovingBitmap noteText;
-        CAnimation	  noteExkey;
+        CMovingBitmap typing_logo;						// typing typing 精美的LOGO
+        CMovingBitmap text1;							// 說明文字
+        CMovingBitmap noteText;							// 遊戲說明
+        CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
+
         CMap			map;
 };
 
