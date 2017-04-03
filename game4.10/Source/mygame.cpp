@@ -26,7 +26,7 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g) {
+    : CGameState(g), NOTE_TEXT_X(80), NOTE_TEXT_Y(300) {
 }
 
 void CGameStateInit::OnInit() {
@@ -35,20 +35,20 @@ void CGameStateInit::OnInit() {
     // 開始載入資料
     //
     //logo.LoadBitmap(IDB_BACKGROUND);
-    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));
-    text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));
-    // note1.LoadBitmap("Bitmaps/note1_start.bmp", RGB(0, 255, 0));
-    char* note1_filename[6] = { "Bitmaps/note1_start_1.bmp",		//開頭說明圖片d
-                                "Bitmaps/note1_start_2.bmp",
-                                "Bitmaps/note1_start_3.bmp",
-                                "Bitmaps/note1_start_4.bmp",
-                                "Bitmaps/note1_start_5.bmp",
-                                "Bitmaps/note1_start_6.bmp",
+    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));		// logo
+    text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
+    noteText.LoadBitmap("Bitmaps/note/note_text_zh.bmp", RGB(0, 255, 0));	// 說明框
+    char* Exkey_filename[6] = { "Bitmaps/note/note1_exkey_1.bmp",			// 說明框裡面的按鍵動畫
+                                "Bitmaps/note/note1_exkey_2.bmp",
+                                "Bitmaps/note/note1_exkey_3.bmp",
+                                "Bitmaps/note/note1_exkey_4.bmp",
+                                "Bitmaps/note/note1_exkey_5.bmp",
+                                "Bitmaps/note/note1_exkey_6.bmp",
                               };
 
-    for (int i = 0; i < 6; i++) note1.AddBitmap(note1_filename[i], RGB(0, 255, 0));
+    for (int i = 0; i < 6; i++) noteExkey.AddBitmap(Exkey_filename[i], RGB(0, 255, 0));
 
-    map.LoadBitmap();
+    map.LoadBitmap();														// 背景網狀動畫
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -71,7 +71,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
     GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 void CGameStateInit::OnMove() {
-    note1.OnMove();
+    noteExkey.OnMove();
     map.OnMove();
 }
 void CGameStateInit::OnShow() {
@@ -85,9 +85,10 @@ void CGameStateInit::OnShow() {
     typing_logo.ShowBitmap();
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
     text1.ShowBitmap();
-    note1.SetTopLeft((SIZE_X - text1.Width()) / 8, SIZE_Y / 5 + typing_logo.Height());
-    note1.SetDelayCount(10);	//設定動畫撥放的速度 如不打這行預設就是10
-    note1.OnShow();
+    noteText.SetTopLeft(NOTE_TEXT_X, NOTE_TEXT_Y );
+    noteText.ShowBitmap();
+    noteExkey.SetTopLeft(NOTE_TEXT_X + 60, NOTE_TEXT_Y + 125 );
+    noteExkey.OnShow();
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //

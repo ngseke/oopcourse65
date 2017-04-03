@@ -23,13 +23,12 @@ CDict::CDict() {
             chongfu = 0;
 
             //以下用於判斷讀入的單字 在字典裡是否已重複
-            /*
-            for (unsigned int i = 0; i < dictionary.size(); i++) {
-                if (temp == dictionary[i])chongfu = 1;
-            }
-            */
 
-            if (chongfu != 1)dictionary.push_back(temp); //將字典檔讀入
+            for (unsigned int i = 0; i < dictionary.size(); i++) {
+                if (temp == dictionary[i])	chongfu = 1;
+            }
+
+            if (!chongfu)dictionary.push_back(temp); //將字典檔讀入
         }
     }
 
