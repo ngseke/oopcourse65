@@ -90,7 +90,7 @@ class CGameStateRun : public CGameState {
         int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
-        int				levelEnemyNum[5] = { 40, 25, 30, 35, 40 };		// 該關卡最大的敵人數
+        int				levelEnemyNum[5] = { 5, 25, 30, 35, 40 };		// 該關卡最大的敵人數
         vector<CBullet*>	bulletList;
         CDict			dictionary;
         CMap			map;

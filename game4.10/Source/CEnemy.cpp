@@ -24,13 +24,13 @@ CEnemy::CEnemy() {
     //SetVocab();
 }
 CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d) {	//	初始值都在此處設定
+    is_alive = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
     ////
     SetXY(x, y);
     SetDelay(delay);
     SetIsAlive(alive);
-    //useDict =  dict;
     dict = d;
     SetVocab();
 }
@@ -92,22 +92,23 @@ void CEnemy::LoadTextbox() {		//用不到了
 }
 */
 void CEnemy::OnMove() {
+    const int STEPS = 300;	// 切成幾分dx
+
     if (!is_alive) return;
 
     delay_counter--;
-    //xMoveDistance = x - (SIZE_X / 2);
     target.OnMove();
+    xMoveDistance = (SIZE_X / 2) - x;
 
     if (delay_counter < 0) {
         delay_counter = delay;
-        const int STEPS = 300 ;	// 切成幾分dx
         index++;
 
         if (index >= STEPS)
             index = 0;
 
-        dx = -(x - (SIZE_X / 2)) / STEPS * index; // dx為 (Enemy<->Me之x總距離) / STEPS * index;
-        dy = -(y - SIZE_Y) / STEPS * index ;
+        dx = (xMoveDistance / STEPS) * index; // dx為 (Enemy<->Me之x總距離) / STEPS * index;
+        dy = ((SIZE_Y - y) / STEPS) * index ;
     }
 }
 
@@ -224,9 +225,11 @@ int CEnemy::GetVocabLeng() {
 }
 int CEnemy::GetX() {
     return x + dx;
+    //return x + dx + bmp.Width() / 2;
 }
 int CEnemy::GetY() {
     return y + dy;
+    //return y + dy + bmp.Height() / 2;
 }
 void CEnemy::MinusIndex(int num) {
     index = index - num;

@@ -46,11 +46,13 @@ class CEnemy {
         int delay_counter;			// 調整旋轉速度的計數器
         int delay;					// 旋轉的速度
         bool is_alive;				// 是否活著
+        int xMoveDistance, yMoveDistance;
         /////////
         string vocab;				// 儲存單字
         int length;					// 單字總長度
         int currWordLeng;			// 當前輸入文字的字元
         CDict* dict;
+
 
     private:
 

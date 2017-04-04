@@ -249,7 +249,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         //	省喬改用把怪物放入vector的作法
-        enemy1.push_back(new CEnemy(randX, 0, 2, 0, &dictionary));
+        enemy1.push_back(new CEnemy(randX, 0, 3, false, &dictionary));
         enemy1.back()->LoadBitmap();
         ////
         // 注意: 下面enemy1.back()指的都是剛新增的那隻怪物
@@ -445,7 +445,6 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
 }
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
-    //eraser.SetMovingLeft(true);
 }
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
     //eraser.SetMovingLeft(false);
@@ -509,8 +508,8 @@ void CGameStateRun::OnShow() {
         pDC->TextOut(20, 20, temp);
 
         for (unsigned int i = 0; i < enemy1.size(); i++) {	// 顯示場上怪物之 單字,curr/length
-            char temp[30];
-            sprintf(temp, "%s %d/%d", enemy1[i]->GetVocab().c_str(), enemy1[i]->GetCurrWordLeng(), enemy1[i]->GetVocabLeng());
+            char temp[40];
+            sprintf(temp, "%s %d/%d(x:%d,y:%d)", enemy1[i]->GetVocab().c_str(), enemy1[i]->GetCurrWordLeng(), enemy1[i]->GetVocabLeng(), enemy1[i]->GetX(), enemy1[i]->GetY());
             pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
             pDC->TextOut(20, i * 14 + 40, temp);
         }
