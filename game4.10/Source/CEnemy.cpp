@@ -107,8 +107,9 @@ void CEnemy::OnMove() {
         if (index >= STEPS)
             index = 0;
 
-        dx = (xMoveDistance / STEPS) * index; // dx為 (Enemy<->Me之x總距離) / STEPS * index;
+        dx = xMoveDistance / STEPS * index; // dx為 (Enemy<->Me之x總距離) / STEPS * index;
         dy = ((SIZE_Y - y) / STEPS) * index ;
+        TRACE("%d", xMoveDistance / STEPS * index);
     }
 }
 
