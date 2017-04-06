@@ -98,7 +98,7 @@ void CEnemy::OnMove() {
 
     delay_counter--;
     target.OnMove();
-    xMoveDistance = (SIZE_X / 2) - x;
+    int xMoveDistance = (SIZE_X / 2) - x;
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -107,7 +107,9 @@ void CEnemy::OnMove() {
         if (index >= STEPS)
             index = 0;
 
-        dx = xMoveDistance / STEPS * index; // dx為 (Enemy<->Me之x總距離) / STEPS * index;
+        // dx = xMoveDistance / STEPS * index;
+        double dxTemp = (double(SIZE_X / 2) - x) / STEPS * index;
+        dx  = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
         dy = ((SIZE_Y - y) / STEPS) * index ;
         TRACE("%d", xMoveDistance / STEPS * index);
     }
