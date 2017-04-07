@@ -273,16 +273,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     // 判斷Me是否碰到Enemy
     for (int unsigned i = 0; i < enemy1.size(); i++) {
         if (enemy1[i]->IsAlive() && enemy1[i]->HitMe(&me)) {
-            //enemy1[i]->SetIsAlive(false);
-            //CAudio::Instance()->Play(AUDIO_DING);
             lives--;
 
-            //
-            // 若剩餘碰撞次數為0，則跳到Game Over狀態
-            //
             if (lives <= 0) {
-                //CAudio::Instance()->Stop(AUDIO_LAKE);	// 停止 WAVE
-                //CAudio::Instance()->Stop(AUDIO_NTUT);	// 停止 MIDI
                 GotoGameState(GAME_STATE_OVER);
             }
         }
