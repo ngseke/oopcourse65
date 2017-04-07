@@ -3,12 +3,12 @@ namespace game_framework {
 class CEnemy {
     public:
         CEnemy();
-        CEnemy(int x, int y, int delay, bool alive, CDict* dict);
-
+        //CEnemy(int x, int y, int delay, bool alive, CDict* dict);
+        CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL);
         bool HitEraser(CEraser* eraser);						// 是否碰到擦子
         bool IsAlive();											// 是否活著
-        virtual void LoadBitmap();										// 載入圖形
-        void OnMove();											// 移動
+        virtual void LoadBitmap();								// 載入圖形
+        virtual void OnMove();									// 移動
         void OnShow();											// 將圖形貼到畫面
         void SetXY(int nx, int ny);								// 設定圓心的座標
         void SetIsAlive(bool alive);							// 設定是否活著
@@ -22,7 +22,6 @@ class CEnemy {
         void AddCurrWordLeng();									// CurrWord++
         int GetCurrWordLeng();									// 回傳int型態的CurrWord
         int GetVocabLeng();
-        void LoadTextbox();
         int GetX(), GetY();
         void MinusIndex(int num);								//	擊退怪物 num為擊退多少index
         bool HitMe(CMe* me);
@@ -52,7 +51,8 @@ class CEnemy {
         int length;					// 單字總長度
         int currWordLeng;			// 當前輸入文字的字元
         CDict* dict;
-
+        int minVocabLeng, maxVocabLeng;		// 規定怪物生成單字長度的區間( minVocabLeng ~ maxVocabLeng)
+        int targetX, targetY;
 
     private:
 

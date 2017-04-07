@@ -71,32 +71,32 @@ class CGameStateRun : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int		NUMBALLS;	// 球的總數
-
         CMovingBitmap	background;	// 背景圖
         CMovingBitmap	help;		// 說明圖
         CBall*			ball;		// 球的陣列
         CMovingBitmap	corner;		// 角落圖
         CEraser			eraser;		// 拍子
-        CInteger		hits_left;	// 剩下的撞擊數
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
-        bool			showDebug = 0;	// 是否顯示debug資訊
-        int				picX, picY;
-        vector<CEnemy*> enemyQueue;
-        CEnemy*			targetEnemy;
-        CInteger		score;
-        const int		LEVEL;											// 關卡總數
-        int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快
-        int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
-        bool			lock;											// 判斷是否鎖住第一個字母了
-        int				currLevel;										// 當前關卡
-        int				levelEnemyNum[5] = { 5, 25, 30, 35, 40 };		// 該關卡最大的敵人數
-        int				levelBossANum[5] = { 0, 0, 0, 0, 1 };
-        int				levelBossBNum[5] = { 0, 0, 0, 0, 0 };
-        vector<CBullet*>	bulletList;
-        CDict			dictionary;
+        bool			showDebug = false;	// 是否顯示debug資訊
+        CDict			dictionary;										// 所有怪物共用的字典
         CMap			map;
         CMe				me;
+        vector<CEnemy*> enemyQueue;
+        vector<CBullet*>bulletList;
+        CEnemy*			targetEnemy;									// 指標 用於指向瞄準的敵人
+        CInteger		score;											// 分數顯示器
+        const int		LEVEL;											// 關卡總數
+        int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快
+        int				callBossACounter, maxCallBossACounter;
+        int				callBossBCounter, maxCallBossBCounter;
+        int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
+        int				currBossANum, currBossBNum;						// 當前該關卡 已召喚的BossA & BossB數量
+        bool			lock;											// 判斷是否鎖住第一個字母了
+        int				currLevel;										// 當前關卡
+        int				levelEnemyNum[10] = {  5, 10, 15, 20, 20, 20, 20, 20, 20, 20 };		// 該關卡最大的敵人數
+        int				levelBossANum[10] = {  1,  0,  0,  0,  1,  0,  0,  0,  0,  0 };
+        int				levelBossBNum[10] = {  1,  0,  0,  0,  1,  0,  0,  0,  0,  0 };
         int				lives;
 
 

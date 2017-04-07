@@ -21,15 +21,19 @@ CEnemy::CEnemy() {
     currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
 }
 
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d) {	//	初始值都在此處設定
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL) {	//	初始值都在此處設定
     is_alive = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
+    targetX = -2;
+    targetY = -2;
     ////
     SetXY(x, y);
     SetDelay(delay);
     SetIsAlive(alive);
     dict = d;
+    minVocabLeng = minVL;
+    maxVocabLeng = maxVL;
     SetVocab();
 }
 
@@ -83,7 +87,6 @@ void CEnemy::OnMove() {
 
     delay_counter--;
     target.OnMove();
-    int xMoveDistance = (SIZE_X / 2) - x;
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -96,7 +99,6 @@ void CEnemy::OnMove() {
         double dxTemp = (double(SIZE_X / 2) - x) / STEPS * index;
         dx  = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
         dy = ((SIZE_Y - y) / STEPS) * index ;
-        TRACE("%d", xMoveDistance / STEPS * index);
     }
 }
 
@@ -127,7 +129,7 @@ void CEnemy::OnShow() {
         talkBoxR.ShowBitmap();
         ////
         //// show target bmp
-        target.SetTopLeft(x + dx - 2, y + dy - 2);
+        target.SetTopLeft(x + dx + targetX, y + dy + targetY);
 
         if (currWordLeng != 0) target.OnShow();
 
@@ -155,7 +157,7 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
         vocab = dict->GetText();	// 給vocab一個單字
         length = vocab.length();
 
-        if (length <= 6)			// 條件成立,使用break跳出迴圈 確定生成此單字
+        if (length >= minVocabLeng && length <= maxVocabLeng)			// 條件成立,使用break跳出迴圈 確定生成此單字
             break;
     }
 }

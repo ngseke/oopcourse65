@@ -172,8 +172,10 @@ void CGameStateOver::OnShow() {
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
-    picX = picY = 0;
+    //picX = picY = 0;
     callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
+    callBossACounter = maxCallBossACounter = 60;
+    callBossBCounter = maxCallBossBCounter = 60;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -190,6 +192,7 @@ void CGameStateRun::OnBeginState() {
     const int HITS_LEFT_Y = 20;
     const int BACKGROUND_X = 60;
     const int ANIMATION_SPEED = 15;
+    const int SCORE_X = 240, SCORE_Y = 240;
     /* 老師的示範球
     for (int i = 0; i < NUMBALLS; i++) {				// 設定球的起始座標
         int x_pos = i % BALL_PER_ROW;
@@ -209,9 +212,10 @@ void CGameStateRun::OnBeginState() {
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
     //
     score.SetInteger(0);			//設定SCORE為0
-    score.SetTopLeft(240, 240);
+    score.SetTopLeft(SCORE_X, SCORE_Y);
     currEnemyNum = 0;
-    lock = 0;
+    currBossANum = 0;
+    lock = false;
     currLevel = 0;
     enemyQueue.clear();
     lives = 3;
@@ -223,34 +227,15 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     //SetCursor(AfxGetApp()->LoadCursor(IDC_GAMECURSOR));
     //
-    // 移動背景圖的座標
-    //
-    /*
-    if (background.Top() > SIZE_Y)  // 當資訊工程系掉落到底部後 回到上面
-    	background.SetTopLeft(60, -background.Height());
-
-    background.SetTopLeft(background.Left(), background.Top() + 1);
-    */
-
-    ////////////
-    if (picX <= SIZE_Y) {
-        picX += 5;
-        picY += 5;
-    }
-    else {
-        picX = picY = 0;
-    }
-
     ////////
     callEnemyCounter--;	//每隻怪物 生成間隔 之 counter
+    callBossACounter--;
 
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        //	省喬改用把怪物放入vector的作法
-        enemyQueue.push_back(new CEnemy(randX, 0, 3, false, &dictionary));
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, false, &dictionary, 2, 6) );
         enemyQueue.back()->LoadBitmap();
-        ////
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
 
         while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
@@ -265,12 +250,31 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
             else break;
         }
 
-        //enemyQueue.back()->LoadTextbox();			//(用不到了 改用改良後的textbox) 確定單字是是什麼後 才讀取textbox的bitmap
         enemyQueue.back()->SetIsAlive(true);
         currEnemyNum++;
-        randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossA(randX, 0, 4, 1, &dictionary, &enemyQueue));
+    }
+
+    if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
+        callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
+        int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
+        enemyQueue.push_back(new CBossA((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue));
         enemyQueue.back()->LoadBitmap();
+        // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
+
+        while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
+            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
+
+            for (int i = enemyQueue.size() - 1; i >= 0; i--) {
+                if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
+                    firstWordBounceFlag = 1;
+            }
+
+            if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
+            else break;
+        }
+
+        enemyQueue.back()->SetIsAlive(true);
+        currBossANum++;
     }
 
     // 判斷Me是否碰到Enemy
@@ -306,31 +310,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     map.OnMove();
     me.OnMove();
-    /////////////
-    //
-    // 移動擦子
-    //
-    //eraser.OnMove();
-    //
-    // 判斷擦子是否碰到球
-    //
-    /*
-    for (int i = 0; i < NUMBALLS; i++)
-        if (ball[i].IsAlive() && ball[i].HitEraser(&eraser)) {
-            ball[i].SetIsAlive(false);
-            CAudio::Instance()->Play(AUDIO_DING);
-            hits_left.Add(-1);
-
-            //
-            // 若剩餘碰撞次數為0，則跳到Game Over狀態
-            //
-            if (hits_left.GetInteger() <= 0) {
-                CAudio::Instance()->Stop(AUDIO_LAKE);	// 停止 WAVE
-                CAudio::Instance()->Stop(AUDIO_NTUT);	// 停止 MIDI
-                GotoGameState(GAME_STATE_OVER);
-            }
-        }
-    */
 }
 
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
@@ -377,6 +356,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == '1')showDebug = 1;	// 按1 顯示debug
 
     if (nChar == '2')showDebug = 0;
+
+    if (nChar == '3')enemyQueue.back()->SetIsAlive(false);
 
     /*
     if (nChar == KEY_LEFT)
@@ -461,7 +442,7 @@ void CGameStateRun::OnShow() {
     //
     //
     //
-    map.OnShow();
+    map.OnShow();						// 貼上背景網子
     help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     /////////
@@ -474,9 +455,6 @@ void CGameStateRun::OnShow() {
 
     me.OnShow();
 
-    /////////
-    //bball.OnShow();						// 貼上彈跳的球
-    //eraser.OnShow();					// 貼上擦子
     //
     //  貼上左上及右下角落的圖
     //
@@ -504,7 +482,7 @@ void CGameStateRun::OnShow() {
 
         for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
             char temp[40];
-            sprintf(temp, "%s %d/%d(x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
+            sprintf(temp, "%s %d/%d (x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
             pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
             pDC->TextOut(20, i * 14 + 40, temp);
         }

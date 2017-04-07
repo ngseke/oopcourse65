@@ -12,28 +12,61 @@
 #include "CBossA.h"
 
 namespace game_framework {
-CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, vector<CEnemy*>* enemyQueue) {	//	初始值都在此處設定
+CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue) {	//	初始值都在此處設定
     this->enemyQueue = enemyQueue;
     is_alive = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
+    targetX = 15;
+    targetY = 15;
     ////
     SetXY(x, y);
     SetDelay(delay);
     SetIsAlive(alive);
     dict = d;
+    minVocabLeng = minVL;
+    maxVocabLeng = maxVL;
+    callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
+    //
     SetVocab();
-    CallEnemy();
 }
 
-void CBossA::CallEnemy() {
-    enemyQueue->push_back(new CEnemy(x + dx, 0, 3, 1, dict));
+void CBossA::CallEnemy(int x, int y) {
+    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4));
     enemyQueue->back()->LoadBitmap();
 }
+void CBossA::OnMove() {
+    const int STEPS = 300;	// 切成幾分dx
+
+    if (!is_alive) return;
+
+    delay_counter--;
+    callEnemyCounter--;
+    target.OnMove();
+
+    if (delay_counter < 0) {
+        delay_counter = delay;
+        index++;
+
+        if (index >= STEPS)
+            index = 0;
+
+        // dx = xMoveDistance / STEPS * index;
+        double dxTemp = (double(SIZE_X / 2) - x) / STEPS * index;
+        dx = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
+        dy = ((SIZE_Y - y) / STEPS) * index;
+    }
+
+    if (callEnemyCounter < 0) {		// BossA技能:召喚小怪
+        callEnemyCounter = maxCallEnemyCounter;
+        CallEnemy((this->x + dx  / 2 + rand() % bmp.Width()), (this->y + dy + 5 + bmp.Height() ));
+    }
+}
+
 
 void CBossA::LoadBitmap() {
-    char* faceFile[] = { "Bitmaps/face_boss1.bmp" };		// 儲存怪物檔案路徑之陣列
-    bmp.LoadBitmap(faceFile[(rand() % 1)], RGB(0, 255, 0)); // 載入 怪物SKIN
+    char* faceFile[] = { "Bitmaps/face_boss1.bmp", "Bitmaps/face_boss2.bmp" };		// 儲存怪物檔案路徑之陣列
+    bmp.LoadBitmap(faceFile[(rand() % 2)], RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
     talkBoxL.LoadBitmap("Bitmaps/talk_box_left_.bmp", RGB(0, 255, 0));
