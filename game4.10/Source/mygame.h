@@ -94,7 +94,7 @@ class CGameStateRun : public CGameState {
         int				currBossANum, currBossBNum;						// 當前該關卡 已召喚的BossA & BossB數量
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
-        int				levelEnemyNum[10] = {  5, 10, 15, 20, 20, 20, 20, 20, 20, 20 };		// 該關卡最大的敵人數
+        int				levelEnemyNum[10] = { 100, 10, 15, 20, 20, 20, 20, 20, 20, 20 };		// 該關卡最大的敵人數
         int				levelBossANum[10] = {  1,  0,  0,  0,  1,  0,  0,  0,  0,  0 };
         int				levelBossBNum[10] = {  1,  0,  0,  0,  1,  0,  0,  0,  0,  0 };
         int				lives;

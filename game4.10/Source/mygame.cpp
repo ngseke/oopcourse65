@@ -445,6 +445,7 @@ void CGameStateRun::OnShow() {
     map.OnShow();						// 貼上背景網子
     help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
+    me.OnShow();
     /////////
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++)
@@ -453,7 +454,8 @@ void CGameStateRun::OnShow() {
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
 
-    me.OnShow();
+    if (lock && targetEnemy->IsAlive())
+        targetEnemy->OnShow();	// 加上這一行 讓被鎖定的怪物再次show, 以防被其他怪物蓋住
 
     //
     //  貼上左上及右下角落的圖
@@ -476,7 +478,7 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[50];
-        sprintf(temp, "Curr Enemy Numbers: %d, Lives:%d", enemyQueue.size(), lives);
+        sprintf(temp, "enemyQueue.size: %d, Lives:%d, currEnemyNum: %d", enemyQueue.size(), lives, currEnemyNum);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 20, temp);
 
