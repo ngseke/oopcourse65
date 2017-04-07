@@ -82,7 +82,7 @@ class CGameStateRun : public CGameState {
         //////////
         bool			showDebug = 0;	// 是否顯示debug資訊
         int				picX, picY;
-        vector<CEnemy*>	enemy1;
+        vector<CEnemy*> enemyQueue;
         CEnemy*			targetEnemy;
         CInteger		score;
         const int		LEVEL;											// 關卡總數
@@ -91,8 +91,8 @@ class CGameStateRun : public CGameState {
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
         int				levelEnemyNum[5] = { 5, 25, 30, 35, 40 };		// 該關卡最大的敵人數
-		int				levelBossANum[5] = { 0,0,0,0,1 };
-		int				levelBossBNum[5] = { 0,0,0,0,0 };
+        int				levelBossANum[5] = { 0, 0, 0, 0, 1 };
+        int				levelBossBNum[5] = { 0, 0, 0, 0, 0 };
         vector<CBullet*>	bulletList;
         CDict			dictionary;
         CMap			map;

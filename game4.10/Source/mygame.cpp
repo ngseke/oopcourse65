@@ -178,7 +178,7 @@ CGameStateRun::CGameStateRun(CGame* g)
 
 CGameStateRun::~CGameStateRun() {
     //delete[] ball;
-    //delete[] &enemy1;
+    //delete[] &enemyQueue;
 }
 
 void CGameStateRun::OnBeginState() {
@@ -213,7 +213,7 @@ void CGameStateRun::OnBeginState() {
     currEnemyNum = 0;
     lock = 0;
     currLevel = 0;
-    enemy1.clear();
+    enemyQueue.clear();
     lives = 3;
 }
 
@@ -248,34 +248,34 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         //	省喬改用把怪物放入vector的作法
-        enemy1.push_back(new CEnemy(randX, 0, 3, false, &dictionary));
-        enemy1.back()->LoadBitmap();
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, false, &dictionary));
+        enemyQueue.back()->LoadBitmap();
         ////
-        // 注意: 下面enemy1.back()指的都是剛新增的那隻怪物
+        // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
 
         while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
             bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
 
-            for (int i = enemy1.size() - 1; i >= 0 ; i--) {
-                if (enemy1.back()->GetFirstWord() == enemy1[i]->GetFirstWord() && enemy1[i]->IsAlive())
+            for (int i = enemyQueue.size() - 1; i >= 0 ; i--) {
+                if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag && !(enemy1.size() >= 24)) enemy1.back()->SetVocab();
+            if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
             else break;
         }
 
-        //enemy1.back()->LoadTextbox();			//(用不到了 改用改良後的textbox) 確定單字是是什麼後 才讀取textbox的bitmap
-        enemy1.back()->SetIsAlive(true);
+        //enemyQueue.back()->LoadTextbox();			//(用不到了 改用改良後的textbox) 確定單字是是什麼後 才讀取textbox的bitmap
+        enemyQueue.back()->SetIsAlive(true);
         currEnemyNum++;
-		randX = (rand() % (SIZE_X - 100));
-		enemy1.push_back(new CBossA(randX, 0,4, 1,&dictionary, &enemy1));
-		enemy1.back()->LoadBitmap();
+        randX = (rand() % (SIZE_X - 100));
+        enemyQueue.push_back(new CBossA(randX, 0, 4, 1, &dictionary, &enemyQueue));
+        enemyQueue.back()->LoadBitmap();
     }
 
     // 判斷Me是否碰到Enemy
-    for (int unsigned i = 0; i < enemy1.size(); i++) {
-        if (enemy1[i]->IsAlive() && enemy1[i]->HitMe(&me)) {
+    for (int unsigned i = 0; i < enemyQueue.size(); i++) {
+        if (enemyQueue[i]->IsAlive() && enemyQueue[i]->HitMe(&me)) {
             lives--;
 
             if (lives <= 0) {
@@ -284,14 +284,14 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         }
     }
 
-    for (unsigned int i = 0; i < enemy1.size(); i++)
-        if (enemy1[i]->IsAlive())	enemy1[i]->OnMove();
+    for (unsigned int i = 0; i < enemyQueue.size(); i++)
+        if (enemyQueue[i]->IsAlive())	enemyQueue[i]->OnMove();
 
-    for (unsigned int i = 0; i < enemy1.size(); i++) {
+    for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
-        if (!enemy1[i]->IsAlive()) {
-            vector<CEnemy*>::iterator iterEnemy1 = enemy1.begin();
-            enemy1.erase(iterEnemy1 + i);
+        if (!enemyQueue[i]->IsAlive()) {
+            vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
+            enemyQueue.erase(iterenemyQueue + i);
             break;
         }
     }
@@ -410,12 +410,12 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_DOWN)
         eraser.SetMovingDown(false);
 
-    for (int unsigned i = 0; i < enemy1.size(); i++) {			// 跑目前關卡怪物的數量
-        if (enemy1[i]->IsAlive()) {								// 回傳當前怪物是否存在
+    for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
+        if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
-                if (nChar + 32 == enemy1[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
+                if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
                     lock = true;
-                    targetEnemy = enemy1[i];					// targetEnemy為指標->正在攻擊的敵人
+                    targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                     targetEnemy->MinusIndex(2);					// 擊退怪物
@@ -466,8 +466,8 @@ void CGameStateRun::OnShow() {
     score.ShowBitmap();					// 貼上分數
     /////////
 
-    for (unsigned int i = 0; i < enemy1.size(); i++)
-        enemy1[i]->OnShow();
+    for (unsigned int i = 0; i < enemyQueue.size(); i++)
+        enemyQueue[i]->OnShow();
 
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
@@ -498,13 +498,13 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[50];
-        sprintf(temp, "Curr Enemy Numbers: %d, Lives:%d", enemy1.size(), lives);
+        sprintf(temp, "Curr Enemy Numbers: %d, Lives:%d", enemyQueue.size(), lives);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 20, temp);
 
-        for (unsigned int i = 0; i < enemy1.size(); i++) {	// 顯示場上怪物之 單字,curr/length
+        for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
             char temp[40];
-            sprintf(temp, "%s %d/%d(x:%d,y:%d)", enemy1[i]->GetVocab().c_str(), enemy1[i]->GetCurrWordLeng(), enemy1[i]->GetVocabLeng(), enemy1[i]->GetX(), enemy1[i]->GetY());
+            sprintf(temp, "%s %d/%d(x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
             pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
             pDC->TextOut(20, i * 14 + 40, temp);
         }
