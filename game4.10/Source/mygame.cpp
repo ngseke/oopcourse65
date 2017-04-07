@@ -150,9 +150,10 @@ void CGameStateOver::OnInit() {
 void CGameStateOver::OnShow() {
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
-    f.CreatePointFont(160, "Times New Roman");	// 產生 font f; 160表示16 point的字
+    f.CreatePointFont(160, "Consolas");	// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
     pDC->SetBkColor(RGB(0, 0, 0));
+    pDC->SetBkMode(TRANSPARENT);
     pDC->SetTextColor(RGB(255, 255, 0));
     char str[80];								// Demo 數字對字串的轉換
     sprintf(str, "Game Over(%d)", counter / 30);
@@ -174,8 +175,8 @@ CGameStateRun::CGameStateRun(CGame* g)
     srand((unsigned)time(NULL));	// 亂數種子
     //picX = picY = 0;
     callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 60;
-    callBossBCounter = maxCallBossBCounter = 60;
+    callBossACounter = maxCallBossACounter = 100;
+    callBossBCounter = maxCallBossBCounter = 100;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -213,8 +214,7 @@ void CGameStateRun::OnBeginState() {
     //
     score.SetInteger(0);			//設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);
-    currEnemyNum = 0;
-    currBossANum = 0;
+    currEnemyNum = currBossANum = currBossBNum = 0;
     lock = false;
     currLevel = 0;
     enemyQueue.clear();
@@ -308,6 +308,16 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());
     }
 
+    if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
+            && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
+        // 換 關卡
+        currLevel++;
+        currEnemyNum = currBossANum = currBossBNum = 0;
+        callEnemyCounter = maxCallEnemyCounter;
+        callBossACounter = maxCallBossACounter;
+        callBossBCounter = maxCallBossBCounter;
+    }
+
     map.OnMove();
     me.OnMove();
 }
@@ -357,7 +367,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == '2')showDebug = 0;
 
-    if (nChar == '3')enemyQueue.back()->SetIsAlive(false);
+    if (nChar == '3' && enemyQueue.size() > 0) enemyQueue.back()->SetIsAlive(false);
 
     /*
     if (nChar == KEY_LEFT)
@@ -478,7 +488,7 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[50];
-        sprintf(temp, "enemyQueue.size: %d, Lives:%d, currEnemyNum: %d", enemyQueue.size(), lives, currEnemyNum);
+        sprintf(temp, "enemyQueue.size: %d, Lives:%d, currLevel: %d", enemyQueue.size(), lives, currLevel);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 20, temp);
 

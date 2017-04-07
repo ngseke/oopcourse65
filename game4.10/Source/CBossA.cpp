@@ -65,8 +65,8 @@ void CBossA::OnMove() {
 
 
 void CBossA::LoadBitmap() {
-    char* faceFile[] = { "Bitmaps/face_boss1.bmp", "Bitmaps/face_boss2.bmp" };		// 儲存怪物檔案路徑之陣列
-    bmp.LoadBitmap(faceFile[(rand() % 2)], RGB(0, 255, 0)); // 載入 怪物SKIN
+    char* faceFile[] = { "Bitmaps/face_boss3.bmp", "Bitmaps/face_boss3.bmp", "Bitmaps/face_boss3.bmp" };		// 儲存怪物檔案路徑之陣列
+    bmp.LoadBitmap(faceFile[(rand() % 3)], RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
     talkBoxL.LoadBitmap("Bitmaps/talk_box_left.bmp", RGB(0, 255, 0));
