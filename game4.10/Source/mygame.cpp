@@ -178,7 +178,6 @@ CGameStateRun::CGameStateRun(CGame* g)
 
 CGameStateRun::~CGameStateRun() {
     //delete[] ball;
-    ////////
     //delete[] &enemy1;
 }
 

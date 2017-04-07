@@ -81,7 +81,6 @@ class CGameStateRun : public CGameState {
         //////////
         bool			showDebug = 0;	// 是否顯示debug資訊
         int				picX, picY;
-        CEnemy*			enemy;
         vector<CEnemy*>	enemy1;
         CEnemy*			targetEnemy;
         CInteger		score;

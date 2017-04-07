@@ -21,6 +21,7 @@ CEnemy::CEnemy() {
     currWordLeng = 0;	  // ·í«eªº´å¼Ð¦b0 ÁÙ¥¼¿é¤Jªº·N«ä (ex: ""apple), ­YcurrWord = 1 (ex: "a"pple)
     //SetVocab();
 }
+
 CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d) {	//	ªì©l­È³£¦b¦¹³B³]©w
     is_alive = false;
     dx = dy = index = delay_counter = 0;
@@ -32,6 +33,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d) {	//	ªì©l­È³£¦b¦¹³
     dict = d;
     SetVocab();
 }
+
 bool CEnemy::HitEraser(CEraser* eraser) {
     // ÀË´ú(À¿¤l©Òºc¦¨ªº¯x§Î)¬O§_¸I¨ì²y
     // ÀË¬d©Çª«¬O§_¸I¨ì¥D¨¤
