@@ -6,6 +6,7 @@
 #include "CEnemy.h"
 #include "CBullet.h"
 #include "CMap.h"
+#include "CBossA.h"
 
 
 namespace game_framework {
@@ -90,6 +91,8 @@ class CGameStateRun : public CGameState {
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
         int				levelEnemyNum[5] = { 5, 25, 30, 35, 40 };		// 該關卡最大的敵人數
+		int				levelBossANum[5] = { 0,0,0,0,1 };
+		int				levelBossBNum[5] = { 0,0,0,0,0 };
         vector<CBullet*>	bulletList;
         CDict			dictionary;
         CMap			map;

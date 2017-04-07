@@ -268,6 +268,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         //enemy1.back()->LoadTextbox();			//(用不到了 改用改良後的textbox) 確定單字是是什麼後 才讀取textbox的bitmap
         enemy1.back()->SetIsAlive(true);
         currEnemyNum++;
+		randX = (rand() % (SIZE_X - 100));
+		enemy1.push_back(new CBossA(randX, 0,4, 1,&dictionary, &enemy1));
+		enemy1.back()->LoadBitmap();
     }
 
     // 判斷Me是否碰到Enemy
