@@ -10,8 +10,6 @@
 #include "CEraser.h"
 #include "CEnemy.h"
 
-
-
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // CEnemy: Ball class
@@ -78,19 +76,7 @@ void CEnemy::LoadBitmap() {
     for (int i = 0; i < 2; i++)		// 載入動畫
         target.AddBitmap(filename[i], RGB(0, 255, 0));
 }
-/*
-void CEnemy::LoadTextbox() {		//用不到了
-    // 根據單字長度 載入不同寬度對話框
-    if (length <= 3)
-        talkBox.LoadBitmap("Bitmaps/talk_box_3words.bmp", RGB(0, 255, 0));
-    else if (length <= 5)
-        talkBox.LoadBitmap("Bitmaps/talk_box_5words.bmp", RGB(0, 255, 0));
-    else if (length <= 10)
-        talkBox.LoadBitmap("Bitmaps/talk_box_10words.bmp", RGB(0, 255, 0));
-    else
-        talkBox.LoadBitmap("Bitmaps/talk_box_15words.bmp", RGB(0, 255, 0));
-}
-*/
+
 void CEnemy::OnMove() {
     const int STEPS = 300;	// 切成幾分dx
 
@@ -151,37 +137,11 @@ void CEnemy::OnShow() {
 
         if (currWordLeng != 0) textCursor.ShowBitmap();
 
-        //////////// Display FONT
-        //
-        /*
-        CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC (黑色背景)
-        CFont f, *fp;
-        f.CreatePointFont(120, "Consolas");			// 產生 font f; 字體選用等寬字 Consolas,或 Courier
-        fp = pDC->SelectObject(&f);					// 選用 font f
-        pDC->SetBkMode(TRANSPARENT);				// TEXT背景設定為透明
-        pDC->SetTextColor(RGB(20, 20, 20));			// 設定文字顏色
-
-        if (currWordLeng > 0)
-            pDC->SetTextColor(RGB(24, 106, 59));	// 若currWordLeng > 0 則文字顏色選為特定顏色
-
-        char str[10];
-        sprintf(str, "curr %d", currWordLeng);
-        pDC->TextOut(x + dx + bmp.Width() + talkBoxL.Width(), y + dy, vocab.c_str());	// 顯示單字
-        pDC->SelectObject(fp);								// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();
-        */
-
         for (int i = 0; i < length; i++) {
             letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 3);
             letter[vocab[i] - 97]->ShowBitmap();
         }
 
-        /*
-        for (int i = 0; i < length; i++) {
-            letter[i]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[i]->Width() * i, y + dy + 3);
-            letter[i]->ShowBitmap();
-        }
-        */
         for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
             talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
             talkBoxC.ShowBitmap();
@@ -199,17 +159,6 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
         if (length <= 6)			// 條件成立,使用break跳出迴圈 確定生成此單字
             break;
     }
-
-    //free(dict);		// 釋放掉dict記憶體
-    //
-    /*
-    for (int i = 0; i < length; i++) {
-        letter.push_back(new CMovingBitmap);
-        char str[20];
-        sprintf(str, "Bitmaps/char/%c.bmp", vocab[i]);
-        letter.back()->LoadBitmap(str, RGB(255, 255, 255));
-    }
-    */
 }
 string CEnemy::GetVocab() {		  // 回傳整組單字(ex: "apple")
     return vocab;
