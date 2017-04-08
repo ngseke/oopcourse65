@@ -37,10 +37,6 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     SetVocab();
 }
 
-bool CEnemy::HitEraser(CEraser* eraser) {
-    return HitRectangle(eraser->GetX1(), eraser->GetY1(),
-                        eraser->GetX2(), eraser->GetY2());
-}
 
 bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
     int x1 = x + dx;				// 怪物face的左上角x座標
@@ -71,7 +67,7 @@ void CEnemy::LoadBitmap() {
     for (int i = 0; i < 26; i++) {
         letter.push_back(new CMovingBitmap);
         char str[20];
-        sprintf(str, "Bitmaps/char/%c.bmp", i + 97);
+        sprintf(str, "Bitmaps/char1/%c.bmp", i + 97);
         letter.back()->LoadBitmap(str, RGB(255, 255, 255));
         //letter[i]->LoadBitmap(str, RGB(255, 255, 255));
     }

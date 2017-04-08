@@ -44,8 +44,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap text1;							// 說明文字
         CMovingBitmap noteText;							// 遊戲說明
         CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
-
-        CMap			map;
+        CMap map;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,12 +77,12 @@ class CGameStateRun : public CGameState {
         CEraser			eraser;		// 拍子
         CBouncingBall   bball;		// 反覆彈跳的球
         //////////
-        bool			showDebug = false;	// 是否顯示debug資訊
+        bool			showDebug = false;								// 是否顯示debug資訊
         CDict			dictionary;										// 所有怪物共用的字典
-        CMap			map;
-        CMe				me;
-        vector<CEnemy*> enemyQueue;
-        vector<CBullet*>bulletList;
+        CMap			map;											// 背景圖
+        CMe				me;												// 主角
+        vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
+        vector<CBullet*>bulletList;										// 儲存飛行中的子彈
         CEnemy*			targetEnemy;									// 指標 用於指向瞄準的敵人
         CInteger		score;											// 分數顯示器
         const int		LEVEL;											// 關卡總數
@@ -95,8 +94,8 @@ class CGameStateRun : public CGameState {
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
         int				levelEnemyNum[10] = {  4,  5,  5,  6,  7,  7, 20, 20, 20, 20 };		// 該關卡最大的敵人數
-        int				levelBossANum[10] = {  10,  1,  1,  1,  2,  0,  0,  0,  0,  0 };
-        int				levelBossBNum[10] = {  0,  0,  0,  0,  0, 0,  0,  0,  0,  0 };
+        int				levelBossANum[10] = {  10, 1,  1,  1,  2,  0,  0,  0,  0,  0 };
+        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
         int				lives;
 
 
