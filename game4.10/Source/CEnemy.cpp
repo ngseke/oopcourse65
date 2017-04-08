@@ -58,7 +58,7 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    char* faceFile[] = { "Bitmaps/face1.bmp", "Bitmaps/face2.bmp", "Bitmaps/face3.bmp", "Bitmaps/face4.bmp", "Bitmaps/face5.bmp", "Bitmaps/face6.bmp", "Bitmaps/face7.bmp" };		// 儲存怪物檔案路徑之陣列
+    char* faceFile[] = { "Bitmaps/face/face1.bmp", "Bitmaps/face/face2.bmp", "Bitmaps/face/face3.bmp", "Bitmaps/face/face4.bmp", "Bitmaps/face/face5.bmp", "Bitmaps/face/face6.bmp", "Bitmaps/face/face7.bmp" };		// 儲存怪物檔案路徑之陣列
     bmp.LoadBitmap(faceFile[(rand() % 7)], RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
