@@ -38,18 +38,16 @@ void CGameStateInit::OnInit() {
     // 開始載入資料
     //
     //logo.LoadBitmap(IDB_BACKGROUND);
-    typing_logo.LoadBitmap("Bitmaps/start_logo.bmp", RGB(0, 255, 0));		// logo
+    typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
     noteText.LoadBitmap("Bitmaps/note/note_text_zh.bmp", RGB(0, 255, 0));	// 說明框
-    char* Exkey_filename[6] = { "Bitmaps/note/note1_exkey_1.bmp",			// 說明框裡面的按鍵動畫
-                                "Bitmaps/note/note1_exkey_2.bmp",
-                                "Bitmaps/note/note1_exkey_3.bmp",
-                                "Bitmaps/note/note1_exkey_4.bmp",
-                                "Bitmaps/note/note1_exkey_5.bmp",
-                                "Bitmaps/note/note1_exkey_6.bmp",
-                              };
+    const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
 
-    for (int i = 0; i < 6; i++) noteExkey.AddBitmap(Exkey_filename[i], RGB(0, 255, 0));
+    for (int i = 0; i < exkeyNum; i++) {											// 說明框裡面的按鍵動畫
+        char str[30];
+        sprintf(str, "Bitmaps/note/note1_exkey_%d.bmp", i + 1);
+        noteExkey.AddBitmap(str, RGB(0, 255, 0));
+    }
 
     map.LoadBitmap();														// 背景網狀動畫
     //

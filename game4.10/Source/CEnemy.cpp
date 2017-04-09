@@ -54,8 +54,10 @@ bool CEnemy::IsAlive() {
 }
 
 void CEnemy::LoadBitmap() {
-    char* faceFile[] = { "Bitmaps/face/face1.bmp", "Bitmaps/face/face2.bmp", "Bitmaps/face/face3.bmp", "Bitmaps/face/face4.bmp", "Bitmaps/face/face5.bmp", "Bitmaps/face/face6.bmp", "Bitmaps/face/face7.bmp" };		// 儲存怪物檔案路徑之陣列
-    bmp.LoadBitmap(faceFile[(rand() % 7)], RGB(0, 255, 0)); // 載入 怪物SKIN
+    char str[30];
+    const unsigned int bitmapNum = 7;		// 圖檔數量
+    sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);
+    bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
     talkBoxL.LoadBitmap("Bitmaps/talk_box_blur/talk_box_left.bmp", RGB(0, 255, 0));
@@ -174,11 +176,9 @@ int CEnemy::GetVocabLeng() {
 }
 int CEnemy::GetX() {
     return x + dx;
-    //return x + dx + bmp.Width() / 2;
 }
 int CEnemy::GetY() {
     return y + dy;
-    //return y + dy + bmp.Height() / 2;
 }
 void CEnemy::MinusIndex(int num) {
     index = index - num;

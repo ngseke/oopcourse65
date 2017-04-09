@@ -17,8 +17,8 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     is_alive = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
-    targetX = 15;
-    targetY = 15;
+    targetX = -2;
+    targetY = -2;
     ////
     SetXY(x, y);
     SetDelay(delay);
@@ -65,20 +65,27 @@ void CBossA::OnMove() {
 
 
 void CBossA::LoadBitmap() {
+    char str[30];
+    const unsigned int bitmapNum = 7;		// 圖檔數量
+    sprintf(str, "Bitmaps/face/face_boss%d.bmp", rand() % bitmapNum + 1);
+    bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
+    //
+    /*
     char* faceFile[] = { "Bitmaps/face/face_boss3.bmp", "Bitmaps/face/face_boss4.bmp", "Bitmaps/face/face_boss5.bmp", "Bitmaps/face/face_boss6.bmp", "Bitmaps/face/face_boss7.bmp" };		// 儲存怪物檔案路徑之陣列
     bmp.LoadBitmap(faceFile[(rand() % 5)], RGB(0, 255, 0)); // 載入 怪物SKIN
+    */
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
     talkBoxL.LoadBitmap("Bitmaps/talk_box_left.bmp", RGB(0, 255, 0));
     talkBoxC.LoadBitmap("Bitmaps/talk_box_center.bmp", RGB(0, 255, 0));
     talkBoxR.LoadBitmap("Bitmaps/talk_box_right.bmp", RGB(0, 255, 0));
     /////
-    char* filename[2] = { "Bitmaps/target_s1.bmp", "Bitmaps/target_s2.bmp" };
+    char* filename[2] = { "Bitmaps/target_m1.bmp", "Bitmaps/target_m2.bmp" };
 
     for (int i = 0; i < 26; i++) {
         letter.push_back(new CMovingBitmap);
         char str[20];
-        sprintf(str, "Bitmaps/char/%c.bmp", i + 97);
+        sprintf(str, "Bitmaps/char1/%c.bmp", i + 97);
         letter.back()->LoadBitmap(str, RGB(255, 255, 255));
     }
 
