@@ -79,7 +79,7 @@ void CEnemy::LoadBitmap() {
 }
 
 void CEnemy::OnMove() {
-    const int STEPS = 300;	// 切成幾分dx
+    const int STEPS = 250;	// 切成幾分dx
 
     if (!is_alive) return;
 

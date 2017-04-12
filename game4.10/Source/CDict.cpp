@@ -15,22 +15,22 @@ namespace game_framework {
 CDict::CDict() {
     //srand((unsigned)time(NULL));
     fstream file;
-    bool chongfu;	//重複
+    bool repeated;	//重複
     file.open("dict/text.txt", ios::in); //讀取字典檔
     string temp;
 
     if (!file) {}
     else {
         while (file >> temp) {
-            chongfu = 0;
+            repeated = false;
 
             //以下用於判斷讀入的單字 在字典裡是否已重複
 
             for (unsigned int i = 0; i < dictionary.size(); i++) {
-                if (temp == dictionary[i])	chongfu = 1;
+                if (temp == dictionary[i])	repeated = true;
             }
 
-            if (!chongfu)dictionary.push_back(temp); //將字典檔讀入
+            if (!repeated)dictionary.push_back(temp); //將字典檔讀入
         }
     }
 
