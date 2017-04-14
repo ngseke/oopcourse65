@@ -258,13 +258,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\audio.cpp" />
-    <ClCompile Include="Source\CBall.cpp" />
+    <ClCompile Include="Source\CBomb.cpp" />
     <ClCompile Include="Source\CBossA.cpp" />
-    <ClCompile Include="Source\CBouncingBall.cpp" />
     <ClCompile Include="Source\CBullet.cpp" />
     <ClCompile Include="Source\CDict.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
-    <ClCompile Include="Source\CEraser.cpp" />
     <ClCompile Include="Source\CMap.cpp" />
     <ClCompile Include="Source\CMe.cpp" />
     <ClCompile Include="Source\game.cpp">
@@ -310,13 +308,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h" />
-    <ClInclude Include="Source\CBall.h" />
+    <ClInclude Include="Source\CBomb.h" />
     <ClInclude Include="Source\CBossA.h" />
-    <ClInclude Include="Source\CBouncingBall.h" />
     <ClInclude Include="Source\CBullet.h" />
     <ClInclude Include="Source\CDict.h" />
     <ClInclude Include="Source\CEnemy.h" />
-    <ClInclude Include="Source\CEraser.h" />
     <ClInclude Include="Source\CMap.h" />
     <ClInclude Include="Source\CMe.h" />
     <ClInclude Include="Source\game.h" />

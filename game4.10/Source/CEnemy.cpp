@@ -81,7 +81,7 @@ void CEnemy::LoadBitmap() {
 void CEnemy::OnMove() {
     const int STEPS = 250;	// 切成幾分dx
 
-    if (!is_alive) return;
+	//if (!is_alive) return;
 
     delay_counter--;
     target.OnMove();
@@ -111,20 +111,22 @@ void CEnemy::SetXY(int nx, int ny) {
     y = ny;
 }
 void CEnemy::OnShow() {
-    if (is_alive) {
-        bmp.SetTopLeft(x + dx, y + dy);
-        bmp.ShowBitmap();
-        // 改良後顯示talkbox方式, 完全依照單字長度
-        talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
-        talkBoxL.ShowBitmap();
+	if (1) {
+		bmp.SetTopLeft(x + dx, y + dy);
+		bmp.ShowBitmap();
+		// 改良後顯示talkbox方式, 完全依照單字長度
+		if (currWordLeng < length) {
+			talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
+			talkBoxL.ShowBitmap();
 
-        for (int i = 0; i < length; i++) {
-            talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
-            talkBoxC.ShowBitmap();
-        }
+			for (int i = 0; i < length; i++) {
+				talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
+				talkBoxC.ShowBitmap();
+			}
 
-        talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
-        talkBoxR.ShowBitmap();
+			talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
+			talkBoxR.ShowBitmap();
+		
         ////
         //// show target bmp
         target.SetTopLeft(x + dx + targetX, y + dy + targetY);
@@ -146,6 +148,7 @@ void CEnemy::OnShow() {
             talkBoxC.ShowBitmap();
         }
     }
+	}
 }
 
 ////////////
