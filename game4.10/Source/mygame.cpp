@@ -23,6 +23,7 @@
 #include "mygame.h"
 
 
+
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
@@ -294,6 +295,10 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
         if (!enemyQueue[i]->IsAlive() && bulletList.size()==0) {
+			bombList.push_back(new CBomb());
+			bombList.back()->SetXY(100, 100);
+			bombList.back()->LoadBitmap();
+			
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
             enemyQueue.erase(iterenemyQueue + i);
             break;
@@ -307,6 +312,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         //若bullet IsAlive=0, 則從vector中移除
         if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());
     }
+	for (unsigned int i = 0; i < bombList.size();i++) {
+		bombList[i]->OnMove();
+	}
 
     if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
             && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
@@ -436,6 +444,9 @@ void CGameStateRun::OnShow() {
 
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
+	for (unsigned int i = 0; i < bombList.size();i++) {
+		bombList[i]->OnShow();
+	}
 
     if (lock && targetEnemy->IsAlive())
         targetEnemy->OnShow();	// 加上這一行 讓被鎖定的怪物再次show, 以防被其他怪物蓋住

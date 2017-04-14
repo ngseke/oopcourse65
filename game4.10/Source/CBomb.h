@@ -4,9 +4,9 @@ namespace game_framework {
 // 看懂就可以改寫成自己的程式了
 /////////////////////////////////////////////////////////////////////////////
 
-class CBouncingBall {
+class CBomb {
     public:
-        CBouncingBall();
+		CBomb();
         void LoadBitmap();		// 載入圖形
         void OnMove();			// 移動
         void OnShow();			// 將圖形貼到畫面
