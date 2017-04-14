@@ -12,33 +12,32 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CBomb::CBomb() {
-    const int INITIAL_VELOCITY = 20;	// 初始上升速度
-    const int FLOOR = 400;				// 地板座標
-    floor = FLOOR;
-    x = 95;
-    y = FLOOR - 1;				// y座標比地板高1點(站在地板上)
-    rising = true;
-    initial_velocity = INITIAL_VELOCITY;
     velocity = initial_velocity;
-
-	animation.SetDelayCount(1);
-
+    animation.SetDelayCount(1);
+}
+CBomb::CBomb(int x, int y) {
+    animation.SetDelayCount(5);
+    this->x = x;
+    this->y = y;
+    is_alive = true;
 }
 
 void CBomb::LoadBitmap() {
-	for (int i = 0; i< 6;i++) {
-		char str[30];
-		sprintf(str, "Bitmaps/bomb/bomb%d.bmp", i + 1);
-		animation.AddBitmap(str, RGB(255,0,255));
-	}
+    for (int i = 0; i < 6; i++) {
+        char str[30];
+        sprintf(str, "Bitmaps/bomb/bomb%d.bmp", i + 1);
+        animation.AddBitmap(str, RGB(255, 0, 255));
+    }
 }
 
 void CBomb::OnMove() {
     animation.OnMove();		// 執行一次animation.OnMove()，animation才會換圖
+
+    if (animation.GetCurrentBitmapNumber() >= 5) is_alive = false;
 }
 
 void CBomb::OnShow() {
-    animation.SetTopLeft(x, y);
+    animation.SetTopLeft(x - 20, y - 20);
     animation.OnShow();
 }
 
@@ -46,12 +45,8 @@ void CBomb::SetXY(int x, int y) {
     this->x = x;
     this->y = y;
 }
+bool CBomb::IsAlive() {
+    return is_alive;
+}
 
-void CBomb::SetFloor(int floor) {
-    this->floor = floor;
-}
-void CBomb::SetVelocity(int velocity) {
-    this->velocity = velocity;
-    this->initial_velocity = velocity;
-}
 }

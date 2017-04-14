@@ -6,19 +6,19 @@ namespace game_framework {
 
 class CBomb {
     public:
-		CBomb();
+        CBomb();
+        CBomb(int x, int y);
         void LoadBitmap();		// 載入圖形
         void OnMove();			// 移動
         void OnShow();			// 將圖形貼到畫面
-        void SetFloor(int);
         void SetXY(int, int);
-        void SetVelocity(int);
+        bool IsAlive();
     private:
         int x, y;				// 圖形座標
-        int floor;				// 地板的Y座標
-        bool rising;			// true表上升、false表下降
         int initial_velocity;	// 初始速度
         int velocity;			// 目前的速度(點/次)
         CAnimation animation;	// 利用動畫作圖形
+        ///
+        bool is_alive;				// 是否活著
 };
 }

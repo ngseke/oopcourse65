@@ -203,7 +203,6 @@ void CGameStateRun::OnBeginState() {
         ball[i].SetIsAlive(true);
     }
     */
-
     //background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
     //hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
@@ -277,7 +276,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         currBossANum++;
     }
 
-    // 判斷Me是否碰到Enemy
+    //===判斷Me是否碰到Enemy===
+
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {
         if (enemyQueue[i]->IsAlive() && enemyQueue[i]->HitMe(&me)) {
             lives--;
@@ -288,22 +288,24 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         }
     }
 
-    // 判斷
+    // ===Enemy===
+
     for (unsigned int i = 0; i < enemyQueue.size(); i++)
         if (enemyQueue[i]->IsAlive())	enemyQueue[i]->OnMove();
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
-        if (!enemyQueue[i]->IsAlive() && bulletList.size()==0) {
-			bombList.push_back(new CBomb());
-			bombList.back()->SetXY(100, 100);
-			bombList.back()->LoadBitmap();
-			
+        if (!enemyQueue[i]->IsAlive() && bulletList.size() == 0) {
+            // push_back爆炸效果
+            bombList.push_back(new CBomb(enemyQueue[i]->GetX(), enemyQueue[i]->GetY()));
+            bombList.back()->LoadBitmap();
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
             enemyQueue.erase(iterenemyQueue + i);
             break;
         }
     }
+
+    ////===bullet===
 
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnMove();	// 移動bullet
@@ -312,10 +314,19 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         //若bullet IsAlive=0, 則從vector中移除
         if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());
     }
-	for (unsigned int i = 0; i < bombList.size();i++) {
-		bombList[i]->OnMove();
-	}
 
+    ////===bomb===
+
+    for (unsigned int i = 0; i < bombList.size(); i++) {
+        bombList[i]->OnMove();
+    }
+
+    for (int i = bombList.size() - 1; i >= 0; i--) {
+        //若 bomb IsAlive=0, 則從vector中移除
+        if (!bombList[i]->IsAlive())	bombList.erase(bombList.begin());
+    }
+
+    ////===Change Level===
     if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
             && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
         // 換 關卡
@@ -381,7 +392,6 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
         if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
@@ -444,9 +454,10 @@ void CGameStateRun::OnShow() {
 
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
-	for (unsigned int i = 0; i < bombList.size();i++) {
-		bombList[i]->OnShow();
-	}
+
+    for (unsigned int i = 0; i < bombList.size(); i++) {
+        bombList[i]->OnShow();
+    }
 
     if (lock && targetEnemy->IsAlive())
         targetEnemy->OnShow();	// 加上這一行 讓被鎖定的怪物再次show, 以防被其他怪物蓋住
