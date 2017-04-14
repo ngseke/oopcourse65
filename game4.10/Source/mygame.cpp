@@ -202,7 +202,7 @@ void CGameStateRun::OnBeginState() {
         ball[i].SetIsAlive(true);
     }
     */
-    eraser.Initialize();
+
     //background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
     //hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
@@ -343,8 +343,6 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     // 繼續載入其他資料
     //
     help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));			// 載入說明的圖形
-    corner.LoadBitmap(IDB_CORNER);							// 載入角落圖形
-    bball.LoadBitmap();										// 載入圖形
     score.LoadBitmap();
     map.LoadBitmap();
     me.LoadBitmap();
@@ -375,17 +373,6 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-    if (nChar == KEY_LEFT)
-        eraser.SetMovingLeft(false);
-
-    if (nChar == KEY_RIGHT)
-        eraser.SetMovingRight(false);
-
-    if (nChar == KEY_UP)
-        eraser.SetMovingUp(false);
-
-    if (nChar == KEY_DOWN)
-        eraser.SetMovingDown(false);
 
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
         if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
