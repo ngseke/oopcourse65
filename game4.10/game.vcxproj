@@ -258,6 +258,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\audio.cpp" />
+    <ClCompile Include="Source\CBomb.cpp" />
     <ClCompile Include="Source\CBossA.cpp" />
     <ClCompile Include="Source\CBullet.cpp" />
     <ClCompile Include="Source\CDict.cpp" />
@@ -307,6 +308,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h" />
+    <ClInclude Include="Source\CBomb.h" />
     <ClInclude Include="Source\CBossA.h" />
     <ClInclude Include="Source\CBullet.h" />
     <ClInclude Include="Source\CDict.h" />

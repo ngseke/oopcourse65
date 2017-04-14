@@ -293,7 +293,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
-        if (!enemyQueue[i]->IsAlive()) {
+        if (!enemyQueue[i]->IsAlive() && bulletList.size()==0) {
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
             enemyQueue.erase(iterenemyQueue + i);
             break;
