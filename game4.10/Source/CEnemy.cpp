@@ -5,9 +5,9 @@
 #include <time.h>
 #include "audio.h"
 #include "gamelib.h"
+#include "CBomb.h"
 #include "CDict.h"
 #include "CMe.h"
-#include "CEraser.h"
 #include "CEnemy.h"
 
 namespace game_framework {
@@ -80,9 +80,7 @@ void CEnemy::LoadBitmap() {
 
 void CEnemy::OnMove() {
     const int STEPS = 250;	// 切成幾分dx
-
-	//if (!is_alive) return;
-
+    //if (!is_alive) return;
     delay_counter--;
     target.OnMove();
 
@@ -111,44 +109,44 @@ void CEnemy::SetXY(int nx, int ny) {
     y = ny;
 }
 void CEnemy::OnShow() {
-	if (1) {
-		bmp.SetTopLeft(x + dx, y + dy);
-		bmp.ShowBitmap();
-		// 改良後顯示talkbox方式, 完全依照單字長度
-		if (currWordLeng < length) {
-			talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
-			talkBoxL.ShowBitmap();
+    if (1) {
+        bmp.SetTopLeft(x + dx, y + dy);
+        bmp.ShowBitmap();
 
-			for (int i = 0; i < length; i++) {
-				talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
-				talkBoxC.ShowBitmap();
-			}
+        // 改良後顯示talkbox方式, 完全依照單字長度
+        if (currWordLeng < length) {
+            talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
+            talkBoxL.ShowBitmap();
 
-			talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
-			talkBoxR.ShowBitmap();
-		
-        ////
-        //// show target bmp
-        target.SetTopLeft(x + dx + targetX, y + dy + targetY);
+            for (int i = 0; i < length; i++) {
+                talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
+                talkBoxC.ShowBitmap();
+            }
 
-        if (currWordLeng != 0) target.OnShow();
+            talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
+            talkBoxR.ShowBitmap();
+            ////
+            //// show target bmp
+            target.SetTopLeft(x + dx + targetX, y + dy + targetY);
 
-        //
-        textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
+            if (currWordLeng != 0) target.OnShow();
 
-        if (currWordLeng != 0) textCursor.ShowBitmap();
+            //
+            textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
 
-        for (int i = 0; i < length; i++) {
-            letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 3);
-            letter[vocab[i] - 97]->ShowBitmap();
-        }
+            if (currWordLeng != 0) textCursor.ShowBitmap();
 
-        for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
-            talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
-            talkBoxC.ShowBitmap();
+            for (int i = 0; i < length; i++) {
+                letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 3);
+                letter[vocab[i] - 97]->ShowBitmap();
+            }
+
+            for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
+                talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
+                talkBoxC.ShowBitmap();
+            }
         }
     }
-	}
 }
 
 ////////////

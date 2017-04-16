@@ -70,10 +70,6 @@ void CBossA::LoadBitmap() {
     sprintf(str, "Bitmaps/face/face_boss%d.bmp", rand() % bitmapNum + 1);
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
     //
-    /*
-    char* faceFile[] = { "Bitmaps/face/face_boss3.bmp", "Bitmaps/face/face_boss4.bmp", "Bitmaps/face/face_boss5.bmp", "Bitmaps/face/face_boss6.bmp", "Bitmaps/face/face_boss7.bmp" };		// 儲存怪物檔案路徑之陣列
-    bmp.LoadBitmap(faceFile[(rand() % 5)], RGB(0, 255, 0)); // 載入 怪物SKIN
-    */
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
     talkBoxL.LoadBitmap("Bitmaps/talk_box_left.bmp", RGB(0, 255, 0));

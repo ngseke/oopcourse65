@@ -1,10 +1,11 @@
 #include "CMe.h"
 #include "CDict.h"
+#include "CBomb.h"
 #include "CEnemy.h"
 #include "CBullet.h"
 #include "CMap.h"
 #include "CBossA.h"
-#include "CBomb.h"
+
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -77,8 +78,8 @@ class CGameStateRun : public CGameState {
         CMe				me;												// 主角
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
         vector<CBullet*>bulletList;										// 儲存飛行中的子彈的Vector
-		vector<CBomb*>  bombList;
-		
+        vector<CBomb*>  bombList;
+
         CEnemy*			targetEnemy;									// 指標 用於指向瞄準的敵人
         CInteger		score;											// 分數顯示器
         const int		LEVEL;											// 關卡總數

@@ -8,13 +8,12 @@
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
-// CBouncingBall: BouncingBall class
+// CBomb: 爆炸動畫
 /////////////////////////////////////////////////////////////////////////////
 
 CBomb::CBomb() {
-    //velocity = initial_velocity;
-    //animation.SetDelayCount(10);
 }
+
 CBomb::CBomb(int x, int y) {
     animation.SetDelayCount(1);
     this->x = x;
@@ -37,6 +36,8 @@ void CBomb::OnMove() {
 }
 
 void CBomb::OnShow() {
+    if (!is_alive)return;	// 若is_alive為false則不執行OnShow
+
     animation.SetTopLeft(x - 20, y - 20);
     animation.OnShow();
 }

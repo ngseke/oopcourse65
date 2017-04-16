@@ -3,8 +3,9 @@ namespace game_framework {
 class CEnemy {
     public:
         CEnemy();
-        //CEnemy(int x, int y, int delay, bool alive, CDict* dict);
         CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL);
+        //CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList);
+
         bool IsAlive();											// 是否活著
         virtual void LoadBitmap();								// 載入圖形
         virtual void OnMove();									// 移動
@@ -24,6 +25,7 @@ class CEnemy {
         int GetX(), GetY();										// 取得X軸(x+dx), Y軸(y+dy)
         void MinusIndex(int num);								// 擊退怪物 num為擊退多少index
         bool HitMe(CMe* me);
+        //void SetBombList(vector<CBomb*>* bombList);
 
     protected:
         CMovingBitmap bmp;								// 球的圖
@@ -53,7 +55,7 @@ class CEnemy {
         int targetX, targetY;
 
     private:
-
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
+        vector<CBomb*>* bombList;
 };
 }

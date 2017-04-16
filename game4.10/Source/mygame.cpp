@@ -351,7 +351,6 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     // 開始載入資料
     //
-    //eraser.LoadBitmap();
     //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
     // 完成部分Loading動作，提高進度
@@ -447,17 +446,17 @@ void CGameStateRun::OnShow() {
     help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     me.OnShow();
+
     /////////
+    for (unsigned int i = 0; i < bombList.size(); i++) {
+        bombList[i]->OnShow();
+    }
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++)
         enemyQueue[i]->OnShow();
 
     for (unsigned int i = 0; i < bulletList.size(); i++)
         bulletList[i]->OnShow();
-
-    for (unsigned int i = 0; i < bombList.size(); i++) {
-        bombList[i]->OnShow();
-    }
 
     if (lock && targetEnemy->IsAlive())
         targetEnemy->OnShow();	// 加上這一行 讓被鎖定的怪物再次show, 以防被其他怪物蓋住
