@@ -12,18 +12,18 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CBomb::CBomb() {
-    velocity = initial_velocity;
-    animation.SetDelayCount(1);
+    //velocity = initial_velocity;
+    //animation.SetDelayCount(10);
 }
 CBomb::CBomb(int x, int y) {
-    animation.SetDelayCount(5);
+    animation.SetDelayCount(1);
     this->x = x;
     this->y = y;
     is_alive = true;
 }
 
 void CBomb::LoadBitmap() {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 16; i++) {
         char str[30];
         sprintf(str, "Bitmaps/bomb/bomb%d.bmp", i + 1);
         animation.AddBitmap(str, RGB(255, 0, 255));
@@ -33,7 +33,7 @@ void CBomb::LoadBitmap() {
 void CBomb::OnMove() {
     animation.OnMove();		// 執行一次animation.OnMove()，animation才會換圖
 
-    if (animation.GetCurrentBitmapNumber() >= 5) is_alive = false;
+    if (animation.GetCurrentBitmapNumber() >= 15) is_alive = false;
 }
 
 void CBomb::OnShow() {
