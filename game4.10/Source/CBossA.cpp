@@ -12,9 +12,10 @@
 #include "CBossA.h"
 
 namespace game_framework {
-CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue) {	//	初始值都在此處設定
+CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList) {	//	初始值都在此處設定
     this->enemyQueue = enemyQueue;
-    is_alive = false;
+    this->bombList = bombList;
+    is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
     targetX = -2;
@@ -24,6 +25,7 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     SetDelay(delay);
     SetIsAlive(alive);
     dict = d;
+    this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
     callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
@@ -32,9 +34,17 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
 }
 
 void CBossA::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4));
+    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList));
     enemyQueue->back()->LoadBitmap();
 }
+
+void CBossA::kill() {
+    is_alive = false;
+    bombList->push_back(new CBomb(GetX() + 10, GetY() + 10));
+    bombList->back()->LoadBitmap();
+    is_bombed = true;
+}
+
 void CBossA::OnMove() {
     const int STEPS = 300;	// 切成幾分dx
 

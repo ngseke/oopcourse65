@@ -1,10 +1,13 @@
+#ifndef CENEMY
+#define CENEMY
+#include "CBomb.h"
 namespace game_framework {
 
 class CEnemy {
     public:
         CEnemy();
         CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL);
-        //CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList);
+        CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList);
 
         bool IsAlive();											// 是否活著
         virtual void LoadBitmap();								// 載入圖形
@@ -25,7 +28,8 @@ class CEnemy {
         int GetX(), GetY();										// 取得X軸(x+dx), Y軸(y+dy)
         void MinusIndex(int num);								// 擊退怪物 num為擊退多少index
         bool HitMe(CMe* me);
-        //void SetBombList(vector<CBomb*>* bombList);
+        bool IsBombed();										// 是否爆炸過了
+        virtual void kill();
 
     protected:
         CMovingBitmap bmp;								// 球的圖
@@ -53,9 +57,13 @@ class CEnemy {
         CDict* dict;				// 字典檔指標
         int minVocabLeng, maxVocabLeng;		// 規定怪物生成單字長度的區間( minVocabLeng ~ maxVocabLeng)
         int targetX, targetY;
+        vector<CBomb*>* bombList;
+        bool is_bombed;
 
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
-        vector<CBomb*>* bombList;
+
 };
 }
+
+#endif

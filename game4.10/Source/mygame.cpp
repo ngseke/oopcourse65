@@ -22,8 +22,6 @@
 #include "gamelib.h"
 #include "mygame.h"
 
-
-
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
@@ -233,7 +231,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 2, false, &dictionary, 2, 6) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 2, false, &dictionary, 2, 6, &bombList) );
         enemyQueue.back()->LoadBitmap();
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
 
@@ -256,7 +254,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CBossA((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue));
+        enemyQueue.push_back(new CBossA((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
 
@@ -295,10 +293,12 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
-        if (!enemyQueue[i]->IsAlive() && bulletList.size() == 0) {
+        if (!enemyQueue[i]->IsAlive() && enemyQueue[i]->IsBombed()) {
             // push_back爆炸效果
+            /*
             bombList.push_back(new CBomb(enemyQueue[i]->GetX(), enemyQueue[i]->GetY()));
             bombList.back()->LoadBitmap();
+            */
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
             enemyQueue.erase(iterenemyQueue + i);
             break;
@@ -383,7 +383,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == '2')showDebug = 0;
 
-    if (nChar == '3' && enemyQueue.size() > 0) enemyQueue.back()->SetIsAlive(false);
+    if (nChar == '3' && enemyQueue.size() > 0) enemyQueue.back()->kill();
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT = 0x25; // keyboard左箭頭
@@ -409,7 +409,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
-                        targetEnemy->SetIsAlive(false);									// 成功殺害怪物
+                        targetEnemy->kill();									// 成功殺害怪物
                         lock = false;
                         score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
                     }

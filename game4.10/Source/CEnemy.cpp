@@ -5,7 +5,6 @@
 #include <time.h>
 #include "audio.h"
 #include "gamelib.h"
-#include "CBomb.h"
 #include "CDict.h"
 #include "CMe.h"
 #include "CEnemy.h"
@@ -21,8 +20,8 @@ CEnemy::CEnemy() {
     currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
 }
 
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL) {	//	初始值都在此處設定
-    is_alive = false;
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList) {	//	初始值都在此處設定
+    is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
     targetX = -2;
@@ -32,6 +31,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     SetDelay(delay);
     SetIsAlive(alive);
     dict = d;
+    this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
     SetVocab();
@@ -148,6 +148,13 @@ void CEnemy::OnShow() {
         }
     }
 }
+void CEnemy::kill() {
+    is_alive = false;
+    bombList->push_back(new CBomb(GetX(), GetY()));
+    bombList->back()->LoadBitmap();
+    is_bombed = true;
+}
+
 
 ////////////
 void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
@@ -187,5 +194,8 @@ void CEnemy::MinusIndex(int num) {
 bool CEnemy::HitMe(CMe* me) {
     return HitRectangle(me->GetX1(), me->GetY1(),
                         me->GetX2(), me->GetY2());
+}
+bool  CEnemy::IsBombed() {
+    return is_bombed;
 }
 }

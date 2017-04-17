@@ -11,7 +11,7 @@ namespace game_framework {
 
 CBullet::CBullet(int endX, int endY) {
     /////
-    delay = delay_counter = 1;
+    delay = delay_counter = 0;
     dx = dy = index = 0;
     is_alive = 1;
     this->endX = endX;
@@ -25,7 +25,7 @@ CBullet::CBullet(int endX, int endY) {
 void CBullet::LoadBitmap() {
     char* filename[2] = { ".\\bitmaps\\bullet1.bmp", ".\\bitmaps\\bullet2.bmp"};
 
-    for (int i = 0; i < 2; i++)		// 載入動畫(由4張圖形構成)
+    for (int i = 0; i < 2; i++)
         animation.AddBitmap(filename[i], RGB(0, 255, 0));
 }
 

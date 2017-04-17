@@ -1,3 +1,6 @@
+#ifndef CBOMB
+#define CBOMB
+
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // 這個class提供會一直彈跳的球
@@ -21,3 +24,4 @@ class CBomb {
 
 };
 }
+#endif
