@@ -383,7 +383,10 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == '2')showDebug = 0;
 
-    if (nChar == '3' && enemyQueue.size() > 0) enemyQueue.back()->kill();
+    if (nChar == '3' && enemyQueue.size() > 0) {
+        enemyQueue.back()->kill();
+        lock = 0;
+    }
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT = 0x25; // keyboard¥ª½bÀY
