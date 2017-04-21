@@ -5,6 +5,7 @@
 #include "CBullet.h"
 #include "CMap.h"
 #include "CBossA.h"
+#include "CBossB.h"
 
 
 namespace game_framework {
