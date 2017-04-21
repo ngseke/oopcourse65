@@ -34,7 +34,32 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
+	endX = SIZE_X / 2;
+	endY = SIZE_Y;
     SetVocab();
+	
+}
+
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList,int endX,int endY) {	//	初始值都在此處設定
+	is_alive = is_bombed = false;
+	dx = dy = index = delay_counter = 0;
+	currWordLeng = 0;
+	targetX = -2;
+	targetY = -2;
+	////
+	SetXY(x, y);
+	SetDelay(delay);
+	SetIsAlive(alive);
+	dict = d;
+	this->bombList = bombList;
+	minVocabLeng = minVL;
+	maxVocabLeng = maxVL;
+
+	this->endX = endX;
+	this->endY = endY;
+	
+
+	SetVocab();
 }
 
 
@@ -92,9 +117,9 @@ void CEnemy::OnMove() {
             index = 0;
 
         // dx = xMoveDistance / STEPS * index;
-        double dxTemp = (double(SIZE_X / 2) - x) / STEPS * index;
+        double dxTemp = (double(endX) - x) / STEPS * index;
         dx  = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
-        dy = ((SIZE_Y - y) / STEPS) * index ;
+        dy = ((endY - y) / STEPS) * index ;
     }
 }
 
