@@ -109,15 +109,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     // 儲存Menu的pointer
     //
     pMenu = GetMenu();
-
     //
     // 如果是Full Screen的話，隱藏ToolBar, StatusBar, Menu
     //
+    m_wndToolBar.ShowWindow(SW_HIDE);
+    m_wndStatusBar.ShowWindow(SW_HIDE);
+    SetMenu(NULL);
+
     if (isFullScreen) {
-        m_wndToolBar.ShowWindow(SW_HIDE);
-        m_wndStatusBar.ShowWindow(SW_HIDE);
         ModifyStyle(WS_DLGFRAME, 0);
-        SetMenu(NULL);
     }
 
     return 0;
@@ -240,6 +240,7 @@ void CMainFrame::OnPaint() {
     }
 
     extra_height += GetSystemMetrics(SM_CYMENU);
+    extra_height = 0;
     CRect WindowRect;
     GetWindowRect(WindowRect);
     MoveWindow(WindowRect.left, WindowRect.top, ClientRect.Width(), ClientRect.Height() + extra_height);
