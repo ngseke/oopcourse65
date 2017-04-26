@@ -35,9 +35,39 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     //
     SetVocab();
 }
+CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList,int endx,int endy) {	//	初始值都在此處設定
+	this->enemyQueue = enemyQueue;
+	this->bombList = bombList;
+	is_alive = is_bombed = false;
+	dx = dy = index = delay_counter = 0;
+	currWordLeng = 0;
+	targetX = -2;
+	targetY = -2;
+	////
+	SetXY(x, y);
+	SetDelay(delay);
+	SetIsAlive(alive);
+	dict = d;
+	this->bombList = bombList;
+	minVocabLeng = minVL;
+	maxVocabLeng = maxVL;
+	callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
+	this->endX = endx;
+	this->endY = endy;
+	//
+	SetVocab();
+}
 void CBossB::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList));
+    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList,-30,30));
     enemyQueue->back()->LoadBitmap();
+	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, -20, 20));
+	enemyQueue->back()->LoadBitmap();
+	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, 0, -20));
+	enemyQueue->back()->LoadBitmap();
+	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, 20, 20));
+	enemyQueue->back()->LoadBitmap();
+	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, -20, 20));
+	enemyQueue->back()->LoadBitmap();
 }
 void CBossB::OnMove() {
     const int STEPS = 300;	// 切成幾分dx

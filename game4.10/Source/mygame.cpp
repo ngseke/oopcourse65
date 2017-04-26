@@ -227,6 +227,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     ////////
     callEnemyCounter--;	//每隻怪物 生成間隔 之 counter
     callBossACounter--;
+	callBossBCounter--;
 
 	//==小怪==================================
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
