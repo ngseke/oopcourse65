@@ -10,7 +10,7 @@
 #include "CEnemy.h"
 #include "CBossA.h"
 #include "CBossB.h"
-
+#include <math.h>
 namespace game_framework {
 CBossB::CBossB() {}
 CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList) {	//	初始值都在此處設定
@@ -29,7 +29,7 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
-    callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
+    callEnemyCounter = maxCallEnemyCounter =500;		// 發動召喚小怪技能的間隔
     endX = SIZE_X / 2;
     endY = SIZE_Y;
     //
@@ -51,22 +51,22 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
 	this->bombList = bombList;
 	minVocabLeng = minVL;
 	maxVocabLeng = maxVL;
-	callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
+	callEnemyCounter = maxCallEnemyCounter = 1000;		// 發動召喚小怪技能的間隔
 	this->endX = endx;
 	this->endY = endy;
 	//
 	SetVocab();
 }
 void CBossB::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList,-30,30));
+	enemyQueue->push_back(new CEnemy(x + (bmp.Width()/2)-5, y+40, 3, 1, dict, 3, 4, bombList, x, int(y * 5  )));//正中間往下(90度)
     enemyQueue->back()->LoadBitmap();
-	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, -20, 20));
+	enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2)-5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(0.785))), int(y * 5 * (sin(0.785)))));//45度
 	enemyQueue->back()->LoadBitmap();
-	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, 0, -20));
+	enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2)-5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(1.1775))), int(y * 5 * (sin(1.1775)))));//67.5度
 	enemyQueue->back()->LoadBitmap();
-	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, 20, 20));
+	enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2)-5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(1.9625))), int(y * 5 * (sin(1.9625)))));//112.5度
 	enemyQueue->back()->LoadBitmap();
-	enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList, -20, 20));
+	enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2)-5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(2.355))), int(y * 5 * (sin(2.355)))));//135度
 	enemyQueue->back()->LoadBitmap();
 }
 void CBossB::OnMove() {
@@ -93,7 +93,7 @@ void CBossB::OnMove() {
 
     if (callEnemyCounter < 0) {		// BossA技能:召喚小怪
         callEnemyCounter = maxCallEnemyCounter;
-        CallEnemy((this->x + dx / 2 + rand() % bmp.Width()), (this->y + dy + 5 + bmp.Height()));
+        CallEnemy((this->x + dx ), (this->y + dy));
     }
 }
 void CBossB::LoadBitmap() {
