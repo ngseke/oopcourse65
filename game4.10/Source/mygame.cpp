@@ -183,32 +183,11 @@ CGameStateRun::~CGameStateRun() {
 }
 
 void CGameStateRun::OnBeginState() {
-    const int BALL_GAP = 90;
-    const int BALL_XY_OFFSET = 45;
-    const int BALL_PER_ROW = 7;
-    const int HITS_LEFT = 10;
-    const int HITS_LEFT_X = SIZE_X - 100;
-    const int HITS_LEFT_Y = 20;
-    const int BACKGROUND_X = 60;
-    const int ANIMATION_SPEED = 15;
     const int SCORE_X = 240, SCORE_Y = 240;
-    /* 老師的示範球
-    for (int i = 0; i < NUMBALLS; i++) {				// 設定球的起始座標
-        int x_pos = i % BALL_PER_ROW;
-        int y_pos = i / BALL_PER_ROW;
-        ball[i].SetXY(x_pos * BALL_GAP + BALL_XY_OFFSET, y_pos * BALL_GAP + BALL_XY_OFFSET);
-        ball[i].SetDelay(x_pos);
-        ball[i].SetIsAlive(true);
-    }
-    */
-    //background.SetTopLeft(BACKGROUND_X, 0);				// 設定背景的起始座標
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
-    //hits_left.SetInteger(HITS_LEFT);					// 指定剩下的撞擊數
-    //hits_left.SetTopLeft(HITS_LEFT_X, HITS_LEFT_Y);		// 指定剩下撞擊數的座標
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
-    //
     score.SetInteger(0);			//設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);
     currEnemyNum = currBossANum = currBossBNum = 0;
@@ -216,6 +195,8 @@ void CGameStateRun::OnBeginState() {
     currLevel = 0;
     enemyQueue.clear();
     lives = 3;
+    totalKeyDownCount = totalCorrectKeyCount = 0;
+    accuracy = 0;
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -227,9 +208,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     ////////
     callEnemyCounter--;	//每隻怪物 生成間隔 之 counter
     callBossACounter--;
-	callBossBCounter--;
+    callBossBCounter--;
 
-	//==小怪==================================
+    //==小怪==================================
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
@@ -252,7 +233,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.back()->SetIsAlive(true);
         currEnemyNum++;
     }
-	//==BossA==================================
+
+    //==BossA==================================
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
@@ -275,29 +257,31 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.back()->SetIsAlive(true);
         currBossANum++;
     }
-	//==BossB==================================
-	if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
-		callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
-		int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-		enemyQueue.push_back(new CBossB((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
-		enemyQueue.back()->LoadBitmap();
-		// 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
 
-		while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
-			bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
+    //==BossB==================================
+    if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
+        callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
+        int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
+        enemyQueue.push_back(new CBossB((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.back()->LoadBitmap();
+        // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
 
-			for (int i = enemyQueue.size() - 1; i >= 0; i--) {
-				if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
-					firstWordBounceFlag = 1;
-			}
+        while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
+            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
 
-			if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
-			else break;
-		}
+            for (int i = enemyQueue.size() - 1; i >= 0; i--) {
+                if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
+                    firstWordBounceFlag = 1;
+            }
 
-		enemyQueue.back()->SetIsAlive(true);
-		currBossBNum++;
-	}
+            if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
+            else break;
+        }
+
+        enemyQueue.back()->SetIsAlive(true);
+        currBossBNum++;
+    }
+
     //===判斷Me是否碰到Enemy===
 
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {
@@ -427,6 +411,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                     targetEnemy->MinusIndex(2);					// 擊退怪物
+                    totalCorrectKeyCount++;							// 正確按鍵數+1
                 }
             }
             else {												// 若已鎖定
@@ -434,6 +419,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     targetEnemy->AddCurrWordLeng();
                     bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
                     targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
+                    totalCorrectKeyCount++;							// 正確按鍵數+1
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->kill();									// 成功殺害怪物
@@ -446,7 +432,15 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             }
         }
     }
+
+    if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
+
+    if (totalKeyDownCount != 0)
+        accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
+    else
+        accuracy = 100;
 }
+
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
 }
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
@@ -508,16 +502,21 @@ void CGameStateRun::OnShow() {
         pDC->SetBkColor(RGB(0, 0, 0));
         pDC->SetBkMode(TRANSPARENT);
         //
-        char temp[50];
+        char temp[100];
         sprintf(temp, "enemyQueue.size: %d, Lives:%d, currLevel: %d", enemyQueue.size(), lives, currLevel);
         pDC->SetTextColor(RGB(200, 0, 0));
+        pDC->TextOut(20, 40, temp);
+        //
+        sprintf(temp, "totalKeyDownCount: %d totalCorrectKeyCount: %d , accuracy: %.2lf%%", totalKeyDownCount, totalCorrectKeyCount, accuracy);
+        pDC->SetTextColor(RGB(50, 200, 200));
         pDC->TextOut(20, 20, temp);
 
+        //
         for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
             char temp[40];
             sprintf(temp, "%s %d/%d (x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
             pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
-            pDC->TextOut(20, i * 14 + 40, temp);
+            pDC->TextOut(20, i * 14 + 60, temp);
         }
 
         sprintf(temp, "Bullet Numbers: %d", bulletList.size());
