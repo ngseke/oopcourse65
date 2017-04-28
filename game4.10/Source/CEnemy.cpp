@@ -8,6 +8,7 @@
 #include "CDict.h"
 #include "CMe.h"
 #include "CEnemy.h"
+#include <math.h>
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -118,8 +119,9 @@ void CEnemy::OnMove() {
 
         // dx = xMoveDistance / STEPS * index;
         double dxTemp = (double(endX) - x) / STEPS * index;
+		double dyTemp = (double(endY) - y) / STEPS * index;
         dx  = int(dxTemp);  // dx¬° (Enemy<->Me¤§xÁ`¶ZÂ÷) / STEPS * index;
-        dy = ((endY - y) / STEPS) * index ;
+        dy  = int(dyTemp);
     }
 }
 
