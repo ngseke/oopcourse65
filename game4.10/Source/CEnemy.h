@@ -5,9 +5,10 @@ namespace game_framework {
 
 class CEnemy {
     public:
-		CEnemy();
+        CEnemy();
         CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList);
-		CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList,int endX,int endY);
+        CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList, int endX, int endY);
+        CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY);
         bool IsAlive();											// 是否活著
         virtual void LoadBitmap();								// 載入圖形
         virtual void OnMove();									// 移動
@@ -58,7 +59,8 @@ class CEnemy {
         int targetX, targetY;
         vector<CBomb*>* bombList;
         bool is_bombed;
-		int endX, endY;
+        int endX, endY;
+        vector<CEnemy*>* enemyQueue;
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 

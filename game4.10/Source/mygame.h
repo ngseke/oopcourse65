@@ -93,7 +93,7 @@ class CGameStateRun : public CGameState {
         int				currLevel;										// 當前關卡
         int				levelEnemyNum[10] = {  5,  0,  0,  0,  0,  0, 20, 20, 20, 20 };		// 該關卡最大的敵人數
         int				levelBossANum[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
-        int				levelBossBNum[10] = {  2,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
+        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
         int				lives;
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率

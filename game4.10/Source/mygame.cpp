@@ -172,7 +172,7 @@ void CGameStateOver::OnShow() {
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
-    callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
+    callEnemyCounter = maxCallEnemyCounter = 3;	// maxCallEnemyCounter 決定怪物生成速度
     callBossACounter = maxCallBossACounter = 100;
     callBossBCounter = maxCallBossBCounter = 100;
 }
@@ -214,22 +214,10 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 2, false, &dictionary, 2, 6, &bombList) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 2, false, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-
-        while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
-            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
-
-            for (int i = enemyQueue.size() - 1; i >= 0 ; i--) {
-                if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
-                    firstWordBounceFlag = 1;
-            }
-
-            if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
-            else break;
-        }
-
+        enemyQueue.back()->SetVocab();
         enemyQueue.back()->SetIsAlive(true);
         currEnemyNum++;
     }

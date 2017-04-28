@@ -35,33 +35,50 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
-	endX = SIZE_X / 2;
-	endY = SIZE_Y;
+    endX = SIZE_X / 2;
+    endY = SIZE_Y;
     SetVocab();
-	
 }
 
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList,int endX,int endY) {	//	初始值都在此處設定
-	is_alive = is_bombed = false;
-	dx = dy = index = delay_counter = 0;
-	currWordLeng = 0;
-	targetX = -2;
-	targetY = -2;
-	////
-	SetXY(x, y);
-	SetDelay(delay);
-	SetIsAlive(alive);
-	dict = d;
-	this->bombList = bombList;
-	minVocabLeng = minVL;
-	maxVocabLeng = maxVL;
-
-	this->endX = endX;
-	this->endY = endY;
-	
-
-	SetVocab();
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
+    is_alive = is_bombed = false;
+    dx = dy = index = delay_counter = 0;
+    currWordLeng = 0;
+    targetX = -2;
+    targetY = -2;
+    ////
+    SetXY(x, y);
+    SetDelay(delay);
+    SetIsAlive(alive);
+    dict = d;
+    this->bombList = bombList;
+    minVocabLeng = minVL;
+    maxVocabLeng = maxVL;
+    this->endX = endX;
+    this->endY = endY;
+    SetVocab();
 }
+
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
+    is_alive = is_bombed = false;
+    dx = dy = index = delay_counter = 0;
+    currWordLeng = 0;
+    targetX = -2;
+    targetY = -2;
+    ////
+    SetXY(x, y);
+    SetDelay(delay);
+    SetIsAlive(alive);
+    dict = d;
+    this->bombList = bombList;
+    this->enemyQueue = enemyQueue;
+    minVocabLeng = minVL;
+    maxVocabLeng = maxVL;
+    this->endX = endX;
+    this->endY = endY;
+    SetVocab();
+}
+
 
 
 bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
@@ -119,7 +136,7 @@ void CEnemy::OnMove() {
 
         // dx = xMoveDistance / STEPS * index;
         double dxTemp = (double(endX) - x) / STEPS * index;
-		double dyTemp = (double(endY) - y) / STEPS * index;
+        double dyTemp = (double(endY) - y) / STEPS * index;
         dx  = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
         dy  = int(dyTemp);
     }
@@ -190,8 +207,17 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
         vocab = dict->GetText();	// 給vocab一個單字
         length = vocab.length();
 
-        if (length >= minVocabLeng && length <= maxVocabLeng)			// 條件成立,使用break跳出迴圈 確定生成此單字
-            break;
+        if (length >= minVocabLeng && length <= maxVocabLeng) {			// 條件成立,使用break跳出迴圈 確定生成此單字
+            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
+
+            for (int i = enemyQueue->size() - 1; i >= 0; i--) {
+                if (vocab[0] == enemyQueue->at(i)->GetFirstWord() && enemyQueue->at(i)->IsAlive())
+                    firstWordBounceFlag = 1;
+            }
+
+            if (firstWordBounceFlag && !(enemyQueue->size() >= 24)) {}
+            else break;
+        }
     }
 }
 string CEnemy::GetVocab() {		  // 回傳整組單字(ex: "apple")
