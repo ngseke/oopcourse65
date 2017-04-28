@@ -497,7 +497,7 @@ void CGameStateRun::OnShow() {
     if (showDebug) {		// 顯示debug資訊
         CDC* pDC = CDDraw::GetBackCDC();
         CFont f, *fp;
-        f.CreatePointFont(120, "Fixedsys");
+        f.CreatePointFont(100, "Fixedsys");
         fp = pDC->SelectObject(&f);
         pDC->SetBkColor(RGB(0, 0, 0));
         pDC->SetBkMode(TRANSPARENT);
@@ -507,7 +507,7 @@ void CGameStateRun::OnShow() {
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 40, temp);
         //
-        sprintf(temp, "totalKeyDownCount: %d totalCorrectKeyCount: %d , accuracy: %.2lf%%", totalKeyDownCount, totalCorrectKeyCount, accuracy);
+        sprintf(temp, "totalKeyDownCount: %d totalCorrectKeyCount: %d , accuracy正確率: %.2lf%%", totalKeyDownCount, totalCorrectKeyCount, accuracy);
         pDC->SetTextColor(RGB(50, 200, 200));
         pDC->TextOut(20, 20, temp);
 
