@@ -6,8 +6,6 @@ namespace game_framework {
 class CEnemy {
     public:
         CEnemy();
-        CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList);
-        CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CBomb*>* bombList, int endX, int endY);
         CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY);
         bool IsAlive();											// 是否活著
         virtual void LoadBitmap();								// 載入圖形

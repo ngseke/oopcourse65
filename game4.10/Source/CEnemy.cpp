@@ -13,53 +13,10 @@
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
-// CEnemy: Ball class
+// CEnemy: Enemy
 /////////////////////////////////////////////////////////////////////////////
 
-CEnemy::CEnemy() {
-    is_alive = false;
-    x = y = dx = dy = index = delay_counter = 0;
-    currWordLeng = 0;	  // 當前的游標在0 還未輸入的意思 (ex: ""apple), 若currWord = 1 (ex: "a"pple)
-}
-
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList) {	//	初始值都在此處設定
-    is_alive = is_bombed = false;
-    dx = dy = index = delay_counter = 0;
-    currWordLeng = 0;
-    targetX = -2;
-    targetY = -2;
-    ////
-    SetXY(x, y);
-    SetDelay(delay);
-    SetIsAlive(alive);
-    dict = d;
-    this->bombList = bombList;
-    minVocabLeng = minVL;
-    maxVocabLeng = maxVL;
-    endX = SIZE_X / 2;
-    endY = SIZE_Y;
-    SetVocab();
-}
-/*
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
-    is_alive = is_bombed = false;
-    dx = dy = index = delay_counter = 0;
-    currWordLeng = 0;
-    targetX = -2;
-    targetY = -2;
-    ////
-    SetXY(x, y);
-    SetDelay(delay);
-    SetIsAlive(alive);
-    dict = d;
-    this->bombList = bombList;
-    minVocabLeng = minVL;
-    maxVocabLeng = maxVL;
-    this->endX = endX;
-    this->endY = endY;
-    SetVocab();
-}
-*/
+CEnemy::CEnemy() {}
 CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
     is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
@@ -203,9 +160,8 @@ void CEnemy::kill() {
 
 ////////////
 void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
-    //CDict* dict = new CDict;
     while (1) {
-        if (maxVocabLeng == 1 && minVocabLeng == 1) {
+        if (maxVocabLeng == 1 && minVocabLeng == 1) {	// 若為1字小怪
             vocab = "a";			//要給定值 不然會出錯
             vocab[0] = 97 + rand() % 26;
             length = 1;
