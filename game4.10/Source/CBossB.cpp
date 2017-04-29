@@ -29,7 +29,7 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
-    callEnemyCounter = maxCallEnemyCounter = 500;		// 發動召喚小怪技能的間隔
+    callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
     endX = SIZE_X / 2;
     endY = SIZE_Y;
     //
@@ -58,15 +58,15 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     SetVocab();
 }
 void CBossB::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 3, 4, bombList, x, int(y * 5  ))); //正中間往下(90度)
+    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 1, 1, bombList, x, int(y * 5  ))); //正中間往下(90度)
     enemyQueue->back()->LoadBitmap();
-    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(0.785))), int(y * 5 * (sin(0.785))))); //45度
+    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 1, 1, bombList, int(x * 5 * (cos(0.785))), int(y * 5 * (sin(0.785))))); //45度
     enemyQueue->back()->LoadBitmap();
-    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(1.1775))), int(y * 5 * (sin(1.1775))))); //67.5度
+    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 1, 1, bombList, int(x * 5 * (cos(1.1775))), int(y * 5 * (sin(1.1775))))); //67.5度
     enemyQueue->back()->LoadBitmap();
-    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(1.9625))), int(y * 5 * (sin(1.9625))))); //112.5度
+    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 1, 1, bombList, int(x * 5 * (cos(1.9625))), int(y * 5 * (sin(1.9625))))); //112.5度
     enemyQueue->back()->LoadBitmap();
-    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 3, 4, bombList, int(x * 5 * (cos(2.355))), int(y * 5 * (sin(2.355))))); //135度
+    enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, 1, dict, 1, 1, bombList, int(x * 5 * (cos(2.355))), int(y * 5 * (sin(2.355))))); //135度
     enemyQueue->back()->LoadBitmap();
 }
 void CBossB::OnMove() {

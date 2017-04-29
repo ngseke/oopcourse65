@@ -422,11 +422,22 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
                 if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
-                    lock = true;
-                    targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
-                    targetEnemy->AddCurrWordLeng();
-                    bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
-                    targetEnemy->MinusIndex(2);					// 擊退怪物
+					if (enemyQueue[i]->GetCurrWordLeng() == 1) {
+						targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
+						bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+						targetEnemy->kill();									// 成功殺害怪物
+						score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+						break;
+					}
+					else {
+						lock = true;
+						targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
+						targetEnemy->AddCurrWordLeng();
+						bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+						targetEnemy->MinusIndex(2);					// 擊退怪物
+						break;
+					}
+
                 }
             }
             else {												// 若已鎖定

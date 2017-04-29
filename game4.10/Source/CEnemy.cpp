@@ -9,6 +9,7 @@
 #include "CMe.h"
 #include "CEnemy.h"
 #include <math.h>
+#include <stdlib.h>
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -35,32 +36,28 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
-	endX = SIZE_X / 2;
-	endY = SIZE_Y;
+    endX = SIZE_X / 2;
+    endY = SIZE_Y;
     SetVocab();
-	
 }
 
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList,int endX,int endY) {	//	初始值都在此處設定
-	is_alive = is_bombed = false;
-	dx = dy = index = delay_counter = 0;
-	currWordLeng = 0;
-	targetX = -2;
-	targetY = -2;
-	////
-	SetXY(x, y);
-	SetDelay(delay);
-	SetIsAlive(alive);
-	dict = d;
-	this->bombList = bombList;
-	minVocabLeng = minVL;
-	maxVocabLeng = maxVL;
-
-	this->endX = endX;
-	this->endY = endY;
-	
-
-	SetVocab();
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
+    is_alive = is_bombed = false;
+    dx = dy = index = delay_counter = 0;
+    currWordLeng = 0;
+    targetX = -2;
+    targetY = -2;
+    ////
+    SetXY(x, y);
+    SetDelay(delay);
+    SetIsAlive(alive);
+    dict = d;
+    this->bombList = bombList;
+    minVocabLeng = minVL;
+    maxVocabLeng = maxVL;
+    this->endX = endX;
+    this->endY = endY;
+    SetVocab();
 }
 
 
@@ -119,7 +116,7 @@ void CEnemy::OnMove() {
 
         // dx = xMoveDistance / STEPS * index;
         double dxTemp = (double(endX) - x) / STEPS * index;
-		double dyTemp = (double(endY) - y) / STEPS * index;
+        double dyTemp = (double(endY) - y) / STEPS * index;
         dx  = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
         dy  = int(dyTemp);
     }
@@ -187,11 +184,19 @@ void CEnemy::kill() {
 void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
     //CDict* dict = new CDict;
     while (1) {
-        vocab = dict->GetText();	// 給vocab一個單字
-        length = vocab.length();
+        if (maxVocabLeng == 1 && minVocabLeng == 1) {
+			vocab = "a";			//要給定值 不然會出錯
+			vocab[0] = 97 + rand() % 26;
+			length = 1;
+			break;
+        }
+        else {
+            vocab = dict->GetText();	// 給vocab一個單字
+            length = vocab.length();
 
-        if (length >= minVocabLeng && length <= maxVocabLeng)			// 條件成立,使用break跳出迴圈 確定生成此單字
-            break;
+            if (length >= minVocabLeng && length <= maxVocabLeng)			// 條件成立,使用break跳出迴圈 確定生成此單字
+                break;
+        }
     }
 }
 string CEnemy::GetVocab() {		  // 回傳整組單字(ex: "apple")
