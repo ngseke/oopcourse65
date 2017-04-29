@@ -11,7 +11,7 @@
 #include "CBossA.h"
 
 namespace game_framework {
-CBossA::CBossA(){}
+CBossA::CBossA() {}
 CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList) {	//	初始值都在此處設定
     this->enemyQueue = enemyQueue;
     this->bombList = bombList;
@@ -29,15 +29,16 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
     callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
-	endX = SIZE_X / 2;
-	endY = SIZE_Y;
+    endX = SIZE_X / 2;
+    endY = SIZE_Y;
     //
     SetVocab();
 }
 
 void CBossA::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 3, 1, dict, 3, 4, bombList));
+    enemyQueue->push_back(new CEnemy(x, y, 3, 0, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2, SIZE_Y));
     enemyQueue->back()->LoadBitmap();
+    enemyQueue->back()->SetIsAlive(true);
 }
 
 void CBossA::kill() {

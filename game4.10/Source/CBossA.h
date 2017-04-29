@@ -12,7 +12,6 @@ class CBossA : public CEnemy {
         void OnMove();
         void LoadBitmap();
     protected:
-        vector<CEnemy*>* enemyQueue;
         int callEnemyCounter, maxCallEnemyCounter;
 };
 }

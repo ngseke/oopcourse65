@@ -173,8 +173,8 @@ CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
     callEnemyCounter = maxCallEnemyCounter = 3;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 100;
-    callBossBCounter = maxCallBossBCounter = 100;
+    callBossACounter = maxCallBossACounter = 3;
+    callBossBCounter = maxCallBossBCounter = 3;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -217,7 +217,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.push_back(new CEnemy(randX, 0, 2, false, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-        enemyQueue.back()->SetVocab();
         enemyQueue.back()->SetIsAlive(true);
         currEnemyNum++;
     }
@@ -229,19 +228,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.push_back(new CBossA((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-
-        while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
-            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
-
-            for (int i = enemyQueue.size() - 1; i >= 0; i--) {
-                if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
-                    firstWordBounceFlag = 1;
-            }
-
-            if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
-            else break;
-        }
-
         enemyQueue.back()->SetIsAlive(true);
         currBossANum++;
     }
@@ -253,19 +239,6 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.push_back(new CBossB((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-
-        while (1) {								//	此迴圈 檢查新召喚的怪物 是否跟場上現有的第一個字撞
-            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
-
-            for (int i = enemyQueue.size() - 1; i >= 0; i--) {
-                if (enemyQueue.back()->GetFirstWord() == enemyQueue[i]->GetFirstWord() && enemyQueue[i]->IsAlive())
-                    firstWordBounceFlag = 1;
-            }
-
-            if (firstWordBounceFlag && !(enemyQueue.size() >= 24)) enemyQueue.back()->SetVocab();
-            else break;
-        }
-
         enemyQueue.back()->SetIsAlive(true);
         currBossBNum++;
     }
@@ -394,12 +367,23 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
                 if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
-                    lock = true;
-                    targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
-                    targetEnemy->AddCurrWordLeng();
-                    bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
-                    targetEnemy->MinusIndex(2);					// 擊退怪物
                     totalCorrectKeyCount++;							// 正確按鍵數+1
+
+                    if (enemyQueue[i]->GetVocabLeng() == 1) {
+                        targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
+                        bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+                        targetEnemy->kill();									// 成功殺害怪物
+                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+                        break;
+                    }
+                    else {
+                        lock = true;
+                        targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
+                        targetEnemy->AddCurrWordLeng();
+                        bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+                        targetEnemy->MinusIndex(2);					// 擊退怪物
+                        break;
+                    }
                 }
             }
             else {												// 若已鎖定
