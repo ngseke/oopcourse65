@@ -61,7 +61,7 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
 void CBossB::CallEnemy(int x, int y) {
     const double PI = 3.141592653;						// 定義圓周率
     const int ONE_WORD_ENEMY_NUM = 7;						// 共要生成幾隻小怪, 範圍:3,5,7,9...
-    const double ONE_WORD_ENEMY_RADIOUS = (PI / 180.0) * 5.0 ;	// 每一隻小怪的角度偏移量, double內填寫角度
+    const double ONE_WORD_ENEMY_RADIOUS = (PI / 180.0) * 15.0 ;	// 每一隻小怪的角度偏移量, double內填寫角度
     ///////////
     // 中間的那隻小怪
     enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, false, dict, 1, 1, enemyQueue, bombList, \
