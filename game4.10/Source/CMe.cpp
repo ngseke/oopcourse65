@@ -40,7 +40,7 @@ void CMe::Initialize() {
 }
 
 void CMe::LoadBitmap() {
-    animation.AddBitmap("Bitmaps/me_cow.bmp", RGB(0, 255, 0));
+    animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
 }
 
 void CMe::OnMove() {
