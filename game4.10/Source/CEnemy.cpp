@@ -88,10 +88,8 @@ void CEnemy::OnMove() {
     if (delay_counter < 0) {
         delay_counter = delay;
         index++;
-
-        if (index >= STEPS)
-            index = 0;
-
+        // if (index >= STEPS)
+        //   index = 0;
         // dx = xMoveDistance / STEPS * index;
         double dxTemp = (double(endX) - x) / STEPS * index;
         double dyTemp = (double(endY) - y) / STEPS * index;

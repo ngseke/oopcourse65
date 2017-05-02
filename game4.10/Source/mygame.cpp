@@ -214,32 +214,26 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 2, false, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 2, true, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
-        // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-        enemyQueue.back()->SetIsAlive(true);
         currEnemyNum++;
     }
 
     //==BossA==================================
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
-        int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CBossA((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
+        int randX = (rand() % (SIZE_X - 100));
+        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
-        // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-        enemyQueue.back()->SetIsAlive(true);
         currBossANum++;
     }
 
     //==BossB==================================
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
-        int randX = (rand() % (SIZE_X - 100));				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CBossB((rand() % (SIZE_X - 100)), 0, 5, false, &dictionary, 6, 20, &enemyQueue, &bombList));
+        int randX = (rand() % (SIZE_X - 100));
+        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
-        // 注意: 下面enemyQueue.back()指的都是剛新增的那隻怪物
-        enemyQueue.back()->SetIsAlive(true);
         currBossBNum++;
     }
 
@@ -261,13 +255,14 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         if (enemyQueue[i]->IsAlive())	enemyQueue[i]->OnMove();
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
+        if (enemyQueue[i]->GetX() > SIZE_X + 40 || enemyQueue[i]->GetX() < -40 || enemyQueue[i]->GetY() > SIZE_Y + 40) {
+            enemyQueue[i]->kill();
+        }
+    }
+
+    for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         //若Enemy IsAlive=0, 則從vector中移除
         if (!enemyQueue[i]->IsAlive() && enemyQueue[i]->IsBombed()) {
-            // push_back爆炸效果
-            /*
-            bombList.push_back(new CBomb(enemyQueue[i]->GetX(), enemyQueue[i]->GetY()));
-            bombList.back()->LoadBitmap();
-            */
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
             enemyQueue.erase(iterenemyQueue + i);
             break;
@@ -475,11 +470,11 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[100];
-        sprintf(temp, "enemyQueue.size: %d, Lives:%d, currLevel: %d", enemyQueue.size(), lives, currLevel);
+        sprintf(temp, "怪物數量: %d, 命: %d, 本關卡: %d", enemyQueue.size(), lives, currLevel);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 40, temp);
         //
-        sprintf(temp, "totalKeyDownCount: %d totalCorrectKeyCount: %d , accuracy正確率: %.2lf%%", totalKeyDownCount, totalCorrectKeyCount, accuracy);
+        sprintf(temp, "總按鍵數: %d 總正確按鍵數: %d , accuracy正確率: %.2lf%%", totalKeyDownCount, totalCorrectKeyCount, accuracy);
         pDC->SetTextColor(RGB(50, 200, 200));
         pDC->TextOut(20, 20, temp);
 
@@ -491,7 +486,7 @@ void CGameStateRun::OnShow() {
             pDC->TextOut(20, i * 14 + 60, temp);
         }
 
-        sprintf(temp, "Bullet Numbers: %d", bulletList.size());
+        sprintf(temp, "子彈數: %d", bulletList.size());
         pDC->SetTextColor(RGB(200, 200, 200 ));
         pDC->TextOut(20, 2, temp);
         ////
