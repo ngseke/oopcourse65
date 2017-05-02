@@ -188,6 +188,7 @@ void CGameStateRun::OnBeginState() {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
+	CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
     score.SetInteger(0);			//設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);
     currEnemyNum = currBossANum = currBossBNum = 0;
@@ -330,9 +331,10 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     me.LoadBitmap();
     //hits_left.LoadBitmap();
     //corner.ShowBitmap(background);							// 將corner貼到background
-    CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
-    CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
-    CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
+    //CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
+    //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
+    //CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
+	CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
