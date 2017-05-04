@@ -188,7 +188,7 @@ void CGameStateRun::OnBeginState() {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
     //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
-	CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
+    CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
     score.SetInteger(0);			//設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);
     currEnemyNum = currBossANum = currBossBNum = 0;
@@ -334,7 +334,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
     //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
     //CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
-	CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
+    CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
+    CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
@@ -359,6 +360,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
+	CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 MIDI
 
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
         if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
