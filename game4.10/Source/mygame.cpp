@@ -360,13 +360,13 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
-	CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 MIDI
 
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
         if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
             if (!lock) {										// 尚未鎖定了
                 if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
                     totalCorrectKeyCount++;							// 正確按鍵數+1
+                    CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
 
                     if (enemyQueue[i]->GetVocabLeng() == 1) {
                         targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
@@ -391,6 +391,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
                     targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
                     totalCorrectKeyCount++;							// 正確按鍵數+1
+                    CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
 
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->kill();									// 成功殺害怪物
