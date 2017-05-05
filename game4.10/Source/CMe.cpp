@@ -4,7 +4,7 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
-//#include "CEnemy.h"
+#include "CEnemy.h"
 #include "CMe.h"
 
 
@@ -16,6 +16,7 @@ namespace game_framework {
 CMe::CMe() {
     Initialize();
 }
+
 
 int CMe::GetX1() {
     return x;
@@ -34,7 +35,7 @@ int CMe::GetY2() {
 }
 
 void CMe::Initialize() {
-    const int X_POS = ( SIZE_X - 16) / 2;
+    const int X_POS = ( SIZE_X - 24) / 2;
     const int Y_POS = SIZE_Y - 50;
     x = X_POS;
     y = Y_POS;
@@ -50,11 +51,12 @@ void CMe::LoadBitmap() {
 		emp.AddBitmap(str, RGB(0, 255, 0));
 	}
 
-	emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y -400) );
+
 }
 
 void CMe::OnMove() {
 	emp.OnMove();
+	emp.GetCurrentBitmapNumber();
 }
 
 
@@ -64,6 +66,7 @@ void CMe::SetXY(int nx, int ny) {
 }
 
 void CMe::OnShow() {
+	emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
 	emp.OnShow();
     animation.SetTopLeft(x, y);
     animation.OnShow();

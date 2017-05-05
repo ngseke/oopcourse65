@@ -19,6 +19,7 @@ class CMe {
         void OnMove();					// 移動擦子
         void OnShow();					// 將擦子圖形貼到畫面
         void SetXY(int nx, int ny);		// 設定擦子左上角座標
+
     protected:
         CAnimation animation;		// 擦子的動畫
 		CAnimation emp;				// 衝擊波
