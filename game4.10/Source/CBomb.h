@@ -1,5 +1,4 @@
-#ifndef CBOMB
-#define CBOMB
+#pragma once
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -24,4 +23,3 @@ class CBomb {
 
 };
 }
-#endif

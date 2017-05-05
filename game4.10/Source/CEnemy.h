@@ -1,6 +1,7 @@
-#ifndef CENEMY
-#define CENEMY
+#pragma once
 #include "CBomb.h"
+#include "CDict.h"
+#include "CMe.h"
 namespace game_framework {
 
 class CEnemy {
@@ -64,5 +65,3 @@ class CEnemy {
 
 };
 }
-
-#endif

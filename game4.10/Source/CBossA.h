@@ -1,5 +1,4 @@
-#ifndef CBOSSA
-#define CBOSSA
+#pragma once
 namespace game_framework {
 
 class CBossA : public CEnemy {
@@ -14,5 +13,3 @@ class CBossA : public CEnemy {
         int callEnemyCounter, maxCallEnemyCounter;
 };
 }
-
-#endif

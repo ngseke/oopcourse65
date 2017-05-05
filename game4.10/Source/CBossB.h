@@ -1,5 +1,4 @@
-#ifndef CBOSSB
-#define CBOSSB
+#pragma once
 namespace game_framework {
 
 class CBossB : public CBossA {
@@ -13,5 +12,3 @@ class CBossB : public CBossA {
         void LoadBitmap();
 };
 }
-
-#endif
