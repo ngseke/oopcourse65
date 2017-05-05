@@ -4,7 +4,9 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
+#include "CEnemy.h"
 #include "CMe.h"
+
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -36,14 +38,22 @@ void CMe::Initialize() {
     const int Y_POS = SIZE_Y - 50;
     x = X_POS;
     y = Y_POS;
-    isMovingLeft = isMovingRight = isMovingUp = isMovingDown = false;
+
+
 }
 
 void CMe::LoadBitmap() {
     animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
+
+	char* filename[2] = { ".\\Bitmaps\\big_wave\\big_wave.bmp", ".\\Bitmaps\\big_wave\\big_wave2.bmp" };
+
+	for (int i = 0; i < 2; i++)
+		emp.AddBitmap(filename[i], RGB(0, 255, 0));
+	emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y -400) );
 }
 
 void CMe::OnMove() {
+	emp.OnMove();
 }
 
 
@@ -53,7 +63,12 @@ void CMe::SetXY(int nx, int ny) {
 }
 
 void CMe::OnShow() {
+	emp.OnShow();
     animation.SetTopLeft(x, y);
     animation.OnShow();
 }
+
+
+
+
 }
