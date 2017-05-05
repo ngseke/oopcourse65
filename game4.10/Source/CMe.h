@@ -9,7 +9,7 @@ namespace game_framework {
 class CMe {
     public:
         CMe();
-		CMe(vector<CEnemy*>* enemyQueue);
+		//CMe(vector<CEnemy*>* enemyQueue);
         int  GetX1();					// 擦子左上角 x 座標
         int  GetY1();					// 擦子左上角 y 座標
         int  GetX2();					// 擦子右下角 x 座標
