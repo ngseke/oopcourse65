@@ -199,7 +199,7 @@ void CGameStateRun::OnBeginState() {
     lives = 3;
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
-    emp.GetEQ(&enemyQueue);
+    emp.SetEQ(&enemyQueue, &score, &lock, &(*targetEnemy));
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -376,7 +376,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
                         bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                         targetEnemy->kill();									// 成功殺害怪物
-                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+                        score.Add(targetEnemy->GetVocabLeng());				// 分數+= 怪物長度
                         break;
                     }
                     else {
@@ -400,7 +400,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->kill();									// 成功殺害怪物
                         lock = false;
-                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+                        score.Add(targetEnemy->GetVocabLeng());						// 分數+= 怪物長度
                     }
 
                     break;

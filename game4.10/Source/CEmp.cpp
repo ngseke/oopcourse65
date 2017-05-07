@@ -57,6 +57,13 @@ void CEmp::OnMove() {
 
         for (unsigned int i = 0; i < enemyQueue->size(); i++) {
             if (HitRectangle(enemyQueue->at(i)->GetX(), enemyQueue->at(i)->GetY(), enemyQueue->at(i)->GetX2(), enemyQueue->at(i)->GetY2())) {
+                //score->Add(targetEnemy->GetCurrWordLeng());				// 分數+= 怪物長度
+                if (lock && &enemyQueue->at(i) == &targetEnemy) {
+                    lock = false;
+                    score->Add(500);
+                }
+
+                score->Add(enemyQueue->at(i)->GetVocabLeng());
                 enemyQueue->at(i)->kill();
             }
         }
@@ -79,8 +86,11 @@ void CEmp::OnShow() {
     emp.OnShow();
 }
 
-void CEmp::GetEQ(vector<CEnemy*>* enemyQueue) {
+void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy* targetEnemy) {
     this->enemyQueue = enemyQueue;
+    this->score = score;
+    this->lock = lock;
+    (this->targetEnemy) = targetEnemy;
 }
 void CEmp::CallEmp() {
     if (!state) {
@@ -88,17 +98,20 @@ void CEmp::CallEmp() {
     }
 }
 bool CEmp::HitRectangle(int tx1, int ty1, int tx2, int ty2) {// 80 160 320 480 480
-    int arr[5] = { 1, 2, 4, 6, 6 };
-    int x1, y1, x2, y2;
-    int  i = emp.GetCurrentBitmapNumber();
-    x1 = x + (320 - (80 * arr[i]) / 2);				// 怪物face的左上角x座標
-    y1 = y + (320 - (80 * arr[i]) / 2);				// 怪物face的左上角y座標
-    x2 = x + (320 + (80 * arr[i]) / 2);				// 怪物face的右下角x座標
-    y2 = y + (320 + (80 * arr[i]) / 2); 			// 怪物face的右下角y座標
-    //
-    // 檢測怪物face的矩形與參數矩形是否有交集
-    //
-    return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
+    if (emp.GetCurrentBitmapNumber() != 0 && !emp.IsFinalBitmap()) {
+        int arr[10] = { 1, 2, 4, 6, 6, 6, 6, 6, 6 };
+        int x1, y1, x2, y2;
+        int  i = emp.GetCurrentBitmapNumber() - 1;
+        x1 = x + (320 - (80 * arr[i]) / 2);
+        y1 = y + (320 - (80 * arr[i]) / 2);
+        x2 = x + (320 + (80 * arr[i]) / 2);
+        y2 = y + (320 + (80 * arr[i]) / 2);
+        //
+        // 檢測怪物face的矩形與參數矩形是否有交集
+        //
+        return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
+    }
+    else return 0;
 }
 
 }
