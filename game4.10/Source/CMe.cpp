@@ -43,6 +43,7 @@ void CMe::Initialize() {
 
 void CMe::LoadBitmap() {
     animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
+    animation.AddBitmap("Bitmaps/me_ironman1.bmp", RGB(255, 255, 255));
 
     for (int i = 0; i < 5; i++) {
         char str[40];
@@ -54,6 +55,7 @@ void CMe::LoadBitmap() {
 void CMe::OnMove() {
     emp.OnMove();
     emp.GetCurrentBitmapNumber();
+    animation.OnMove();
 }
 
 

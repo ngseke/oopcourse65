@@ -57,7 +57,12 @@ bool CEnemy::IsAlive() {
 void CEnemy::LoadBitmap() {
     char str[30];
     const unsigned int bitmapNum = 7;		// 圖檔數量
-    sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);
+
+    if (maxVocabLeng == 1 && minVocabLeng == 1) {
+        sprintf(str, "Bitmaps/face/face_min%d.bmp", rand() % (4) + 1);	// 1字小怪的bmp
+    }
+    else  sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);  // 一般小怪的bmp
+
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
     /////
