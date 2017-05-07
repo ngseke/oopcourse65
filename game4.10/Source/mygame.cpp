@@ -199,6 +199,7 @@ void CGameStateRun::OnBeginState() {
     lives = 3;
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
+    emp.GetEQ(&enemyQueue);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -304,6 +305,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     map.OnMove();
+    emp.OnMove();
     me.OnMove();
 }
 
@@ -329,6 +331,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));			// 載入說明的圖形
     score.LoadBitmap();
     map.LoadBitmap();
+    emp.LoadBitmap();
     me.LoadBitmap();
     //hits_left.LoadBitmap();
     //corner.ShowBitmap(background);							// 將corner貼到background
@@ -412,6 +415,10 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
     else
         accuracy = 100;
+
+    if (nChar == 13) {
+        emp.CallEmp();
+    }
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
@@ -439,6 +446,7 @@ void CGameStateRun::OnShow() {
     map.OnShow();						// 貼上背景網子
     help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
+    emp.OnShow();
     me.OnShow();
 
     /////////

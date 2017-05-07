@@ -17,7 +17,6 @@ CMe::CMe() {
     Initialize();
 }
 
-
 int CMe::GetX1() {
     return x;
 }
@@ -43,17 +42,9 @@ void CMe::Initialize() {
 
 void CMe::LoadBitmap() {
     animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
-
-    for (int i = 0; i < 5; i++) {
-        char str[40];
-        sprintf(str, "Bitmaps/big_wave/big_wave%d.bmp", i + 1);
-        emp.AddBitmap(str, RGB(0, 255, 0));
-    }
 }
 
 void CMe::OnMove() {
-    emp.OnMove();
-    emp.GetCurrentBitmapNumber();
 }
 
 
@@ -63,8 +54,6 @@ void CMe::SetXY(int nx, int ny) {
 }
 
 void CMe::OnShow() {
-    emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
-    emp.OnShow();
     animation.SetTopLeft(x, y);
     animation.OnShow();
 }

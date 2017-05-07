@@ -6,6 +6,7 @@
 #include "CMap.h"
 #include "CBossA.h"
 #include "CBossB.h"
+#include "CEmp.h"
 
 
 namespace game_framework {
@@ -86,6 +87,7 @@ class CGameStateRun : public CGameState {
 
         CEnemy*			targetEnemy;									// 指標 用於指向瞄準的敵人
         CInteger		score;											// 分數顯示器
+		CEmp			emp;
         const int		LEVEL;											// 關卡總數
         int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快
         int				callBossACounter, maxCallBossACounter;

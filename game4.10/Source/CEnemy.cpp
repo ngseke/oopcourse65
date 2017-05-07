@@ -204,6 +204,12 @@ int CEnemy::GetX() {
 int CEnemy::GetY() {
     return y + dy;
 }
+int CEnemy::GetX2() {
+    return x + dx + bmp.Width();
+}
+int CEnemy::GetY2() {
+    return y + dy + bmp.Height();
+}
 void CEnemy::MinusIndex(int num) {
     index = index - num;
 }
