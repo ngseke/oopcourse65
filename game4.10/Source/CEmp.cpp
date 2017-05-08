@@ -58,8 +58,8 @@ void CEmp::OnMove() {
         for (unsigned int i = 0; i < enemyQueue->size(); i++) {
             if (HitRectangle(enemyQueue->at(i)->GetX(), enemyQueue->at(i)->GetY(), enemyQueue->at(i)->GetX2(), enemyQueue->at(i)->GetY2())) {
                 // score->Add(targetEnemy->GetCurrWordLeng());				// 分數+= 怪物長度
-                if (lock && enemyQueue->at(i) == *targetEnemy) {
-                    lock = 0;
+                if (*lock && enemyQueue->at(i) == *targetEnemy) {
+                    *lock = 0;
                 }
 
                 score->Add(enemyQueue->at(i)->GetVocabLeng());
@@ -84,7 +84,7 @@ void CEmp::OnShow() {
     emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
     emp.OnShow();
 
-    if (state) {		// 顯示debug資訊
+    if (0) {		// 顯示debug資訊
         CDC* pDC = CDDraw::GetBackCDC();
         CFont f, *fp;
         f.CreatePointFont(100, "Fixedsys");
