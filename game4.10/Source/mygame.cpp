@@ -199,6 +199,7 @@ void CGameStateRun::OnBeginState() {
     lives = 3;
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
+    emp.SetEQ(&enemyQueue, &score, &lock, &(*targetEnemy));
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -304,6 +305,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     map.OnMove();
+    emp.OnMove();
     me.OnMove();
 }
 
@@ -329,6 +331,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));			// 載入說明的圖形
     score.LoadBitmap();
     map.LoadBitmap();
+    emp.LoadBitmap();
     me.LoadBitmap();
     //hits_left.LoadBitmap();
     //corner.ShowBitmap(background);							// 將corner貼到background
@@ -373,7 +376,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
                         bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                         targetEnemy->kill();									// 成功殺害怪物
-                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+                        score.Add(targetEnemy->GetVocabLeng());				// 分數+= 怪物長度
                         break;
                     }
                     else {
@@ -397,7 +400,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                         targetEnemy->kill();									// 成功殺害怪物
                         lock = false;
-                        score.Add(targetEnemy->GetCurrWordLeng());						// 分數+= 怪物長度
+                        score.Add(targetEnemy->GetVocabLeng());						// 分數+= 怪物長度
                     }
 
                     break;
@@ -412,6 +415,10 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
     else
         accuracy = 100;
+
+    if (nChar == 13) {
+        emp.CallEmp();
+    }
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
@@ -439,6 +446,7 @@ void CGameStateRun::OnShow() {
     map.OnShow();						// 貼上背景網子
     help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
+    emp.OnShow();
     me.OnShow();
 
     /////////

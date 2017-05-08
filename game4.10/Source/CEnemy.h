@@ -25,6 +25,7 @@ class CEnemy {
         int GetCurrWordLeng();									// 回傳int型態的CurrWord
         int GetVocabLeng();										// 回傳單字總長度
         int GetX(), GetY();										// 取得X軸(x+dx), Y軸(y+dy)
+        int GetX2(), GetY2();
         void MinusIndex(int num);								// 擊退怪物 num為擊退多少index
         bool HitMe(CMe* me);
         bool IsBombed();										// 是否爆炸過了

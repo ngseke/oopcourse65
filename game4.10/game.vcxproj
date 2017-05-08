@@ -263,6 +263,7 @@
     <ClCompile Include="Source\CBossB.cpp" />
     <ClCompile Include="Source\CBullet.cpp" />
     <ClCompile Include="Source\CDict.cpp" />
+    <ClCompile Include="Source\CEmp.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
     <ClCompile Include="Source\CMap.cpp" />
     <ClCompile Include="Source\CMe.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="Source\CBossB.h" />
     <ClInclude Include="Source\CBullet.h" />
     <ClInclude Include="Source\CDict.h" />
+    <ClInclude Include="Source\CEmp.h" />
     <ClInclude Include="Source\CEnemy.h" />
     <ClInclude Include="Source\CMap.h" />
     <ClInclude Include="Source\CMe.h" />
