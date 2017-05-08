@@ -199,7 +199,7 @@ void CGameStateRun::OnBeginState() {
     lives = 3;
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
-    emp.SetEQ(&enemyQueue, &score, &lock, &(*targetEnemy));
+    emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -484,7 +484,7 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[100];
-        sprintf(temp, "怪物數量: %d, 命: %d, 本關卡: %d", enemyQueue.size(), lives, currLevel);
+        sprintf(temp, "怪物數量: %d, 命: %d, 本關卡: %d, LOCK: %d", enemyQueue.size(), lives, currLevel, int(lock));
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 40, temp);
         //

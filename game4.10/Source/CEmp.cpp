@@ -57,10 +57,9 @@ void CEmp::OnMove() {
 
         for (unsigned int i = 0; i < enemyQueue->size(); i++) {
             if (HitRectangle(enemyQueue->at(i)->GetX(), enemyQueue->at(i)->GetY(), enemyQueue->at(i)->GetX2(), enemyQueue->at(i)->GetY2())) {
-                //score->Add(targetEnemy->GetCurrWordLeng());				// 分數+= 怪物長度
-                if (lock && &enemyQueue->at(i) == &targetEnemy) {
-                    lock = false;
-                    score->Add(500);
+                // score->Add(targetEnemy->GetCurrWordLeng());				// 分數+= 怪物長度
+                if (lock && enemyQueue->at(i) == *targetEnemy) {
+                    lock = 0;
                 }
 
                 score->Add(enemyQueue->at(i)->GetVocabLeng());
@@ -84,19 +83,37 @@ void CEmp::SetXY(int nx, int ny) {
 void CEmp::OnShow() {
     emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
     emp.OnShow();
+
+    if (state) {		// 顯示debug資訊
+        CDC* pDC = CDDraw::GetBackCDC();
+        CFont f, *fp;
+        f.CreatePointFont(100, "Fixedsys");
+        fp = pDC->SelectObject(&f);
+        pDC->SetBkColor(RGB(0, 0, 0));
+        //
+        char temp[100];
+        sprintf(temp, "DEBUG-- 1.%s  ", (*targetEnemy)->GetVocab().c_str());
+        pDC->SetTextColor(RGB(200, 0, 0));
+        pDC->TextOut(10, 10, temp);
+        ////
+        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+    }
 }
 
-void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy* targetEnemy) {
+void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy** targetEnemy) {
     this->enemyQueue = enemyQueue;
     this->score = score;
     this->lock = lock;
-    (this->targetEnemy) = targetEnemy;
+    this->targetEnemy = targetEnemy;
 }
+
 void CEmp::CallEmp() {
     if (!state) {
         state = true;
     }
 }
+
 bool CEmp::HitRectangle(int tx1, int ty1, int tx2, int ty2) {// 80 160 320 480 480
     if (emp.GetCurrentBitmapNumber() != 0 && !emp.IsFinalBitmap()) {
         int arr[10] = { 1, 2, 4, 6, 6, 6, 6, 6, 6 };

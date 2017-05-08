@@ -17,7 +17,8 @@ class CEmp {
         void OnMove();					// 移動擦子
         void OnShow();					// 將擦子圖形貼到畫面
         void SetXY(int nx, int ny);		// 設定擦子左上角座標
-        void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy* targetEnemy);
+        void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy** targetEnemy);
+        void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy targetEnemy);
         void CallEmp();
         //bool HitMe(vector<CEnemy*>* enemyQueue);
     protected:
@@ -28,7 +29,7 @@ class CEmp {
         //
         CInteger* score;
         bool* lock;
-        CEnemy* targetEnemy;
+        CEnemy** targetEnemy;
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 };
