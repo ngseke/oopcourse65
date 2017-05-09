@@ -31,8 +31,9 @@ class CEmp {
         bool* lock;
         CEnemy** targetEnemy;
         CMovingBitmap displayBG, displayNumber[3];
-
+        int empTimes;			//EMP的次數
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
+
 };
 }
