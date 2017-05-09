@@ -30,6 +30,8 @@ class CEmp {
         CInteger* score;
         bool* lock;
         CEnemy** targetEnemy;
+        CMovingBitmap	displayBG, displayNumber[3];
+
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 };

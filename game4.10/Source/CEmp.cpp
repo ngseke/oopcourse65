@@ -49,6 +49,11 @@ void CEmp::LoadBitmap() {
         sprintf(str, "Bitmaps/big_wave/big_wave%d.bmp", i);
         emp.AddBitmap(str, RGB(0, 255, 0));
     }
+
+    displayBG.LoadBitmap("Bitmaps/emp_text/bg.bmp", RGB(0, 255, 0));
+    displayNumber[0].LoadBitmap("Bitmaps/emp_text/3.bmp", RGB(0, 255, 0));
+    displayNumber[1].LoadBitmap("Bitmaps/emp_text/2.bmp", RGB(0, 255, 0));
+    displayNumber[2].LoadBitmap("Bitmaps/emp_text/1.bmp", RGB(0, 255, 0));
 }
 
 void CEmp::OnMove() {
