@@ -82,7 +82,6 @@ void CEmp::OnMove() {
         if (emp.IsFinalBitmap()) {
             state = false;
             emp.Reset();
-            empTimes--;
         }
     }
 }
@@ -125,7 +124,8 @@ void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnem
 }
 
 void CEmp::CallEmp() {
-    if (!state) {
+    if (!state && empTimes != 0) {
+        empTimes--;
         state = true;
     }
 }

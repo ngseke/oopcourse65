@@ -29,13 +29,14 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
-    callEnemyCounter = maxCallEnemyCounter = 600;		// 發動召喚小怪技能的間隔
+    callEnemyCounter = maxCallEnemyCounter = 30 * 10;		// 發動召喚小怪技能的間隔
     callEnemyCounter = 0;								// DEBUG用, 幫助快速生成
     endX = SIZE_X / 2;
     endY = SIZE_Y;
     //
     SetVocab();
 }
+/*
 CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endx, int endy) {	//	初始值都在此處設定
     this->enemyQueue = enemyQueue;
     this->bombList = bombList;
@@ -58,10 +59,11 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     //
     SetVocab();
 }
+*/
 void CBossB::CallEnemy(int x, int y) {
     const double PI = 3.141592653;						// 定義圓周率
     const int ONE_WORD_ENEMY_NUM = 7;						// 共要生成幾隻小怪, 範圍:3,5,7,9...
-    const double ONE_WORD_ENEMY_RADIOUS = (PI / 180.0) * 15.0 ;	// 每一隻小怪的角度偏移量, double內填寫角度
+    const double ONE_WORD_ENEMY_RADIOUS = (PI / 180.0) * 10.0 ;	// 每一隻小怪的角度偏移量, double內填寫角度
     ///////////
     // 中間的那隻小怪
     enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 3, false, dict, 1, 1, enemyQueue, bombList, \

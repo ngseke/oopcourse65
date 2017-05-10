@@ -28,7 +28,7 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->bombList = bombList;
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
-    callEnemyCounter = maxCallEnemyCounter = 300;		// 發動召喚小怪技能的間隔
+    callEnemyCounter = maxCallEnemyCounter = 30 * 7;		// 發動召喚小怪技能的間隔
     endX = SIZE_X / 2;
     endY = SIZE_Y;
     //
