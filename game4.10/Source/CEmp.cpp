@@ -55,9 +55,10 @@ void CEmp::LoadBitmap() {
     displayNumber[0].LoadBitmap("Bitmaps/emp_text/3.bmp", RGB(0, 255, 0));
     displayNumber[1].LoadBitmap("Bitmaps/emp_text/2.bmp", RGB(0, 255, 0));
     displayNumber[2].LoadBitmap("Bitmaps/emp_text/1.bmp", RGB(0, 255, 0));
+    displayNumber[3].LoadBitmap("Bitmaps/emp_text/0.bmp", RGB(0, 255, 0));
     displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
         displayNumber[i].SetTopLeft(SIZE_X - 80 + 14, SIZE_Y - 80 + 8);
     }
 }
@@ -96,14 +97,7 @@ void CEmp::OnShow() {
     emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
     emp.OnShow();
     displayBG.ShowBitmap();
-
-    if (empTimes <= 0) {
-        empTimes = 0;
-        displayBG.ShowBitmap();
-    }
-    else {
-        displayNumber[3 - empTimes].ShowBitmap();
-    }
+    displayNumber[4 - empTimes - 1].ShowBitmap();
 
     if (0) {		// 顯示debug資訊
         CDC* pDC = CDDraw::GetBackCDC();
