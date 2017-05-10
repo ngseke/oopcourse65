@@ -41,8 +41,21 @@ void CMe::Initialize() {
 }
 
 void CMe::LoadBitmap() {
-    animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
-    animation.AddBitmap("Bitmaps/me_ironman1.bmp", RGB(255, 255, 255));
+    int character = 2;
+
+    if (character == 0) {
+        animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
+        animation.AddBitmap("Bitmaps/me_ironman1.bmp", RGB(255, 255, 255));
+        animation.SetTopLeft(x, y);
+    }
+    else if (character == 1) {
+        animation.AddBitmap("Bitmaps/me_hulk.bmp", RGB(255, 255, 255));
+        animation.SetTopLeft(x - 4, y - 2);
+    }
+    else if (character == 2) {
+        animation.AddBitmap("Bitmaps/me_captian_american.bmp", RGB(0, 255, 0));
+        animation.SetTopLeft(x, y);
+    }
 }
 
 void CMe::OnMove() {
@@ -58,7 +71,6 @@ void CMe::SetXY(int nx, int ny) {
 }
 
 void CMe::OnShow() {
-    animation.SetTopLeft(x, y);
     animation.OnShow();
 }
 
