@@ -41,7 +41,7 @@ void CMe::Initialize() {
 }
 
 void CMe::LoadBitmap() {
-    int character = 2;
+    int character = 0;
 
     if (character == 0) {
         animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));

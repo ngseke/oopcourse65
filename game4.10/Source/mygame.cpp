@@ -29,7 +29,7 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(300) {
+    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(300), MENU_POS_Y(400) {
 }
 
 void CGameStateInit::OnInit() {
@@ -42,6 +42,7 @@ void CGameStateInit::OnInit() {
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
     noteText.LoadBitmap("Bitmaps/note/note_text_zh.bmp", RGB(0, 255, 0));	// 說明框
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
+    currSelectItem = 0;
 
     for (int i = 0; i < exkeyNum; i++) {											// 說明框裡面的按鍵動畫
         char str[30];
@@ -50,6 +51,11 @@ void CGameStateInit::OnInit() {
     }
 
     map.LoadBitmap();														// 背景網狀動畫
+    menuBorder.LoadBitmap("Bitmaps/menu/menu_border.bmp", RGB(0, 255, 0));
+    menuBorder_ckecked.LoadBitmap("Bitmaps/menu/menu_border_checked.bmp", RGB(0, 255, 0));
+    menuText[0].LoadBitmap("Bitmaps/menu/menu_t_1.bmp", RGB(0, 255, 0));
+    menuText[1].LoadBitmap("Bitmaps/menu/menu_t_2.bmp", RGB(0, 255, 0));
+    menuText[2].LoadBitmap("Bitmaps/menu/menu_t_3.bmp", RGB(0, 255, 0));
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -61,6 +67,13 @@ void CGameStateInit::OnBeginState() {
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ESC = 27;
     const char KEY_SPACE = ' ';
+    const char KEY_LEFT = 0x25;	// keyboard左箭頭
+    const char KEY_UP = 0x26;	// keyboard上箭頭
+    const char KEY_RIGHT = 0x27; // keyboard右箭頭
+    const char KEY_DOWN = 0x28; // keyboard下箭頭
+
+    if (nChar == KEY_UP) {
+    }
 
     if (nChar == KEY_SPACE)
         GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
@@ -76,40 +89,24 @@ void CGameStateInit::OnMove() {
     map.OnMove();
 }
 void CGameStateInit::OnShow() {
-    //
-    // 貼上logo
-    //
-    //logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
-    //logo.ShowBitmap();
     map.OnShow();
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
     typing_logo.ShowBitmap();
-    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
-    text1.ShowBitmap();
+    //text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
+    //text1.ShowBitmap();
     noteText.SetTopLeft(NOTE_TEXT_X, NOTE_TEXT_Y );
     noteText.ShowBitmap();
     noteExkey.SetTopLeft(NOTE_TEXT_X + 60, NOTE_TEXT_Y + 125 );
     noteExkey.OnShow();
-    //
-    // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
-    //
-    /*
-    CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
-    CFont f, *fp;
-    f.CreatePointFont(160, "Consolas");	// 產生 font f; 160表示16 point的字
-    fp = pDC->SelectObject(&f);					// 選用 font f
-    pDC->SetBkColor(RGB(0, 0, 0));
-    pDC->SetBkMode(TRANSPARENT);
-    pDC->SetTextColor(RGB(41, 171, 226));
-    pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
+    menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * 0);
+    menuBorder_ckecked.ShowBitmap();
 
-    if (ENABLE_GAME_PAUSE)
-        pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
-
-    pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
-    pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-    CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-    */
+    for (int i = 0; i < 3; i++) {
+        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * i);
+        menuBorder.ShowBitmap();
+        menuText[i].SetTopLeft((SIZE_X - menuText[i].Width()) / 2, MENU_POS_Y + 7 + 40 * i);
+        menuText[i].ShowBitmap();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////

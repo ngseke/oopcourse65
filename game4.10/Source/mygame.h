@@ -42,12 +42,16 @@ class CGameStateInit : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
+        const int MENU_POS_Y ;
         CMovingBitmap logo;								// csie的logo
         CMovingBitmap typing_logo;						// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
         CMovingBitmap noteText;							// 遊戲說明
         CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
         CMap map;
+        CMovingBitmap menuBorder, menuBorder_ckecked;
+        CMovingBitmap menuText[5];
+        unsigned int currSelectItem;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -96,14 +100,11 @@ class CGameStateRun : public CGameState {
         int				currBossANum, currBossBNum;						// 當前該關卡 已召喚的BossA & BossB數量
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
-        int				levelEnemyNum[10] = {  5,  0,  0,  0,  0,  0, 20, 20, 20, 20 };		// 該關卡最大的敵人數
-        int				levelBossANum[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
-        int				levelBossBNum[10] = {  01,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
-        /*
-        int				levelEnemyNum[10] = {  4,  5,  5,  6,  7,  7, 20, 20, 20, 20 };		// 該關卡最大的敵人數
-        int				levelBossANum[10] = {  0,  1,  1,  2,  0,  0,  0,  0,  0,  0 };
-        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
-        */
+
+        int				levelEnemyNum[10] = {  4,  5,  5,  6,  7,  7,  7, 20, 20, 20 };		// 該關卡最大的敵人數
+        int				levelBossANum[10] = {  0,  0,  1,  1,  1,  2,  1,  0,  0,  0 };
+        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  1,  0,  0,  0 };
+
         int				lives;
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
