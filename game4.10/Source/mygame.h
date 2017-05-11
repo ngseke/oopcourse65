@@ -42,7 +42,8 @@ class CGameStateInit : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
-        const int MENU_POS_Y ;
+        const int MENU_POS_Y;
+        const int MENU_ITEM_NUM;
         CMovingBitmap logo;								// csie的logo
         CMovingBitmap typing_logo;						// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
@@ -51,7 +52,7 @@ class CGameStateInit : public CGameState {
         CMap map;
         CMovingBitmap menuBorder, menuBorder_ckecked;
         CMovingBitmap menuText[5];
-        int currSelectItem;
+        int currSelectItem, displayState;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -29,22 +29,19 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(300), MENU_POS_Y(400) {
+    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(330), MENU_POS_Y(400),
+      MENU_ITEM_NUM(4) {
 }
 
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
-    //
-    // 開始載入資料
-    //
-    //logo.LoadBitmap(IDB_BACKGROUND);
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
     noteText.LoadBitmap("Bitmaps/note/note_text_zh.bmp", RGB(0, 255, 0));	// 說明框
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
-    currSelectItem = 0;
+    currSelectItem = displayState = 1;
 
-    for (int i = 0; i < exkeyNum; i++) {											// 說明框裡面的按鍵動畫
+    for (int i = 0; i < exkeyNum; i++) {									// 說明框裡面的按鍵動畫
         char str[30];
         sprintf(str, "Bitmaps/note/note1_exkey_%d.bmp", i + 1);
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
@@ -56,6 +53,7 @@ void CGameStateInit::OnInit() {
     menuText[0].LoadBitmap("Bitmaps/menu/menu_t_1.bmp", RGB(0, 255, 0));
     menuText[1].LoadBitmap("Bitmaps/menu/menu_t_2.bmp", RGB(0, 255, 0));
     menuText[2].LoadBitmap("Bitmaps/menu/menu_t_3.bmp", RGB(0, 255, 0));
+    menuText[3].LoadBitmap("Bitmaps/menu/menu_t_4.bmp", RGB(0, 255, 0));
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -67,28 +65,33 @@ void CGameStateInit::OnBeginState() {
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ESC = 27;
     const char KEY_SPACE = ' ';
+    const char KEY_ENTER = 0xD;
     const char KEY_LEFT = 0x25;	// keyboard左箭頭
     const char KEY_UP = 0x26;	// keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
-    const char KEY_ENTER = 0xD;
 
-    if (nChar == KEY_UP || nChar == KEY_DOWN) {
+    if (displayState == 0 && (nChar == KEY_UP || nChar == KEY_DOWN)) {
         if (nChar == KEY_UP) currSelectItem--;
         else if (nChar == KEY_DOWN) currSelectItem++;
 
-        if (currSelectItem < 0)currSelectItem = 2;
-        else if (currSelectItem > 2)currSelectItem = 0;
+        if (currSelectItem < 0)currSelectItem = MENU_ITEM_NUM - 1;
+        else if (currSelectItem > MENU_ITEM_NUM - 1)currSelectItem = 0;
     }
 
-    if (nChar == KEY_ENTER && currSelectItem == 0 ) {
-        GotoGameState(GAME_STATE_RUN);
-    }
+    if (displayState == 0 && nChar == KEY_ENTER ) { // 按下ENTER選擇後...
+        if ( currSelectItem == 0 ) // 開始遊戲
+            GotoGameState(GAME_STATE_RUN);
 
-    if (nChar == KEY_SPACE)
-        GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
-    else if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+        if ( currSelectItem == 1 ) {
+            displayState = 1;	// 顯示遊戲說明的state
+        }
+    }
+    else if (displayState == 1) {
+        displayState = 0;
+    }								// Demo 關閉遊戲的方法
+
+    //PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -100,22 +103,29 @@ void CGameStateInit::OnMove() {
 }
 void CGameStateInit::OnShow() {
     map.OnShow();
+    // logo
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
     typing_logo.ShowBitmap();
-    //text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
-    //text1.ShowBitmap();
-    noteText.SetTopLeft(NOTE_TEXT_X, NOTE_TEXT_Y );
-    noteText.ShowBitmap();
-    noteExkey.SetTopLeft(NOTE_TEXT_X + 60, NOTE_TEXT_Y + 125 );
-    noteExkey.OnShow();
-    menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
-    menuBorder_ckecked.ShowBitmap();
 
-    for (int i = 0; i < 3; i++) {
-        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * i);
-        menuBorder.ShowBitmap();
-        menuText[i].SetTopLeft((SIZE_X - menuText[i].Width()) / 2, MENU_POS_Y + 7 + 40 * i);
-        menuText[i].ShowBitmap();
+    if (displayState == 0) {
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
+        menuBorder_ckecked.ShowBitmap();
+
+        for (int i = 0; i < MENU_ITEM_NUM; i++) {
+            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * i);
+            menuBorder.ShowBitmap();
+            menuText[i].SetTopLeft((SIZE_X - menuText[i].Width()) / 2, MENU_POS_Y + 7 + 40 * i);
+            menuText[i].ShowBitmap();
+        }
+    }
+    else if (displayState == 1) {
+        // 說明文字
+        noteText.SetTopLeft((SIZE_X - noteText.Width()) / 2, NOTE_TEXT_Y);
+        noteText.ShowBitmap();
+        noteExkey.SetTopLeft((SIZE_X - noteExkey.Width()) / 2, NOTE_TEXT_Y + 115);
+        noteExkey.OnShow();
+    }
+    else if (displayState == 2) {
     }
 }
 
