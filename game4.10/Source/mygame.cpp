@@ -37,7 +37,7 @@ void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
     currSelectItem = displayState = 1;
-    noteDisplayState = 4;
+    noteDisplayState = 5;
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
@@ -68,7 +68,7 @@ void CGameStateInit::OnInit() {
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
     }
 
-    for (int i = 0; i < 5; i++) {		// 多頁的說明文字
+    for (int i = 0; i < 8; i++) {		// 多頁的說明文字
         char str[50];
         sprintf(str, "Bitmaps/menu/note/note_text_p%d.bmp", i + 1);
         note.push_back(new CMovingBitmap);
