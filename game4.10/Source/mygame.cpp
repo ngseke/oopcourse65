@@ -30,14 +30,14 @@ namespace game_framework {
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
-      MENU_ITEM_NUM(4) {
+      MENU_ITEM_NUM(4), CHARACTER_POS_Y(320) {
 }
 
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
-    currSelectItem = displayState = 1;
-    noteDisplayState = 5;
+    currSelectItem = displayState = 2;
+    noteDisplayState = 0;
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
@@ -75,6 +75,10 @@ void CGameStateInit::OnInit() {
         note.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    // 載入角色選擇 元素
+    characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
+    me_ironman.LoadBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
+    // characterArrow[2]
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
     about.LoadBitmap("Bitmaps/menu/about/about_text_p1.bmp", RGB(0, 255, 0)); // 介紹文字
@@ -198,8 +202,11 @@ void CGameStateInit::OnShow() {
         menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2,  7 + BACK_BTN_POS);
         menuText[4]->ShowBitmap();
     }
-    else if (displayState == 2) {
-        // 選擇角色
+    else if (displayState == 2) {      // 顯示 選擇角色 頁面
+        characterBorder.SetTopLeft((SIZE_X - characterBorder.Width()) / 2, CHARACTER_POS_Y);
+        characterBorder.ShowBitmap();
+        me_ironman.SetTopLeft((SIZE_X - me_ironman.Width()) / 2, CHARACTER_POS_Y + (characterBorder.Height() - me_ironman.Height()) / 2 + 11);
+        me_ironman.ShowBitmap();
     }
     else if (displayState == 3) {      // 顯示關於頁面
         // 關於框

@@ -43,6 +43,7 @@ class CGameStateInit : public CGameState {
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
         const int MENU_POS_Y;							// 定義 MENU 的Y軸
         const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
+        const int CHARACTER_POS_Y;
         CMovingBitmap typing_logo;						// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
         CMap map;										// 背景
@@ -56,9 +57,14 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
         CMovingBitmap			noteSelected, noteUnselected;	// 指示燈
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
+        // 角色選擇 元素
+        CMovingBitmap			characterBorder, characterArrow[2];
+        CMovingBitmap			me_ironman;
         // 介紹頁面
         CMovingBitmap			aboutBorder;
         CMovingBitmap			about;
+
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
