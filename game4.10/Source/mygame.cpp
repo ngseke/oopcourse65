@@ -68,7 +68,7 @@ void CGameStateInit::OnInit() {
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
     }
 
-    for (int i = 0; i < 3; i++) {		// 多頁的說明文字
+    for (int i = 0; i < 4; i++) {		// 多頁的說明文字
         char str[50];
         sprintf(str, "Bitmaps/menu/note/note_text_p%d.bmp", i + 1);
         note.push_back(new CMovingBitmap);
