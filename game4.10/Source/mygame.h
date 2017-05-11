@@ -51,7 +51,7 @@ class CGameStateInit : public CGameState {
         CMap map;
         CMovingBitmap menuBorder, menuBorder_ckecked;
         CMovingBitmap menuText[5];
-        unsigned int currSelectItem;
+        int currSelectItem;
 };
 
 /////////////////////////////////////////////////////////////////////////////

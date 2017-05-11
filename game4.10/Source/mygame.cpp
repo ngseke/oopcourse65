@@ -71,8 +71,18 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_UP = 0x26;	// keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
+    const char KEY_ENTER = 0xD;
 
-    if (nChar == KEY_UP) {
+    if (nChar == KEY_UP || nChar == KEY_DOWN) {
+        if (nChar == KEY_UP) currSelectItem--;
+        else if (nChar == KEY_DOWN) currSelectItem++;
+
+        if (currSelectItem < 0)currSelectItem = 2;
+        else if (currSelectItem > 2)currSelectItem = 0;
+    }
+
+    if (nChar == KEY_ENTER && currSelectItem == 0 ) {
+        GotoGameState(GAME_STATE_RUN);
     }
 
     if (nChar == KEY_SPACE)
@@ -82,7 +92,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
-    GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+    //GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
@@ -98,7 +108,7 @@ void CGameStateInit::OnShow() {
     noteText.ShowBitmap();
     noteExkey.SetTopLeft(NOTE_TEXT_X + 60, NOTE_TEXT_Y + 125 );
     noteExkey.OnShow();
-    menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * 0);
+    menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
     menuBorder_ckecked.ShowBitmap();
 
     for (int i = 0; i < 3; i++) {
