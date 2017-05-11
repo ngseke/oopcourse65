@@ -41,6 +41,7 @@ void CEmp::Initialize() {
     y = Y_POS;
     state = false;
     emp.SetDelayCount(2);
+    empTimes = 3;
 }
 
 void CEmp::LoadBitmap() {
@@ -48,6 +49,17 @@ void CEmp::LoadBitmap() {
         char str[40];
         sprintf(str, "Bitmaps/big_wave/big_wave%d.bmp", i);
         emp.AddBitmap(str, RGB(0, 255, 0));
+    }
+
+    displayBG.LoadBitmap("Bitmaps/emp_text/bg.bmp", RGB(0, 255, 0));
+    displayNumber[0].LoadBitmap("Bitmaps/emp_text/3.bmp", RGB(0, 255, 0));
+    displayNumber[1].LoadBitmap("Bitmaps/emp_text/2.bmp", RGB(0, 255, 0));
+    displayNumber[2].LoadBitmap("Bitmaps/emp_text/1.bmp", RGB(0, 255, 0));
+    displayNumber[3].LoadBitmap("Bitmaps/emp_text/0.bmp", RGB(0, 255, 0));
+    displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
+
+    for (int i = 0; i < 4; i++) {
+        displayNumber[i].SetTopLeft(SIZE_X - 80 + 14, SIZE_Y - 80 + 8);
     }
 }
 
@@ -83,6 +95,8 @@ void CEmp::SetXY(int nx, int ny) {
 void CEmp::OnShow() {
     emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
     emp.OnShow();
+    displayBG.ShowBitmap();
+    displayNumber[4 - empTimes - 1].ShowBitmap();
 
     if (0) {		// 顯示debug資訊
         CDC* pDC = CDDraw::GetBackCDC();
@@ -92,7 +106,8 @@ void CEmp::OnShow() {
         pDC->SetBkColor(RGB(0, 0, 0));
         //
         char temp[100];
-        sprintf(temp, "DEBUG-- 1.%s  ", (*targetEnemy)->GetVocab().c_str());
+        //sprintf(temp, "DEBUG-- 1.%s  ", (*targetEnemy)->GetVocab().c_str());
+        sprintf(temp, "DEBUG-- empTimes:%d  ", empTimes);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(10, 10, temp);
         ////
@@ -109,7 +124,8 @@ void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnem
 }
 
 void CEmp::CallEmp() {
-    if (!state) {
+    if (!state && empTimes != 0) {
+        empTimes--;
         state = true;
     }
 }

@@ -35,6 +35,8 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->endX = endX;
     this->endY = endY;
     SetVocab();
+
+    if (maxVocabLeng == 1 && minVocabLeng == 1)  index = 10;
 }
 
 
@@ -85,7 +87,7 @@ void CEnemy::LoadBitmap() {
 }
 
 void CEnemy::OnMove() {
-    const int STEPS = 250;	// 切成幾分dx
+    const int STEPS = 200;	// 切成幾分dx
     //if (!is_alive) return;
     delay_counter--;
     target.OnMove();

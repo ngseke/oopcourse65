@@ -173,9 +173,9 @@ void CGameStateOver::OnShow() {
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
-    callEnemyCounter = maxCallEnemyCounter = 3;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 3;
-    callBossBCounter = maxCallBossBCounter = 3;
+    callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
+    callBossACounter = maxCallBossACounter = 100;
+    callBossBCounter = maxCallBossBCounter = 100;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -217,7 +217,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 2, true, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 5, true, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
         currEnemyNum++;
     }
@@ -226,7 +226,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossA(randX, 0, 7, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
     }
@@ -235,7 +235,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossB(randX, 0, 7, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
     }
