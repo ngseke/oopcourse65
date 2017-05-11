@@ -29,14 +29,14 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(300), MENU_POS_Y(350),
+    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
       MENU_ITEM_NUM(4) {
 }
 
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
-    currSelectItem = displayState = 1;
+    currSelectItem = displayState = 3;
     noteDisplayState = 0;
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
@@ -75,6 +75,9 @@ void CGameStateInit::OnInit() {
         note.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    // 載入關於元素
+    aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
+    about.LoadBitmap("Bitmaps/menu/about/about_text_p1.bmp", RGB(0, 255, 0)); // 介紹文字
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -108,9 +111,15 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             displayState = 1;	// 顯示遊戲說明的state
             noteDisplayState = 0;
         }
+        else if (currSelectItem == 2) {
+            displayState = 2;	// 角色選擇的state
+        }
+        else if (currSelectItem == 3) {
+            displayState = 3;	// 關於的state
+        }
     }
     else if (displayState == 1 ) { // [遊戲說明]
-        if (nChar == KEY_ENTER)displayState = 0;	// ->返回主選單
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
         else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) { // [遊戲說明] 左右翻頁遊戲說明
             if		(nChar == KEY_LEFT)   noteDisplayState--;
             else if (nChar == KEY_RIGHT) noteDisplayState++;
@@ -119,7 +128,11 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else if (noteDisplayState >  int(note.size()) - 1) noteDisplayState = 0;
         }
     }
-    else if (1) {
+    else if (displayState == 2 && nChar == KEY_ENTER) { // [角色選擇]
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+    }
+    else if (displayState == 3 && nChar == KEY_ENTER) { // [關於]
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
     }
 
     //PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
@@ -136,7 +149,7 @@ void CGameStateInit::OnMove() {
 void CGameStateInit::OnShow() {
     map.OnShow();
     // logo
-    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
+    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
     typing_logo.ShowBitmap();
 
     if (displayState == 0) {	// 顯示主選單
@@ -177,19 +190,32 @@ void CGameStateInit::OnShow() {
         }
 
         // 顯示偽返回按鈕
-        const int BACK_BTN_POS = 170;
-        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + BACK_BTN_POS);
+        const int BACK_BTN_POS = NOTE_TEXT_Y + noteBorder.Height() + 0;
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
         menuBorder_ckecked.ShowBitmap();
-        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + BACK_BTN_POS);
+        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
         menuBorder.ShowBitmap();
-        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2, MENU_POS_Y + 7 + BACK_BTN_POS);
+        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2,  7 + BACK_BTN_POS);
         menuText[4]->ShowBitmap();
     }
     else if (displayState == 2) {
         // 選擇角色
     }
-    else if (displayState == 3) {
-        // 關於
+    else if (displayState == 3) {      // 顯示關於頁面
+        // 關於框
+        aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
+        aboutBorder.ShowBitmap();
+        // 關於文字
+        about.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y  + 11);
+        about.ShowBitmap();
+        // 顯示偽返回按鈕
+        const int BACK_BTN_POS = NOTE_TEXT_Y + aboutBorder.Height() - 23;
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+        menuBorder_ckecked.ShowBitmap();
+        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+        menuBorder.ShowBitmap();
+        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2, 7 + BACK_BTN_POS);
+        menuText[4]->ShowBitmap();
     }
 }
 

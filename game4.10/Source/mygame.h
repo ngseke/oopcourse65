@@ -37,7 +37,6 @@ class CGameStateInit : public CGameState {
         void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
         void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
         void OnMove();
-
     protected:
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
@@ -53,10 +52,13 @@ class CGameStateInit : public CGameState {
         int currSelectItem, displayState, noteDisplayState; // 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
 
         // 遊戲說明 元素
-        CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
-        CMovingBitmap noteBorder, noteArrow;			// 框線, 箭頭
-        CMovingBitmap noteSelected, noteUnselected;		// 指示燈
-        vector<CMovingBitmap*> note;					// 多頁的說明文字
+        CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
+        CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
+        CMovingBitmap			noteSelected, noteUnselected;	// 指示燈
+        vector<CMovingBitmap*>	note;							// 多頁的說明文字
+        // 介紹頁面
+        CMovingBitmap			aboutBorder;
+        CMovingBitmap			about;
 };
 
 /////////////////////////////////////////////////////////////////////////////
