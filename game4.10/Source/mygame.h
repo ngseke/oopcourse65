@@ -42,17 +42,20 @@ class CGameStateInit : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
-        const int MENU_POS_Y;
-        const int MENU_ITEM_NUM;
-        CMovingBitmap logo;								// csie的logo
+        const int MENU_POS_Y;							// 定義 MENU 的Y軸
+        const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
+        //const int MENU_NOTE_ITEM_NUM;					// 定義 說明文字的頁數
         CMovingBitmap typing_logo;						// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
-        CMovingBitmap noteText;							// 遊戲說明
-        CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
         CMap map;
+        //
+        CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
+        CMovingBitmap noteBorder, noteArrow, noteText;	// 遊戲說明:框線, 箭頭, 文字
+        vector<CMovingBitmap*> note;
+        //
         CMovingBitmap menuBorder, menuBorder_ckecked;
-        CMovingBitmap menuText[5];
-        int currSelectItem, displayState;
+        vector<CMovingBitmap*> menuText;				// 選單文字VECTOR
+        int currSelectItem, displayState, noteDisplayState; // 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
 };
 
 /////////////////////////////////////////////////////////////////////////////
