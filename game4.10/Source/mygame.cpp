@@ -56,19 +56,19 @@ void CGameStateInit::OnInit() {
     menuBorder_ckecked.LoadBitmap("Bitmaps/menu/menu_border_checked.bmp", RGB(0, 255, 0));
     menuText.push_back(new CMovingBitmap);
     menuText.back()->LoadBitmap("Bitmaps/menu/menu_t_b.bmp", RGB(0, 255, 0));
+    // 載入遊戲說明元素
+    noteBorder.LoadBitmap("Bitmaps/menu/note/note_text_border.bmp", RGB(0, 255, 0)); // 說明框線
+    noteArrow.LoadBitmap ("Bitmaps/menu/note/note_text_arraw.bmp", RGB(0, 255, 0));	// 說明箭頭
+    noteUnselected.LoadBitmap("Bitmaps/menu/note/note_unselected.bmp", RGB(0, 255, 0));
+    noteSelected.LoadBitmap("Bitmaps/menu/note/note_selected.bmp", RGB(0, 255, 0));
 
-    //
-    for (int i = 0; i < exkeyNum; i++) {									// 說明框裡面的按鍵動畫
+    for (int i = 0; i < exkeyNum; i++) {	// 說明框裡面的按鍵動畫
         char str[50];
         sprintf(str, "Bitmaps/menu/note/note1_exkey_%d.bmp", i + 1);
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
     }
 
-    noteText.LoadBitmap  ("Bitmaps/menu/note/note_text_zh.bmp", RGB(0, 255, 0));	// 說明框
-    noteBorder.LoadBitmap("Bitmaps/menu/note/note_text_border.bmp", RGB(0, 255, 0)); // 說明框線
-    noteArrow.LoadBitmap ("Bitmaps/menu/note/note_text_arraw.bmp", RGB(0, 255, 0));	// 說明箭頭
-
-    for (int i = 0; i < 2; i++) {		// 4個選單
+    for (int i = 0; i < 3; i++) {		// 多頁的說明文字
         char str[50];
         sprintf(str, "Bitmaps/menu/note/note_text_p%d.bmp", i + 1);
         note.push_back(new CMovingBitmap);
@@ -139,7 +139,7 @@ void CGameStateInit::OnShow() {
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
     typing_logo.ShowBitmap();
 
-    if (displayState == 0) {
+    if (displayState == 0) {	// 顯示主選單
         menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
         menuBorder_ckecked.ShowBitmap();
 
@@ -150,14 +150,7 @@ void CGameStateInit::OnShow() {
             menuText[i]->ShowBitmap();
         }
     }
-    else if (displayState == 1) {
-        // 說明文字
-        /*
-        noteText.SetTopLeft((SIZE_X - noteText.Width()) / 2, NOTE_TEXT_Y);
-        noteText.ShowBitmap();
-        noteExkey.SetTopLeft((SIZE_X - noteExkey.Width()) / 2, NOTE_TEXT_Y + 115);
-        noteExkey.OnShow();
-        */
+    else if (displayState == 1) {	// 顯示說明文字
         // 說明框線
         noteBorder.SetTopLeft((SIZE_X - noteBorder.Width()) / 2, NOTE_TEXT_Y);
         noteBorder.ShowBitmap();
@@ -167,6 +160,15 @@ void CGameStateInit::OnShow() {
         // 說明文字
         note[noteDisplayState]->SetTopLeft((SIZE_X - noteBorder.Width()) / 2, NOTE_TEXT_Y + (noteBorder.Height() - note[noteDisplayState]->Height() ) / 2 + 11);
         note[noteDisplayState]->ShowBitmap();
+
+        // 說明文字 指示燈
+        for (unsigned int i = 0; i < note.size(); i++) {
+            noteUnselected.SetTopLeft((SIZE_X - noteBorder.Width()) / 2 + noteBorder.Width() - 25 - 8 * i, NOTE_TEXT_Y + noteBorder.Height() - 20);
+            noteUnselected.ShowBitmap();
+        }
+
+        noteSelected.SetTopLeft((SIZE_X - noteBorder.Width()) / 2 + noteBorder.Width() - 25 - 8 * (note.size() - noteDisplayState - 1), NOTE_TEXT_Y + noteBorder.Height() - 20);
+        noteSelected.ShowBitmap();
 
         // 說明打字動畫
         if (noteDisplayState == 0) {
@@ -523,7 +525,7 @@ void CGameStateRun::OnShow() {
     //
     //
     map.OnShow();						// 貼上背景網子
-    help.ShowBitmap();					// 貼上說明圖
+    //help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     emp.OnShow();
     me.OnShow();
