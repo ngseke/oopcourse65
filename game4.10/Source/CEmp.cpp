@@ -17,7 +17,6 @@ CEmp::CEmp() {
     Initialize();
 }
 
-
 int CEmp::GetX1() {
     return x;
 }

@@ -148,6 +148,9 @@
     <ClCompile Include="Source\CEmp.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CCharacter.cpp">
+      <Filter>MyGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="Source\CEmp.h">
       <Filter>MyGame</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CCharacter.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\game.rc">
@@ -211,9 +217,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\bitmap3.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\mushroom.bmp">
       <Filter>Resource Files</Filter>
     </Image>
@@ -223,13 +226,16 @@
     <Image Include="res\blue1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\green.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\green1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\blue.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Bitmaps\me_hulk.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Bitmaps\me_ironman.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\me_hulk.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

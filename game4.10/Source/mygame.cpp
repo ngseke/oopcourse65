@@ -38,6 +38,7 @@ void CGameStateInit::OnInit() {
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
     currSelectItem = displayState = 2;
     noteDisplayState = 0;
+    me.LoadBitmap();
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
@@ -77,7 +78,7 @@ void CGameStateInit::OnInit() {
 
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
-    me_ironman.LoadBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
+    //me_ironman.LoadBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
     // characterArrow[2]
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
@@ -148,6 +149,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
+    me.OnMove();
 }
 
 void CGameStateInit::OnShow() {
@@ -205,8 +207,9 @@ void CGameStateInit::OnShow() {
     else if (displayState == 2) {      // 顯示 選擇角色 頁面
         characterBorder.SetTopLeft((SIZE_X - characterBorder.Width()) / 2, CHARACTER_POS_Y);
         characterBorder.ShowBitmap();
-        me_ironman.SetTopLeft((SIZE_X - me_ironman.Width()) / 2, CHARACTER_POS_Y + (characterBorder.Height() - me_ironman.Height()) / 2 + 11);
-        me_ironman.ShowBitmap();
+        //me_ironman.SetTopLeft((SIZE_X - me_ironman.Width()) / 2, CHARACTER_POS_Y + (characterBorder.Height() - me_ironman.Height()) / 2 + 11);
+        //me_ironman.ShowBitmap();
+        me.OnShow();
     }
     else if (displayState == 3) {      // 顯示關於頁面
         // 關於框
@@ -433,12 +436,10 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     //
     // 開始載入資料
     //
-    //background.LoadBitmap(IDB_BACKGROUND);					// 載入背景的圖形
     //
     // 完成部分Loading動作，提高進度
     //
     ShowInitProgress(50);
-    Sleep(0); // 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 繼續載入其他資料
     //

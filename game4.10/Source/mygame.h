@@ -1,3 +1,4 @@
+#include "CCharacter.h"
 #include "CMe.h"
 #include "CDict.h"
 #include "CBomb.h"
@@ -59,10 +60,12 @@ class CGameStateInit : public CGameState {
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow[2];
-        CMovingBitmap			me_ironman;
+        //CMovingBitmap			me_ironman;
+        CMe						me;
         // 介紹頁面
         CMovingBitmap			aboutBorder;
         CMovingBitmap			about;
+
 
 
 };

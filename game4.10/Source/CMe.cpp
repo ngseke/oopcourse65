@@ -15,22 +15,27 @@ namespace game_framework {
 
 CMe::CMe() {
     Initialize();
+    //char* file[2] = { "Bitmaps/me_ironman.bmp", "Bitmaps/me_ironman1.bmp" }
 }
 
 int CMe::GetX1() {
     return x;
+    //return character[0]->GetX1();
 }
 
 int CMe::GetY1() {
     return y;
+    // return character[0]->GetY1();
 }
 
 int CMe::GetX2() {
     return x + animation.Width();
+    // return character[0]->GetX2();
 }
 
 int CMe::GetY2() {
     return y + animation.Height();
+    // return character[0]->GetY2();
 }
 
 void CMe::Initialize() {
@@ -41,7 +46,7 @@ void CMe::Initialize() {
 }
 
 void CMe::LoadBitmap() {
-    int character = 0;
+    int character = 2;
 
     if (character == 0) {
         animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
@@ -56,24 +61,30 @@ void CMe::LoadBitmap() {
         animation.AddBitmap("Bitmaps/me_captian_american.bmp", RGB(0, 255, 0));
         animation.SetTopLeft(x, y);
     }
+
+    LoadCharacter();
+}
+
+void CMe::LoadCharacter() {
+    string file[2] = { "Bitmaps/me_ironman.bmp", "Bitmaps/me_ironman1.bmp" };
+    character.push_back(new CCharacter("Iron Man", file, 2, 100, 100));
+    //character.back()->LoadBitmap();
 }
 
 void CMe::OnMove() {
-    animation.OnMove();
+    //animation.OnMove();
+    character[0]->OnMove();
 }
 
-
-
+void CMe::OnShow() {
+    //animation.OnShow();
+    character[0]->OnShow();
+}
 
 void CMe::SetXY(int nx, int ny) {
     x = nx;
     y = ny;
 }
-
-void CMe::OnShow() {
-    animation.OnShow();
-}
-
 
 
 

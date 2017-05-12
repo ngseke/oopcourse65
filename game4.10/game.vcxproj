@@ -262,6 +262,7 @@
     <ClCompile Include="Source\CBossA.cpp" />
     <ClCompile Include="Source\CBossB.cpp" />
     <ClCompile Include="Source\CBullet.cpp" />
+    <ClCompile Include="Source\CCharacter.cpp" />
     <ClCompile Include="Source\CDict.cpp" />
     <ClCompile Include="Source\CEmp.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="Source\CBossA.h" />
     <ClInclude Include="Source\CBossB.h" />
     <ClInclude Include="Source\CBullet.h" />
+    <ClInclude Include="Source\CCharacter.h" />
     <ClInclude Include="Source\CDict.h" />
     <ClInclude Include="Source\CEmp.h" />
     <ClInclude Include="Source\CEnemy.h" />
@@ -336,12 +338,12 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Bitmaps\me_hulk.bmp" />
+    <Image Include="Bitmaps\me_ironman.bmp" />
     <Image Include="C:\Users\sean\Desktop\blue.bmp" />
-    <Image Include="res\bitmap3.bmp" />
     <Image Include="res\blue.bmp" />
     <Image Include="res\blue1.bmp" />
-    <Image Include="res\green.bmp" />
-    <Image Include="res\green1.bmp" />
+    <Image Include="res\me_hulk.bmp" />
     <Image Include="res\mushroom.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
