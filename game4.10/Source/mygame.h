@@ -48,20 +48,22 @@ class CGameStateInit : public CGameState {
         CMovingBitmap text1;							// 說明文字
         int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景
+
         //主選單元素
         CMovingBitmap menuBorder, menuBorder_ckecked;
-        vector<CMovingBitmap*> menuText;				// 選單文字VECTOR
-        int currSelectItem, displayState, noteDisplayState; // 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
-
+        vector<CMovingBitmap*> menuText;						// 選單文字VECTOR
+        int currSelectItem, displayState, noteDisplayState;		// 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
+        CMovingBitmap highScoreBorder;
+        CMovingBitmap userBorder;
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
         CMovingBitmap			noteSelected, noteUnselected;	// 指示燈
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
-        CMovingBitmap			characterBorder, characterArrow;
+        CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         CMe						me;
-        // 介紹頁面
+        // 介紹頁面 元素
         CMovingBitmap			aboutBorder;
         CMovingBitmap			about;
 
@@ -91,7 +93,6 @@ class CGameStateRun : public CGameState {
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-        const int		NUMBALLS;	// 球的總數
         CMovingBitmap	background;	// 背景圖
         CMovingBitmap	help;		// 說明圖
         CMovingBitmap	corner;		// 角落圖

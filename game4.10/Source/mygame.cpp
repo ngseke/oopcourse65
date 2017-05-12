@@ -42,13 +42,14 @@ void CGameStateInit::OnInit() {
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
+    highScoreBorder.LoadBitmap("Bitmaps/menu/highscore_border.bmp", RGB(0, 255, 0));
     /////
     //
     // 載入選單元素
 
     for (int i = 0; i < 4; i++) {		// 4個選單
         char str[40];
-        sprintf(str, "Bitmaps/menu/menu_t_%d.bmp", i + 1);
+        sprintf(str, "Bitmaps/menu/menu_t_%de.bmp", i + 1);
         menuText.push_back(new CMovingBitmap);
         menuText.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
@@ -168,6 +169,8 @@ void CGameStateInit::OnShow() {
     // logo
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
     typing_logo.ShowBitmap();
+    highScoreBorder.SetTopLeft((SIZE_X - highScoreBorder.Width()) / 2, 250);
+    highScoreBorder.ShowBitmap();
 
     if (displayState == 0) {	// 顯示主選單
         menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
@@ -302,7 +305,7 @@ void CGameStateOver::OnShow() {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateRun::CGameStateRun(CGame* g)
-    : CGameState(g), NUMBALLS(28), LEVEL(10) {
+    : CGameState(g), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
     callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
     callBossACounter = maxCallBossACounter = 80;
@@ -317,9 +320,6 @@ CGameStateRun::~CGameStateRun() {
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
-    //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
-    //CAudio::Instance()->Play(AUDIO_DING, false);		// 撥放 WAVE
-    //CAudio::Instance()->Play(AUDIO_NTUT, true);			// 撥放 MIDI
     CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
     score.SetInteger(0);			//設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);

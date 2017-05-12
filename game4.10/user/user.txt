@@ -1,0 +1,4 @@
+character 1
+high_score 9487
+high_level 8
+total_key_count 5000;
