@@ -11,22 +11,29 @@ namespace game_framework {
 // CCharacter: Enemy
 /////////////////////////////////////////////////////////////////////////////
 
-CCharacter::CCharacter(string name, string pathName[10], int bmpNum, int x, int y) {
+CCharacter::CCharacter(string name, string subName, string fn, int bmpNum, int x, int y) {
     this->name = name;
+    this->subName = subName;
     this->bmpNum = bmpNum;
     this->x = x;
     this->y = y;
-
-    for (int i = 0; i < bmpNum; i++) this->pathName[i] = pathName[i];
-
+    this->fileName = fn;
+    //for (int i = 0; i < bmpNum; i++) this->pathName[i] = pathName[i];
     LoadBitmap();
 }
 
 void CCharacter::LoadBitmap() {
-    for (int i = 0; i < bmpNum; i++) {		// 載入動畫
-        char str[50];
-        sprintf(str, "%s", pathName[i].c_str());
-        animation.AddBitmap(str, RGB(0, 255, 0) );
+    char str[50];
+
+    if (bmpNum == 1) {
+        sprintf(str, "Bitmaps/me/%s", fileName.c_str());
+        animation.AddBitmap(str, RGB(0, 255, 0));
+    }
+    else {
+        for (int i = 0; i < bmpNum; i++) {		// 載入動畫
+            sprintf(str, "Bitmaps/me/%s%d.bmp", fileName.c_str(), i + 1);
+            animation.AddBitmap(str, RGB(0, 255, 0));
+        }
     }
 }
 
@@ -63,5 +70,8 @@ int CCharacter::GetHeight() {
 }
 string CCharacter::GetName() {
     return name;
+}
+string CCharacter::GetSubName() {
+    return subName;
 }
 }

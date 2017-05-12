@@ -43,19 +43,11 @@ void CMe::LoadBitmap() {
 }
 
 void CMe::LoadCharacter() {
-    string file1[2] = { "Bitmaps/me_ironman.bmp", "Bitmaps/me_ironman1.bmp" };
-    character.push_back(new CCharacter("Iron Man", file1, 2, x, y));
-    //
-    string file2[1] = { "Bitmaps/me_captain_american.bmp" };
-    character.push_back(new CCharacter("Captain American", file2, 1, x, y));
-    //
-    string file3[1] = { "Bitmaps/me_hulk.bmp" };
-    character.push_back(new CCharacter("Hulk", file3, 1, x, y));
-    //
-    string file4[1] = { "Bitmaps/me_cow.bmp" };
-    character.push_back(new CCharacter("Cow", file4, 1, x, y));
-    string file5[1] = { "Bitmaps/me_cow.bmp" };
-    character.push_back(new CCharacter("Cow", file5, 1, x, y));
+    character.push_back(new CCharacter("Iron Man", "肛鐵人", "me_ironman", 2, x, y));
+    character.push_back(new CCharacter("Captain American", "美利堅隊長", "me_captain_american.bmp", 1, x, y));
+    character.push_back(new CCharacter("Hulk", "好客", "me_hulk.bmp", 1, x, y));
+    character.push_back(new CCharacter("Cow", "牛", "me_cow.bmp", 1, x, y));
+    character.push_back(new CCharacter("Cow", "牛", "me_cow.bmp", 1, x, y));
 }
 
 void CMe::OnMove() {
@@ -99,9 +91,11 @@ void CMe::OnShow() {
         fp = pDC->SelectObject(&f);
         pDC->SetBkMode(TRANSPARENT);
         char temp[20];
-        sprintf(temp, "%s", character[selectedChar]->GetName().c_str());
         pDC->SetTextColor(RGB(200, 200, 200));
-        pDC->TextOut(350, CHARACTER_POS_Y + 70 + 60, temp);
+        sprintf(temp, "%s", character[selectedChar]->GetName().c_str());
+        pDC->TextOut(350, CHARACTER_POS_Y + 60 + 60, temp);
+        sprintf(temp, "%s", character[selectedChar]->GetSubName().c_str());
+        pDC->TextOut(350, CHARACTER_POS_Y + 60 + 74, temp);
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
         ////
