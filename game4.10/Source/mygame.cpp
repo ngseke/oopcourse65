@@ -30,13 +30,13 @@ namespace game_framework {
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
-      MENU_ITEM_NUM(4), CHARACTER_POS_Y(320) {
+      MENU_ITEM_NUM(5), CHARACTER_POS_Y(320), HIGHSCORE_POS_Y(270) {
 }
 
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
-    currSelectItem = displayState = 2;
+    currSelectItem = displayState = 0;
     noteDisplayState = 0;
     me.LoadBitmap();
     map.LoadBitmap();														// 背景網狀動畫
@@ -47,7 +47,7 @@ void CGameStateInit::OnInit() {
     //
     // 載入選單元素
 
-    for (int i = 0; i < 4; i++) {		// 4個選單
+    for (int i = 0; i < 5; i++) {		// 5個選單
         char str[40];
         sprintf(str, "Bitmaps/menu/menu_t_%de.bmp", i + 1);
         menuText.push_back(new CMovingBitmap);
@@ -121,8 +121,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         else if (currSelectItem == 2) {
             displayState = 2;	// 角色選擇的state
         }
-        else if (currSelectItem == 3) {
-            displayState = 3;	// 關於的state
+        else if (currSelectItem == 4) {
+            displayState = 4;	// 關於的state
         }
     }
     else if (displayState == 1 ) { // [遊戲說明]
@@ -142,7 +142,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else if (nChar == KEY_RIGHT)  me.addSelectedChar(-1);
         }
     }
-    else if (displayState == 3 && nChar == KEY_ENTER) { // [關於]
+    else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
     }
 
@@ -169,8 +169,6 @@ void CGameStateInit::OnShow() {
     // logo
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
     typing_logo.ShowBitmap();
-    highScoreBorder.SetTopLeft((SIZE_X - highScoreBorder.Width()) / 2, 250);
-    highScoreBorder.ShowBitmap();
 
     if (displayState == 0) {	// 顯示主選單
         menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
@@ -182,6 +180,23 @@ void CGameStateInit::OnShow() {
             menuText[i]->SetTopLeft((SIZE_X - menuText[i]->Width()) / 2, MENU_POS_Y + 7 + 40 * i);
             menuText[i]->ShowBitmap();
         }
+
+        // 顯示最高分
+        highScoreBorder.SetTopLeft((SIZE_X - highScoreBorder.Width()) / 2, HIGHSCORE_POS_Y);
+        highScoreBorder.ShowBitmap();
+        ////
+        CDC* pDC = CDDraw::GetBackCDC();
+        CFont f, *fp;
+        f.CreatePointFont(100, "新細明體");
+        fp = pDC->SelectObject(&f);
+        pDC->SetBkMode(TRANSPARENT);
+        char temp[20];
+        pDC->SetTextColor(RGB(255, 200, 15));
+        sprintf(temp, "%d", 87487);
+        pDC->TextOut((SIZE_X - highScoreBorder.Width()) / 2  + 85, HIGHSCORE_POS_Y + 4, temp);
+        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+        ////
     }
     else if (displayState == 1) {	// 顯示說明文字
         // 說明框線
@@ -215,8 +230,8 @@ void CGameStateInit::OnShow() {
         menuBorder_ckecked.ShowBitmap();
         menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
         menuBorder.ShowBitmap();
-        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2,  7 + BACK_BTN_POS);
-        menuText[4]->ShowBitmap();
+        menuText[5]->SetTopLeft((SIZE_X - menuText[5]->Width()) / 2,  7 + BACK_BTN_POS);
+        menuText[5]->ShowBitmap();
     }
     else if (displayState == 2) {      // 顯示 選擇角色 頁面
         characterBorder.SetTopLeft((SIZE_X - characterBorder.Width()) / 2, CHARACTER_POS_Y);
@@ -225,7 +240,7 @@ void CGameStateInit::OnShow() {
         characterArrow.ShowBitmap();
         me.OnShow();
     }
-    else if (displayState == 3) {      // 顯示關於頁面
+    else if (displayState == 4) {      // 顯示關於頁面
         // 關於框
         aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
         aboutBorder.ShowBitmap();
@@ -238,8 +253,8 @@ void CGameStateInit::OnShow() {
         menuBorder_ckecked.ShowBitmap();
         menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
         menuBorder.ShowBitmap();
-        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2, 7 + BACK_BTN_POS);
-        menuText[4]->ShowBitmap();
+        menuText[5]->SetTopLeft((SIZE_X - menuText[5]->Width()) / 2, 7 + BACK_BTN_POS);
+        menuText[5]->ShowBitmap();
     }
 
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, text1_y);
