@@ -87,7 +87,7 @@ void CEnemy::LoadBitmap() {
 }
 
 void CEnemy::OnMove() {
-    const int STEPS = 200;	// 切成幾分dx
+    const int STEPS = 180;	// 切成幾分dx
     //if (!is_alive) return;
     delay_counter--;
     target.OnMove();

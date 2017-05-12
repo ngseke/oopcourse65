@@ -79,17 +79,17 @@ void CGameStateInit::OnInit() {
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
     characterArrow.LoadBitmap("Bitmaps/menu/character/character_arraw.bmp", RGB(0, 255, 0));
-    //me_ironman.LoadBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
-    // characterArrow[2]
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
-    about.LoadBitmap("Bitmaps/menu/about/about_text_p1.bmp", RGB(0, 255, 0)); // 介紹文字
+    about.LoadBitmap("Bitmaps/menu/about/about_text_p2.bmp", RGB(0, 255, 0)); // 介紹文字
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
 }
 
 void CGameStateInit::OnBeginState() {
+    text1_y = 550;
+    text1_count = 0;
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -155,6 +155,12 @@ void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
     me.OnMove();
+
+    if (text1_count < 400)text1_count++;
+
+    if (text1_count > 5 * 30) {
+        text1_y += int((text1_count - 5 * 30) * 1.1);
+    }
 }
 
 void CGameStateInit::OnShow() {
@@ -232,6 +238,9 @@ void CGameStateInit::OnShow() {
         menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2, 7 + BACK_BTN_POS);
         menuText[4]->ShowBitmap();
     }
+
+    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, text1_y);
+    text1.ShowBitmap();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -349,7 +358,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossA(randX, 0, 6, true, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
     }
@@ -358,7 +367,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossB(randX, 0, 6, true, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
     }

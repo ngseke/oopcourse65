@@ -14,7 +14,6 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // Constants
 /////////////////////////////////////////////////////////////////////////////
-
 enum AUDIO_ID {				// 定義各種音效的編號
     AUDIO_DING,				// 0
     AUDIO_LAKE,				// 1
@@ -47,6 +46,7 @@ class CGameStateInit : public CGameState {
         const int CHARACTER_POS_Y;
         CMovingBitmap typing_logo;						// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
+        int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景
         //主選單元素
         CMovingBitmap menuBorder, menuBorder_ckecked;
