@@ -54,10 +54,10 @@ void CGameStateInit::OnInit() {
         menuText.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    menuText.push_back(new CMovingBitmap);
+    menuText.back()->LoadBitmap("Bitmaps/menu/menu_t_be.bmp", RGB(0, 255, 0));	// 返回按鈕
     menuBorder.LoadBitmap("Bitmaps/menu/menu_border.bmp", RGB(0, 255, 0));
     menuBorder_ckecked.LoadBitmap("Bitmaps/menu/menu_border_checked.bmp", RGB(0, 255, 0));
-    menuText.push_back(new CMovingBitmap);
-    menuText.back()->LoadBitmap("Bitmaps/menu/menu_t_b.bmp", RGB(0, 255, 0));
     // 載入遊戲說明元素
     noteBorder.LoadBitmap("Bitmaps/menu/note/note_text_border.bmp", RGB(0, 255, 0)); // 說明框線
     noteArrow.LoadBitmap ("Bitmaps/menu/note/note_text_arraw.bmp", RGB(0, 255, 0));	// 說明箭頭
