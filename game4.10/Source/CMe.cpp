@@ -7,46 +7,24 @@
 #include "CEnemy.h"
 #include "CMe.h"
 
-
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // CMe: 主角
 /////////////////////////////////////////////////////////////////////////////
 
-CMe::CMe() {
-    Initialize();
-    //char* file[2] = { "Bitmaps/me_ironman.bmp", "Bitmaps/me_ironman1.bmp" }
+CMe::CMe(): CHARACTER_POS_Y(320) {
+    x = 100;
+    y = SIZE_Y - 60;
+    selectedChar = 0;
+    currState = 1;
 }
 
-int CMe::GetX1() {
-    return x;
-    //return character[0]->GetX1();
-}
-
-int CMe::GetY1() {
-    return y;
-    // return character[0]->GetY1();
-}
-
-int CMe::GetX2() {
-    return x + animation.Width();
-    // return character[0]->GetX2();
-}
-
-int CMe::GetY2() {
-    return y + animation.Height();
-    // return character[0]->GetY2();
-}
-
-void CMe::Initialize() {
-    const int X_POS = ( SIZE_X - 24) / 2;
-    const int Y_POS = SIZE_Y - 50;
-    x = X_POS;
-    y = Y_POS;
-}
 
 void CMe::LoadBitmap() {
+    LoadCharacter();
+    /*
     int character = 2;
+
 
     if (character == 0) {
         animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
@@ -61,31 +39,102 @@ void CMe::LoadBitmap() {
         animation.AddBitmap("Bitmaps/me_captian_american.bmp", RGB(0, 255, 0));
         animation.SetTopLeft(x, y);
     }
-
-    LoadCharacter();
+    */
 }
 
 void CMe::LoadCharacter() {
-    string file[2] = { "Bitmaps/me_ironman.bmp", "Bitmaps/me_ironman1.bmp" };
-    character.push_back(new CCharacter("Iron Man", file, 2, 100, 100));
-    //character.back()->LoadBitmap();
+    string file1[2] = { "Bitmaps/me_ironman.bmp", "Bitmaps/me_ironman1.bmp" };
+    character.push_back(new CCharacter("Iron Man", file1, 2, x, y));
+    //
+    string file2[1] = { "Bitmaps/me_captain_american.bmp" };
+    character.push_back(new CCharacter("Captain American", file2, 1, x, y));
+    //
+    string file3[1] = { "Bitmaps/me_hulk.bmp" };
+    character.push_back(new CCharacter("Hulk", file3, 1, x, y));
+    //
+    string file4[1] = { "Bitmaps/me_cow.bmp" };
+    character.push_back(new CCharacter("Cow", file4, 1, x, y));
+    string file5[1] = { "Bitmaps/me_cow.bmp" };
+    character.push_back(new CCharacter("Cow", file5, 1, x, y));
 }
 
 void CMe::OnMove() {
-    //animation.OnMove();
-    character[0]->OnMove();
+    if (currState == 0) character[selectedChar]->OnMove();
 }
 
 void CMe::OnShow() {
-    //animation.OnShow();
-    character[0]->OnShow();
-}
+    if (currState == 0) {	// 遊戲中顯示
+        x = (SIZE_X - character[selectedChar]->GetWidth()) / 2;
+        y = SIZE_Y - 60;
+        character[selectedChar]->SetXY(x, y);
+        character[selectedChar]->OnShow();
+    }
+    else if (currState == 1) {	//選擇角色畫面
+        x = (SIZE_X - character[selectedChar]->GetWidth()) / 2;
+        y = CHARACTER_POS_Y + 70;			// 待修改
+        character[selectedChar]->SetXY(x, y);
+        character[selectedChar]->OnShow();
 
+        for (unsigned int i = 1; i <= 4; i++) {
+            const int PADDING_CENTER = 40, PADDING_EACH = 80;
+            int position = selectedChar + i;
+
+            if (position >= 0 && position < int(character.size()) ) {
+                character[selectedChar + i]->SetXY(x + PADDING_CENTER + PADDING_EACH * i, y);
+                character[selectedChar + i]->OnShow();
+            }
+
+            position = selectedChar - i;
+
+            if (position >= 0 && position < int(character.size())) {
+                character[selectedChar - i]->SetXY(x - PADDING_CENTER - PADDING_EACH * i, y);
+                character[selectedChar - i]->OnShow();
+            }
+        }
+
+        ////
+        CDC* pDC = CDDraw::GetBackCDC();
+        CFont f, *fp;
+        f.CreatePointFont(100, "新細明體");
+        fp = pDC->SelectObject(&f);
+        pDC->SetBkMode(TRANSPARENT);
+        char temp[20];
+        sprintf(temp, "%s", character[selectedChar]->GetName().c_str());
+        pDC->SetTextColor(RGB(200, 200, 200));
+        pDC->TextOut(350, CHARACTER_POS_Y + 70 + 60, temp);
+        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+        ////
+    }
+}
+void CMe::addSelectedChar(int num) {
+    int result = selectedChar + num;
+
+    if (result >= 0 && result < int(character.size()) ) selectedChar = result;
+}
 void CMe::SetXY(int nx, int ny) {
     x = nx;
     y = ny;
 }
 
+int CMe::GetX1() {
+    return character[selectedChar]->GetX1();
+}
 
+int CMe::GetY1() {
+    return character[selectedChar]->GetY1();
+}
+
+int CMe::GetX2() {
+    return character[selectedChar]->GetX2();
+}
+
+int CMe::GetY2() {
+    return character[selectedChar]->GetY2();
+}
+
+void CMe::setState(int state) {
+    currState = state;
+}
 
 }

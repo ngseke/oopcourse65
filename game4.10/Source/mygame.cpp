@@ -78,6 +78,7 @@ void CGameStateInit::OnInit() {
 
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
+    characterArrow.LoadBitmap("Bitmaps/menu/character/character_arraw.bmp", RGB(0, 255, 0));
     //me_ironman.LoadBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
     // characterArrow[2]
     // 載入關於元素
@@ -133,8 +134,12 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else if (noteDisplayState >  int(note.size()) - 1) noteDisplayState = 0;
         }
     }
-    else if (displayState == 2 && nChar == KEY_ENTER) { // [角色選擇]
+    else if (displayState == 2) { // [角色選擇]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+        else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) {
+            if		(nChar == KEY_LEFT)   me.addSelectedChar(1);
+            else if (nChar == KEY_RIGHT)  me.addSelectedChar(-1);
+        }
     }
     else if (displayState == 3 && nChar == KEY_ENTER) { // [關於]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
@@ -207,8 +212,8 @@ void CGameStateInit::OnShow() {
     else if (displayState == 2) {      // 顯示 選擇角色 頁面
         characterBorder.SetTopLeft((SIZE_X - characterBorder.Width()) / 2, CHARACTER_POS_Y);
         characterBorder.ShowBitmap();
-        //me_ironman.SetTopLeft((SIZE_X - me_ironman.Width()) / 2, CHARACTER_POS_Y + (characterBorder.Height() - me_ironman.Height()) / 2 + 11);
-        //me_ironman.ShowBitmap();
+        characterArrow.SetTopLeft((SIZE_X - characterArrow.Width()) / 2, CHARACTER_POS_Y + characterBorder.Height() / 2);
+        characterArrow.ShowBitmap();
         me.OnShow();
     }
     else if (displayState == 3) {      // 顯示關於頁面
@@ -317,6 +322,7 @@ void CGameStateRun::OnBeginState() {
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
     emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
+    me.setState(0);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素

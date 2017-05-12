@@ -7,6 +7,7 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 class CMe {
     public:
+
         CMe();
         void Initialize();				// 設定初始值
         void LoadBitmap();				// 載入圖形
@@ -17,11 +18,16 @@ class CMe {
         int  GetX2();					// ME右下角 x 座標
         int  GetY2();					// ME右下角 y 座標
         void SetXY(int nx, int ny);		// 設定擦子左上角座標
-        void LoadCharacter();
-
+        void LoadCharacter();			// 載入角色
+        void addSelectedChar(int);		// 選擇角色時移動游標
+        void setState(int);				// 設定當前顯示的狀態
+        CCharacter GetCharacterVector();
     protected:
-        CAnimation animation;			// 圖形的動畫
+        const int CHARACTER_POS_Y;
+        //CAnimation animation;			// 圖形的動畫
         int x, y;						// 圖形左上角座標
         vector<CCharacter*> character;
+        int  selectedChar;				// 選中的角色編號
+        int  currState;					// 0: 遊戲中, 1: 選擇角色畫面
 };
 }

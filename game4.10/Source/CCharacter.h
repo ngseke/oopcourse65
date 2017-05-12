@@ -12,6 +12,7 @@ class CCharacter {
         void SetXY(int, int);
         int  GetX1(), GetY1(), GetX2(), GetY2();
         int  GetWidth(), GetHeight();
+        string GetName();
 
     protected:
         CAnimation			animation;							// ¥D¨¤°Êµe

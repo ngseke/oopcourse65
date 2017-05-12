@@ -59,8 +59,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			noteSelected, noteUnselected;	// 指示燈
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
-        CMovingBitmap			characterBorder, characterArrow[2];
-        //CMovingBitmap			me_ironman;
+        CMovingBitmap			characterBorder, characterArrow;
         CMe						me;
         // 介紹頁面
         CMovingBitmap			aboutBorder;

@@ -17,8 +17,7 @@ CCharacter::CCharacter(string name, string pathName[10], int bmpNum, int x, int 
     this->x = x;
     this->y = y;
 
-    for (int i = 0; i < bmpNum; i++)
-        this->pathName[i] = pathName[i];
+    for (int i = 0; i < bmpNum; i++) this->pathName[i] = pathName[i];
 
     LoadBitmap();
 }
@@ -61,5 +60,8 @@ int CCharacter::GetWidth() {
 }
 int CCharacter::GetHeight() {
     return animation.Height();
+}
+string CCharacter::GetName() {
+    return name;
 }
 }
