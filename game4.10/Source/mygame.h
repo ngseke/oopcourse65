@@ -121,7 +121,7 @@ class CGameStateRun : public CGameState {
         int				lives;
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
-
+        char			keyFlag;
 };
 
 /////////////////////////////////////////////////////////////////////////////
