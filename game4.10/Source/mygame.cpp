@@ -29,27 +29,59 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(300) {
+    : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
+      MENU_ITEM_NUM(4), CHARACTER_POS_Y(320) {
 }
 
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
-    //
-    // 開始載入資料
-    //
-    //logo.LoadBitmap(IDB_BACKGROUND);
+    const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
+    currSelectItem = displayState = 2;
+    noteDisplayState = 0;
+    map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
-    noteText.LoadBitmap("Bitmaps/note/note_text_zh.bmp", RGB(0, 255, 0));	// 說明框
-    const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
+    /////
+    //
+    // 載入選單元素
 
-    for (int i = 0; i < exkeyNum; i++) {											// 說明框裡面的按鍵動畫
-        char str[30];
-        sprintf(str, "Bitmaps/note/note1_exkey_%d.bmp", i + 1);
+    for (int i = 0; i < 4; i++) {		// 4個選單
+        char str[40];
+        sprintf(str, "Bitmaps/menu/menu_t_%d.bmp", i + 1);
+        menuText.push_back(new CMovingBitmap);
+        menuText.back()->LoadBitmap(str, RGB(0, 255, 0));
+    }
+
+    menuBorder.LoadBitmap("Bitmaps/menu/menu_border.bmp", RGB(0, 255, 0));
+    menuBorder_ckecked.LoadBitmap("Bitmaps/menu/menu_border_checked.bmp", RGB(0, 255, 0));
+    menuText.push_back(new CMovingBitmap);
+    menuText.back()->LoadBitmap("Bitmaps/menu/menu_t_b.bmp", RGB(0, 255, 0));
+    // 載入遊戲說明元素
+    noteBorder.LoadBitmap("Bitmaps/menu/note/note_text_border.bmp", RGB(0, 255, 0)); // 說明框線
+    noteArrow.LoadBitmap ("Bitmaps/menu/note/note_text_arraw.bmp", RGB(0, 255, 0));	// 說明箭頭
+    noteUnselected.LoadBitmap("Bitmaps/menu/note/note_unselected.bmp", RGB(0, 255, 0));
+    noteSelected.LoadBitmap("Bitmaps/menu/note/note_selected.bmp", RGB(0, 255, 0));
+
+    for (int i = 0; i < exkeyNum; i++) {	// 說明框裡面的按鍵動畫
+        char str[50];
+        sprintf(str, "Bitmaps/menu/note/note1_exkey_%d.bmp", i + 1);
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
     }
 
-    map.LoadBitmap();														// 背景網狀動畫
+    for (int i = 0; i < 8; i++) {		// 多頁的說明文字
+        char str[50];
+        sprintf(str, "Bitmaps/menu/note/note_text_p%d.bmp", i + 1);
+        note.push_back(new CMovingBitmap);
+        note.back()->LoadBitmap(str, RGB(0, 255, 0));
+    }
+
+    // 載入角色選擇 元素
+    characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
+    me_ironman.LoadBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
+    // characterArrow[2]
+    // 載入關於元素
+    aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
+    about.LoadBitmap("Bitmaps/menu/about/about_text_p1.bmp", RGB(0, 255, 0)); // 介紹文字
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -61,55 +93,137 @@ void CGameStateInit::OnBeginState() {
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ESC = 27;
     const char KEY_SPACE = ' ';
+    const char KEY_ENTER = 0xD;
+    const char KEY_LEFT = 0x25;	// keyboard左箭頭
+    const char KEY_UP = 0x26;	// keyboard上箭頭
+    const char KEY_RIGHT = 0x27; // keyboard右箭頭
+    const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-    if (nChar == KEY_SPACE)
-        GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
-    else if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+    if (displayState == 0 && (nChar == KEY_UP || nChar == KEY_DOWN)) { // 移動主選單
+        if (nChar == KEY_UP) currSelectItem--;
+        else if (nChar == KEY_DOWN) currSelectItem++;
+
+        if (currSelectItem < 0)currSelectItem = MENU_ITEM_NUM - 1;
+        else if (currSelectItem > MENU_ITEM_NUM - 1)currSelectItem = 0;
+    }
+
+    if (displayState == 0 && nChar == KEY_ENTER ) { // 按下ENTER選擇後...
+        if ( currSelectItem == 0 ) // 開始遊戲
+            GotoGameState(GAME_STATE_RUN);
+
+        if ( currSelectItem == 1 ) {
+            displayState = 1;	// 顯示遊戲說明的state
+            noteDisplayState = 0;
+        }
+        else if (currSelectItem == 2) {
+            displayState = 2;	// 角色選擇的state
+        }
+        else if (currSelectItem == 3) {
+            displayState = 3;	// 關於的state
+        }
+    }
+    else if (displayState == 1 ) { // [遊戲說明]
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+        else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) { // [遊戲說明] 左右翻頁遊戲說明
+            if		(nChar == KEY_LEFT)   noteDisplayState--;
+            else if (nChar == KEY_RIGHT) noteDisplayState++;
+
+            if (noteDisplayState < 0) noteDisplayState = int(note.size()) - 1;
+            else if (noteDisplayState >  int(note.size()) - 1) noteDisplayState = 0;
+        }
+    }
+    else if (displayState == 2 && nChar == KEY_ENTER) { // [角色選擇]
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+    }
+    else if (displayState == 3 && nChar == KEY_ENTER) { // [關於]
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+    }
+
+    //PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
-    GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+    //GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
 }
+
 void CGameStateInit::OnShow() {
-    //
-    // 貼上logo
-    //
-    //logo.SetTopLeft((SIZE_X - logo.Width()) / 2, SIZE_Y / 8);
-    //logo.ShowBitmap();
     map.OnShow();
-    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, SIZE_Y / 5);
+    // logo
+    typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
     typing_logo.ShowBitmap();
-    text1.SetTopLeft((SIZE_X - text1.Width()) / 2, SIZE_Y / 5 + typing_logo.Height() + 180);
-    text1.ShowBitmap();
-    noteText.SetTopLeft(NOTE_TEXT_X, NOTE_TEXT_Y );
-    noteText.ShowBitmap();
-    noteExkey.SetTopLeft(NOTE_TEXT_X + 60, NOTE_TEXT_Y + 125 );
-    noteExkey.OnShow();
-    //
-    // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
-    //
-    /*
-    CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
-    CFont f, *fp;
-    f.CreatePointFont(160, "Consolas");	// 產生 font f; 160表示16 point的字
-    fp = pDC->SelectObject(&f);					// 選用 font f
-    pDC->SetBkColor(RGB(0, 0, 0));
-    pDC->SetBkMode(TRANSPARENT);
-    pDC->SetTextColor(RGB(41, 171, 226));
-    pDC->TextOut(180, 350, "Huang Xingqiao / Yu kaici");  //test text
 
-    if (ENABLE_GAME_PAUSE)
-        pDC->TextOut(5, 425, "Press Ctrl-Q to pause the Game.");
+    if (displayState == 0) {	// 顯示主選單
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
+        menuBorder_ckecked.ShowBitmap();
 
-    pDC->TextOut(5, 455, "Press Alt-F4 or ESC to Quit.");
-    pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-    CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-    */
+        for (int i = 0; i < MENU_ITEM_NUM; i++) {
+            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * i);
+            menuBorder.ShowBitmap();
+            menuText[i]->SetTopLeft((SIZE_X - menuText[i]->Width()) / 2, MENU_POS_Y + 7 + 40 * i);
+            menuText[i]->ShowBitmap();
+        }
+    }
+    else if (displayState == 1) {	// 顯示說明文字
+        // 說明框線
+        noteBorder.SetTopLeft((SIZE_X - noteBorder.Width()) / 2, NOTE_TEXT_Y);
+        noteBorder.ShowBitmap();
+        // 說明箭頭
+        noteArrow.SetTopLeft((SIZE_X - noteArrow.Width()) / 2, NOTE_TEXT_Y + (noteBorder.Height()  - noteArrow.Height()) / 2 + 11);
+        noteArrow.ShowBitmap();
+        // 說明文字
+        note[noteDisplayState]->SetTopLeft((SIZE_X - noteBorder.Width()) / 2, NOTE_TEXT_Y + (noteBorder.Height() - note[noteDisplayState]->Height() ) / 2 + 11);
+        note[noteDisplayState]->ShowBitmap();
+
+        // 說明文字 指示燈
+        for (unsigned int i = 0; i < note.size(); i++) {
+            noteUnselected.SetTopLeft((SIZE_X - noteBorder.Width()) / 2 + noteBorder.Width() - 25 - 8 * i, NOTE_TEXT_Y + noteBorder.Height() - 20);
+            noteUnselected.ShowBitmap();
+        }
+
+        noteSelected.SetTopLeft((SIZE_X - noteBorder.Width()) / 2 + noteBorder.Width() - 25 - 8 * (note.size() - noteDisplayState - 1), NOTE_TEXT_Y + noteBorder.Height() - 20);
+        noteSelected.ShowBitmap();
+
+        // 說明打字動畫
+        if (noteDisplayState == 0) {
+            noteExkey.SetTopLeft((SIZE_X - noteExkey.Width()) / 2, NOTE_TEXT_Y + 150);
+            noteExkey.OnShow();
+        }
+
+        // 顯示偽返回按鈕
+        const int BACK_BTN_POS = NOTE_TEXT_Y + noteBorder.Height() + 0;
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+        menuBorder_ckecked.ShowBitmap();
+        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+        menuBorder.ShowBitmap();
+        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2,  7 + BACK_BTN_POS);
+        menuText[4]->ShowBitmap();
+    }
+    else if (displayState == 2) {      // 顯示 選擇角色 頁面
+        characterBorder.SetTopLeft((SIZE_X - characterBorder.Width()) / 2, CHARACTER_POS_Y);
+        characterBorder.ShowBitmap();
+        me_ironman.SetTopLeft((SIZE_X - me_ironman.Width()) / 2, CHARACTER_POS_Y + (characterBorder.Height() - me_ironman.Height()) / 2 + 11);
+        me_ironman.ShowBitmap();
+    }
+    else if (displayState == 3) {      // 顯示關於頁面
+        // 關於框
+        aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
+        aboutBorder.ShowBitmap();
+        // 關於文字
+        about.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y  + 11);
+        about.ShowBitmap();
+        // 顯示偽返回按鈕
+        const int BACK_BTN_POS = NOTE_TEXT_Y + aboutBorder.Height() - 23;
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+        menuBorder_ckecked.ShowBitmap();
+        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+        menuBorder.ShowBitmap();
+        menuText[4]->SetTopLeft((SIZE_X - menuText[4]->Width()) / 2, 7 + BACK_BTN_POS);
+        menuText[4]->ShowBitmap();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -173,9 +287,9 @@ void CGameStateOver::OnShow() {
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), NUMBALLS(28), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
-    callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 100;
-    callBossBCounter = maxCallBossBCounter = 100;
+    callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
+    callBossACounter = maxCallBossACounter = 80;
+    callBossBCounter = maxCallBossBCounter = 80;
 }
 
 CGameStateRun::~CGameStateRun() {
@@ -217,7 +331,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 5, true, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 6, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
         currEnemyNum++;
     }
@@ -226,7 +340,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossA(randX, 0, 7, true, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossA(randX, 0, 6, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
     }
@@ -235,7 +349,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossB(randX, 0, 7, true, &dictionary, 6, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossB(randX, 0, 6, true, &dictionary, 6, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
     }
@@ -444,7 +558,7 @@ void CGameStateRun::OnShow() {
     //
     //
     map.OnShow();						// 貼上背景網子
-    help.ShowBitmap();					// 貼上說明圖
+    //help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     emp.OnShow();
     me.OnShow();

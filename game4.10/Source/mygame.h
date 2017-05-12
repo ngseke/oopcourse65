@@ -37,17 +37,34 @@ class CGameStateInit : public CGameState {
         void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
         void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
         void OnMove();
-
     protected:
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
-        CMovingBitmap logo;								// csie的logo
+        const int MENU_POS_Y;							// 定義 MENU 的Y軸
+        const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
+        const int CHARACTER_POS_Y;
         CMovingBitmap typing_logo;						// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
-        CMovingBitmap noteText;							// 遊戲說明
-        CAnimation	  noteExkey;						// 遊戲說明裡面的 打字動畫
-        CMap map;
+        CMap map;										// 背景
+        //主選單元素
+        CMovingBitmap menuBorder, menuBorder_ckecked;
+        vector<CMovingBitmap*> menuText;				// 選單文字VECTOR
+        int currSelectItem, displayState, noteDisplayState; // 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
+
+        // 遊戲說明 元素
+        CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
+        CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
+        CMovingBitmap			noteSelected, noteUnselected;	// 指示燈
+        vector<CMovingBitmap*>	note;							// 多頁的說明文字
+        // 角色選擇 元素
+        CMovingBitmap			characterBorder, characterArrow[2];
+        CMovingBitmap			me_ironman;
+        // 介紹頁面
+        CMovingBitmap			aboutBorder;
+        CMovingBitmap			about;
+
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -96,19 +113,15 @@ class CGameStateRun : public CGameState {
         int				currBossANum, currBossBNum;						// 當前該關卡 已召喚的BossA & BossB數量
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
-        /*
-        int				levelEnemyNum[10] = {  5,  0,  0,  0,  0,  0, 20, 20, 20, 20 };		// 該關卡最大的敵人數
-        int				levelBossANum[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
-        int				levelBossBNum[10] = {  01,  0,  0,  0,  0,  0,  0,  0,  0,  0 };
-        */
-        int				levelEnemyNum[10] = {  4,  5,  5,  6,  7,  7, 20, 20, 20, 20 };		// 該關卡最大的敵人數
-        int				levelBossANum[10] = {  0,  1,  1,  2,  0,  0,  0,  0,  0,  0 };
-        int				levelBossBNum[10] = {  0,  0,  0,  0,  1,  0,  0,  0,  0,  0 };
+
+        int				levelEnemyNum[10] = {  4,  5,  5,  6,  7,  7,  7, 20, 20, 20 };		// 該關卡最大的敵人數
+        int				levelBossANum[10] = {  0,  0,  1,  1,  1,  2,  1,  0,  0,  0 };
+        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  1,  0,  0,  0 };
 
         int				lives;
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
-
+        char			keyFlag;
 };
 
 /////////////////////////////////////////////////////////////////////////////

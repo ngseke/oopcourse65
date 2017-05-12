@@ -30,36 +30,12 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     minVocabLeng = minVL;
     maxVocabLeng = maxVL;
     callEnemyCounter = maxCallEnemyCounter = 30 * 10;		// 發動召喚小怪技能的間隔
-    callEnemyCounter = 0;								// DEBUG用, 幫助快速生成
     endX = SIZE_X / 2;
     endY = SIZE_Y;
     //
     SetVocab();
 }
-/*
-CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endx, int endy) {	//	初始值都在此處設定
-    this->enemyQueue = enemyQueue;
-    this->bombList = bombList;
-    is_alive = is_bombed = false;
-    dx = dy = index = delay_counter = 0;
-    currWordLeng = 0;
-    targetX = -2;
-    targetY = -2;
-    ////
-    SetXY(x, y);
-    SetDelay(delay);
-    SetIsAlive(alive);
-    dict = d;
-    this->bombList = bombList;
-    minVocabLeng = minVL;
-    maxVocabLeng = maxVL;
-    callEnemyCounter = maxCallEnemyCounter = 100;		// 發動召喚小怪技能的間隔
-    this->endX = endx;
-    this->endY = endy;
-    //
-    SetVocab();
-}
-*/
+
 void CBossB::CallEnemy(int x, int y) {
     const double PI = 3.141592653;						// 定義圓周率
     const int ONE_WORD_ENEMY_NUM = 7;						// 共要生成幾隻小怪, 範圍:3,5,7,9...
