@@ -21,7 +21,7 @@ class CMe {
         void LoadCharacter();			// 載入角色
         void addSelectedChar(int);		// 選擇角色時移動游標
         void setState(int);				// 設定當前顯示的狀態
-        CCharacter GetCharacterVector();
+
     protected:
         const int CHARACTER_POS_Y;
         //CAnimation animation;			// 圖形的動畫

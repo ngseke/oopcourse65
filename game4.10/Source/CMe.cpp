@@ -43,15 +43,17 @@ void CMe::LoadBitmap() {
 }
 
 void CMe::LoadCharacter() {
-    character.push_back(new CCharacter("Iron Man", "肛鐵人", "me_ironman", 2, x, y));
+    character.push_back(new CCharacter("Iron Man", "鋼鐵人", "me_ironman", 2, x, y));
     character.push_back(new CCharacter("Captain American", "美利堅隊長", "me_captain_american.bmp", 1, x, y));
-    character.push_back(new CCharacter("Hulk", "好客", "me_hulk.bmp", 1, x, y));
+    character.push_back(new CCharacter("Hulk", "浩克", "me_hulk.bmp", 1, x, y));
+    character.push_back(new CCharacter("Creeper", "苦力怕", "me_creeper.bmp", 1, x, y));
     character.push_back(new CCharacter("Cow", "牛", "me_cow.bmp", 1, x, y));
-    character.push_back(new CCharacter("Cow", "牛", "me_cow.bmp", 1, x, y));
+    character.push_back(new CCharacter("Bouncing Ball", "跳動的球", "me_ball", 4, x, y));
 }
 
 void CMe::OnMove() {
     if (currState == 0) character[selectedChar]->OnMove();
+    else if (currState == 1) character[selectedChar]->OnMove();
 }
 
 void CMe::OnShow() {
@@ -89,6 +91,7 @@ void CMe::OnShow() {
         CFont f, *fp;
         f.CreatePointFont(100, "新細明體");
         fp = pDC->SelectObject(&f);
+        pDC->SetBkColor(RGB(0, 90, 130));
         pDC->SetBkMode(TRANSPARENT);
         char temp[20];
         pDC->SetTextColor(RGB(200, 200, 200));
