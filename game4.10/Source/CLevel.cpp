@@ -12,6 +12,7 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 CLevel::CLevel() {
     delay_counter = 200000;
+    delay_counter = 0;
     easeC = 0;
     level = 0;
     score = 87;
@@ -51,20 +52,20 @@ void CLevel::OnMove() {
 
     if (delay_counter < 30 * 3) {
         if (y < centerPosY) {
-            easeC -= .5;
-            y += 18 + int(easeC) ;
+            easeC += .63;
+            y += 20 - int(easeC)  ;
         }
         else  easeC = 0;
     }
     else if (delay_counter < 30 * 5) {
         if (y < btmPosY) {
-            easeC += .6;
+            easeC += .7;
             y += 0 + int(easeC);
         }
         else  easeC = 0;
     }
     else if (delay_counter < 30 * 10) {
-        //delay_counter = 0;
+        delay_counter = 0;
         easeC = 0;
         y = topPosY;
     }
@@ -76,22 +77,15 @@ void CLevel::OnShow() {
     int tempScore = score, tempLevel = level;
 
     for (int i = 0; i < 5; i++) {
-        numBmpSmall[tempScore % 10].SetTopLeft(x + 97 - 10 * i, y + 66);
+        numBmpSmall[tempScore % 10].SetTopLeft(x + 107 - 10 * i, y + 66);
         numBmpSmall[tempScore % 10].ShowBitmap();
         tempScore /= 10;
     }
 
     for (int i = 0; i < 2; i++) {
-        numBmp[tempLevel % 10].SetTopLeft(x + 108 - 20 * i, y );
+        numBmp[tempLevel % 10].SetTopLeft(x + 118 - 20 * i, y );
         numBmp[tempLevel % 10].ShowBitmap();
         tempLevel /=  10;
-    }
-
-    for (int i = 0; i < 10; i++) {
-        numBmp[i].SetTopLeft(x + 20 * i, y + animation.Height());
-        //numBmp[i].ShowBitmap();
-        numBmpSmall[i].SetTopLeft(x + 20 * i, y + animation.Height() + 24);
-        //numBmpSmall[i].ShowBitmap();
     }
 }
 
