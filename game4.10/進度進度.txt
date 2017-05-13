@@ -1,6 +1,3 @@
-4/28
-
-＝ BossB 產生的小怪物 單字長度為1.（用ascii隨機產生）
-＝ BossB 產生的小怪物 飛行的角度、生成時間的間隔
-＝ BossB 產生的小怪物 skin應該要不一樣
-＝ 把分數傳到gameover的狀態
+1.把分數傳到gameover的狀態
+2.將結果傳到user.txt
+  character:1,score:100,level:9,accuracy:100.00,date:20170101235959;
