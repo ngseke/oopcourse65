@@ -138,8 +138,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     else if (displayState == 2) { // [角色選擇]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
         else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) {
-            if		(nChar == KEY_LEFT)   me.addSelectedChar(1);
-            else if (nChar == KEY_RIGHT)  me.addSelectedChar(-1);
+            if		(nChar == KEY_LEFT)   me.addSelectedChar(-1);
+            else if (nChar == KEY_RIGHT)  me.addSelectedChar(1);
         }
     }
     else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]

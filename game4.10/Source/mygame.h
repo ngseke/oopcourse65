@@ -118,9 +118,9 @@ class CGameStateRun : public CGameState {
         bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
 
-        int				levelEnemyNum[10] = {  4,  5,  5,  6,  7,  7,  7, 20, 20, 20 };		// 該關卡最大的敵人數
-        int				levelBossANum[10] = {  0,  0,  1,  1,  1,  2,  1,  0,  0,  0 };
-        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  1,  0,  0,  0 };
+        int				levelEnemyNum[10] = {  5,  6,  6,  7,  8,  8,  8,  8,  9, 10 };		// 該關卡最大的敵人數
+        int				levelBossANum[10] = {  0,  0,  1,  1,  1,  2,  1,  1,  2,  2 };
+        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  1,  2,  2,  3 };
 
         int				lives;
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
