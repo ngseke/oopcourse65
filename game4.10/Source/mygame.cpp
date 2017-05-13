@@ -458,6 +458,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     map.OnMove();
     emp.OnMove();
     me.OnMove();
+    levelAni.OnMove();
 }
 
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
@@ -482,11 +483,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     map.LoadBitmap();
     emp.LoadBitmap();
     me.LoadBitmap();
-    //hits_left.LoadBitmap();
-    //corner.ShowBitmap(background);							// 將corner貼到background
-    //CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");	// 載入編號0的聲音ding.wav
-    //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
-    //CAudio::Instance()->Load(AUDIO_NTUT, "sounds\\ntut.mid");	// 載入編號2的聲音ntut.mid
+    levelAni.LoadBitmap();
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
     //
@@ -602,6 +599,7 @@ void CGameStateRun::OnShow() {
     score.ShowBitmap();					// 貼上分數
     emp.OnShow();
     me.OnShow();
+    levelAni.OnShow();
 
     /////////
     for (unsigned int i = 0; i < bombList.size(); i++) {
