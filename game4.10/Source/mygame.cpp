@@ -30,7 +30,7 @@ namespace game_framework {
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
-      MENU_ITEM_NUM(5), CHARACTER_POS_Y(320), HIGHSCORE_POS_Y(270) {
+      MENU_ITEM_NUM(5), CHARACTER_POS_Y(320) {
 }
 
 void CGameStateInit::OnInit() {
@@ -181,22 +181,26 @@ void CGameStateInit::OnShow() {
             menuText[i]->ShowBitmap();
         }
 
-        // 顯示最高分
-        highScoreBorder.SetTopLeft((SIZE_X - highScoreBorder.Width()) / 2, HIGHSCORE_POS_Y);
-        highScoreBorder.ShowBitmap();
-        ////
-        CDC* pDC = CDDraw::GetBackCDC();
-        CFont f, *fp;
-        f.CreatePointFont(100, "新細明體");
-        fp = pDC->SelectObject(&f);
-        pDC->SetBkMode(TRANSPARENT);
-        char temp[20];
-        pDC->SetTextColor(RGB(255, 200, 15));
-        sprintf(temp, "%d", 87487);
-        pDC->TextOut((SIZE_X - highScoreBorder.Width()) / 2  + 85, HIGHSCORE_POS_Y + 4, temp);
-        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-        ////
+        if (1) {
+            // 顯示最高分
+            int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
+            int HIGHSCORE_POS_Y = MENU_POS_Y + 10;
+            highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
+            highScoreBorder.ShowBitmap();
+            ////
+            CDC* pDC = CDDraw::GetBackCDC();
+            CFont f, *fp;
+            f.CreatePointFont(100, "新細明體");
+            fp = pDC->SelectObject(&f);
+            pDC->SetBkMode(TRANSPARENT);
+            char temp[20];
+            pDC->SetTextColor(RGB(255, 200, 15));
+            sprintf(temp, "%d", 87487);
+            pDC->TextOut(HIGHSCORE_POS_X + 85, HIGHSCORE_POS_Y + 4, temp);
+            pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+            CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+            ////
+        }
     }
     else if (displayState == 1) {	// 顯示說明文字
         // 說明框線
