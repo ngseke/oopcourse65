@@ -162,6 +162,8 @@ void CGameStateInit::OnMove() {
     if (text1_count > 5 * 30) {
         text1_y += int((text1_count - 5 * 30) * 1.1);
     }
+
+    GotoGameState(GAME_STATE_RUN);
 }
 
 void CGameStateInit::OnShow() {
@@ -453,6 +455,7 @@ void CGameStateRun::OnMove() {						// ²¾°Ê¹CÀ¸¤¸¯À
         callEnemyCounter = maxCallEnemyCounter;
         callBossACounter = maxCallBossACounter;
         callBossBCounter = maxCallBossBCounter;
+        levelAni.Play(currLevel, score.GetInteger());
     }
 
     map.OnMove();

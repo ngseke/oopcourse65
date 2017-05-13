@@ -11,10 +11,16 @@ namespace game_framework {
 // CLevel: Enemy
 /////////////////////////////////////////////////////////////////////////////
 CLevel::CLevel() {
+    delay_counter = 200000;
+    easeC = 0;
+    level = 0;
+    score = 87;
 }
-CLevel::CLevel(string name, string subName, string fn, int bmpNum, int x, int y) {
+void CLevel::Play(int level, int score) {
+    delay_counter = 0;
+    this->level = level;
+    this->score = score;
 }
-
 void CLevel::LoadBitmap() {
     char str[50];
 
@@ -26,35 +32,66 @@ void CLevel::LoadBitmap() {
     for (int i = 0; i < 10; i++) {		// 更计瓜
         sprintf(str, "Bitmaps/level/num/%d.bmp", i);
         numBmp[i].LoadBitmap(str, RGB(0, 255, 0));
+        sprintf(str, "Bitmaps/level/num_s/%d.bmp", i);
+        numBmpSmall[i].LoadBitmap(str, RGB(0, 255, 0));
     }
 
-    x = (SIZE_X - animation.Width()) / 2;
-    y = (SIZE_Y - animation.Height()) / 2;
-    /*
-    if (bmpNum == 1) {
-        sprintf(str, "Bitmaps/me/%s", fileName.c_str());
-        animation.AddBitmap(str, RGB(0, 255, 0));
-    }
-    else {
-        for (int i = 0; i < bmpNum; i++) {		// 更笆礶
-            sprintf(str, "Bitmaps/me/%s%d.bmp", fileName.c_str(), i + 1);
-            animation.AddBitmap(str, RGB(0, 255, 0));
-        }
-    }
-    */
+    topPosY = 0 - animation.Height();
+    btmPosY = SIZE_Y;
+    centerPosX = (SIZE_X - animation.Width()) / 2;
+    centerPosY = (SIZE_Y - animation.Height()) / 2 - 15;
+    x = centerPosX;
+    y = topPosY;
 }
 
 void CLevel::OnMove() {
     animation.OnMove();
+
+    if (delay_counter < 30 * 10) delay_counter++;
+
+    if (delay_counter < 30 * 3) {
+        if (y < centerPosY) {
+            easeC -= .5;
+            y += 18 + int(easeC) ;
+        }
+        else  easeC = 0;
+    }
+    else if (delay_counter < 30 * 5) {
+        if (y < btmPosY) {
+            easeC += .6;
+            y += 0 + int(easeC);
+        }
+        else  easeC = 0;
+    }
+    else if (delay_counter < 30 * 10) {
+        //delay_counter = 0;
+        easeC = 0;
+        y = topPosY;
+    }
 }
 
 void CLevel::OnShow() {
     animation.SetTopLeft(x, y);
     animation.OnShow();
+    int tempScore = score, tempLevel = level;
 
-    for (int i = 0; i < 10; i++) {		// 更计瓜
+    for (int i = 0; i < 5; i++) {
+        numBmpSmall[tempScore % 10].SetTopLeft(x + 97 - 10 * i, y + 66);
+        numBmpSmall[tempScore % 10].ShowBitmap();
+        tempScore /= 10;
+    }
+
+    for (int i = 0; i < 2; i++) {
+        numBmp[tempLevel % 10].SetTopLeft(x + 108 - 20 * i, y );
+        numBmp[tempLevel % 10].ShowBitmap();
+        tempLevel /=  10;
+    }
+
+    for (int i = 0; i < 10; i++) {
         numBmp[i].SetTopLeft(x + 20 * i, y + animation.Height());
-        numBmp[i].ShowBitmap();
+        //numBmp[i].ShowBitmap();
+        numBmpSmall[i].SetTopLeft(x + 20 * i, y + animation.Height() + 24);
+        //numBmpSmall[i].ShowBitmap();
     }
 }
 
