@@ -106,9 +106,10 @@ class CGameStateRun : public CGameState {
         vector<CBullet*>bulletList;										// 儲存飛行中的子彈的Vector
         vector<CBomb*>  bombList;
 
-        CEnemy* 			targetEnemy;									// 指標 用於指向瞄準的敵人
+        CEnemy* 		targetEnemy;									// 指標 用於指向瞄準的敵人
         CInteger		score;											// 分數顯示器
         CEmp			emp;
+        char			key;											// 記錄所按下的按鍵 用於防止彈跳
         const int		LEVEL;											// 關卡總數
         int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快
         int				callBossACounter, maxCallBossACounter;

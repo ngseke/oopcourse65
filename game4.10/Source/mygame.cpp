@@ -495,6 +495,65 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
+    if (key != nChar) {
+        key = nChar;
+
+        for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
+            if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
+                if (!lock) {										// 尚未鎖定了
+                    if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
+                        totalCorrectKeyCount++;							// 正確按鍵數+1
+                        CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
+
+                        if (enemyQueue[i]->GetVocabLeng() == 1) {
+                            targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
+                            bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+                            targetEnemy->kill();									// 成功殺害怪物
+                            score.Add(targetEnemy->GetVocabLeng());				// 分數+= 怪物長度
+                            break;
+                        }
+                        else {
+                            lock = true;
+                            targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
+                            targetEnemy->AddCurrWordLeng();
+                            bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
+                            targetEnemy->MinusIndex(2);					// 擊退怪物
+                            break;
+                        }
+                    }
+                }
+                else {												// 若已鎖定
+                    if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
+                        targetEnemy->AddCurrWordLeng();
+                        bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
+                        targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
+                        totalCorrectKeyCount++;							// 正確按鍵數+1
+                        CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
+
+                        if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
+                            targetEnemy->kill();									// 成功殺害怪物
+                            lock = false;
+                            score.Add(targetEnemy->GetVocabLeng());						// 分數+= 怪物長度
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
+
+        if (totalKeyDownCount != 0)
+            accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
+        else
+            accuracy = 100;
+
+        if (nChar == 13) {
+            emp.CallEmp();
+        }
+    }
+
     if (nChar == '1')showDebug = 1;	// 按1 顯示debug
 
     if (nChar == '2')showDebug = 0;
@@ -509,61 +568,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
-
-    for (int unsigned i = 0; i < enemyQueue.size(); i++) {			// 跑目前關卡怪物的數量
-        if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
-            if (!lock) {										// 尚未鎖定了
-                if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
-                    totalCorrectKeyCount++;							// 正確按鍵數+1
-                    CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
-
-                    if (enemyQueue[i]->GetVocabLeng() == 1) {
-                        targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
-                        bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
-                        targetEnemy->kill();									// 成功殺害怪物
-                        score.Add(targetEnemy->GetVocabLeng());				// 分數+= 怪物長度
-                        break;
-                    }
-                    else {
-                        lock = true;
-                        targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
-                        targetEnemy->AddCurrWordLeng();
-                        bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
-                        targetEnemy->MinusIndex(2);					// 擊退怪物
-                        break;
-                    }
-                }
-            }
-            else {												// 若已鎖定
-                if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
-                    targetEnemy->AddCurrWordLeng();
-                    bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
-                    targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
-                    totalCorrectKeyCount++;							// 正確按鍵數+1
-                    CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
-
-                    if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
-                        targetEnemy->kill();									// 成功殺害怪物
-                        lock = false;
-                        score.Add(targetEnemy->GetVocabLeng());						// 分數+= 怪物長度
-                    }
-
-                    break;
-                }
-            }
-        }
-    }
-
-    if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
-
-    if (totalKeyDownCount != 0)
-        accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
-    else
-        accuracy = 100;
-
-    if (nChar == 13) {
-        emp.CallEmp();
-    }
+    key = NULL;
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
