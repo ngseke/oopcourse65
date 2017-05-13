@@ -16,7 +16,7 @@ class CLevel {
         void Play(int level, int score);
 
     protected:
-        CAnimation			animation;							// 主角動畫
+        CMovingBitmap		border, bg;
         CMovingBitmap		numBmp[10], numBmpSmall[10];		// 數字圖檔
         int					x, y;
         int					level, score;
