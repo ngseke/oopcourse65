@@ -72,7 +72,6 @@ void CEnemy::LoadBitmap() {
     talkBoxC.LoadBitmap("Bitmaps/talk_box_blur/talk_box_center.bmp", RGB(0, 255, 0));
     talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
     /////
-    char* filename[2] = { "Bitmaps/target_s1.bmp", "Bitmaps/target_s2.bmp" };
 
     for (int i = 0; i < 26; i++) {
         letter.push_back(new CMovingBitmap);
@@ -82,8 +81,13 @@ void CEnemy::LoadBitmap() {
         //letter[i]->LoadBitmap(str, RGB(255, 255, 255));
     }
 
-    for (int i = 0; i < 2; i++)		// 載入動畫
-        target.AddBitmap(filename[i], RGB(0, 255, 0));
+    for (int i = 0; i < 22; i++) {	// 載入動畫
+        char str[20];
+        sprintf(str, "Bitmaps/target/target_s%d.bmp", i + 1);
+        target.AddBitmap(str, RGB(0, 255, 0));
+    }
+
+    target.SetDelayCount(2);
 }
 
 void CEnemy::OnMove() {

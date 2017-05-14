@@ -18,8 +18,8 @@ class CEmp {
         void OnShow();					// 將擦子圖形貼到畫面
         void SetXY(int nx, int ny);		// 設定擦子左上角座標
         void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy** targetEnemy);
-        void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy targetEnemy);
         void CallEmp();
+        void SetEmpTimes(int);
         //bool HitMe(vector<CEnemy*>* enemyQueue);
     protected:
         CAnimation emp;				// 衝擊波

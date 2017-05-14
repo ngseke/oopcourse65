@@ -354,6 +354,7 @@ void CGameStateRun::OnBeginState() {
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
     emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
+    emp.SetEmpTimes(3);
     me.setState(0);
 }
 
