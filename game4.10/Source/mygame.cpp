@@ -283,12 +283,16 @@ CGameStateOver::CGameStateOver(CGame* g)
 }
 
 void CGameStateOver::OnMove() {
-    counter--;
-
     if (counter < 0)
         GotoGameState(GAME_STATE_INIT);
 }
+void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
+    const char KEY_ENTER = 0xD;
 
+    if (nChar == KEY_ENTER) {
+        GotoGameState(GAME_STATE_INIT);
+    }
+}
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 5; // 5 seconds
     //
@@ -299,8 +303,9 @@ void CGameStateOver::OnBeginState() {
 
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
-    border.LoadBitmap("Bitmaps/gameover/gameover_border.bmp", RGB(0, 255, 0));
+    border.LoadBitmap("Bitmaps/gameover/gameover_border_zh.bmp", RGB(0, 255, 0));
     char str[80];
+    ShowInitProgress(80);
 
     for (int i = 0; i < 10; i++) {		// 載入數字圖
         sprintf(str, "Bitmaps/level/num/%d.bmp", i);
@@ -322,39 +327,41 @@ void CGameStateOver::OnShow() {
     //
     int tempScore = score, tempLevel = level, tempAccuracy = int (accuracy * 100.0);
     int dotPos = 0;
+    int scorePosX = 230, levelPosX = 130, accPosX = 155, // 定義各數字位置偏移量
+        scorePosY =  45, levelPosY =  90, accPosY = 108 ;
 
-    for (int i = 0; i < 5; i++) {		// 顯示分數數字bmp
-        numBmp[tempScore % 10].SetTopLeft(x + 230 - 20 * i, y + 42);
+    for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
+        numBmp[tempScore % 10].SetTopLeft(x + scorePosX - 20 * i, y + scorePosY);
         numBmp[tempScore % 10].ShowBitmap();
         tempScore /= 10;
     }
 
-    for (int i = 0; i < 2; i++) {		// 顯示關卡數字bmp
-        numBmpSmall[tempLevel % 10].SetTopLeft(x + 130 - 10 * i, y + 87);
+    for (int i = 0; i < 2; i++) {					// 顯示關卡數字bmp
+        numBmpSmall[tempLevel % 10].SetTopLeft(x + levelPosX - 10 * i, y + levelPosY);
         numBmpSmall[tempLevel % 10].ShowBitmap();
         tempLevel /= 10;
     }
 
     for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
-        numBmpSmall[tempAccuracy % 10].SetTopLeft(x + 155 - 10 * i - dotPos, y + 105);
+        numBmpSmall[tempAccuracy % 10].SetTopLeft(x + accPosX - 10 * i - dotPos, y + accPosY);
         numBmpSmall[tempAccuracy % 10].ShowBitmap();
         tempAccuracy /= 10;
 
-        if (i == 1) {
+        if (i == 1) {								// 顯示小數點
             dotPos = 5;
-            numBmpSmall[11].SetTopLeft(x + 155 - 10 * i - dotPos, y + 105);	// 顯示小數點
+            numBmpSmall[11].SetTopLeft(x + accPosX - 10 * i - dotPos, y + accPosY);
             numBmpSmall[11].ShowBitmap();
         }
 
         tempLevel /= 10;
     }
 
-    numBmpSmall[10].SetTopLeft(x + 155 + 14, y + 105);
+    numBmpSmall[10].SetTopLeft(x + accPosX + 14, y + accPosY);
     numBmpSmall[10].ShowBitmap();					// 顯示百分比符號
     //
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
-    f.CreatePointFont(160, "Consolas");			// 產生 font f; 160表示16 point的字
+    f.CreatePointFont(100, "新細明體");			// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
     pDC->SetBkColor(RGB(0, 0, 0));
     pDC->SetBkMode(TRANSPARENT);
