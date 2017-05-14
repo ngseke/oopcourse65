@@ -12,7 +12,7 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 CLevel::CLevel() {
     delay_counter = 200000;
-    delay_counter = 0;
+    //delay_counter = 0;
     easeC = 0;
     level = 0;
     score = 87;
@@ -62,7 +62,7 @@ void CLevel::OnMove() {
         else  easeC = 0;
     }
     else if (delay_counter < 30 * 10) {
-        delay_counter = 0;
+        //delay_counter = 0;
         easeC = 0;
         y = topPosY;
     }

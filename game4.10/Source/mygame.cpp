@@ -152,6 +152,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
     //GotoGameState(GAME_STATE_RUN);		// ¤Á´«¦ÜGAME_STATE_RUN
 }
+void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point) {
+}
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
@@ -163,7 +165,7 @@ void CGameStateInit::OnMove() {
         text1_y += int((text1_count - 5 * 30) * 1.1);
     }
 
-    GotoGameState(GAME_STATE_RUN);
+    //GotoGameState(GAME_STATE_RUN);
 }
 
 void CGameStateInit::OnShow() {
