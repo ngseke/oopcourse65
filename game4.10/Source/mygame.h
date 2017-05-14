@@ -46,7 +46,7 @@ class CGameStateInit : public CGameState {
         const int MENU_POS_Y;							// 定義 MENU 的Y軸
         const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
         const int CHARACTER_POS_Y;
-        CMovingBitmap typing_logo;						// typing typing 精美的LOGO
+        CMovingBitmap typing_logo, taipin;				// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
         int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景

@@ -41,6 +41,7 @@ void CGameStateInit::OnInit() {
     me.LoadBitmap();
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
+    taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
     highScoreBorder.LoadBitmap("Bitmaps/menu/highscore_border.bmp", RGB(0, 255, 0));
     /////
@@ -178,6 +179,8 @@ void CGameStateInit::OnShow() {
     // logo
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
     typing_logo.ShowBitmap();
+    taipin.SetTopLeft((SIZE_X + typing_logo.Width()) / 2 - 60, 100 + 31);
+    taipin.ShowBitmap();
 
     if (displayState == 0) {	// 顯示主選單
         menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
