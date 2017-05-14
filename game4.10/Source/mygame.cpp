@@ -170,7 +170,7 @@ void CGameStateInit::OnMove() {
     }
 
     //GotoGameState(GAME_STATE_RUN);
-    GotoGameState(GAME_STATE_OVER);
+    //GotoGameState(GAME_STATE_OVER);
 }
 
 void CGameStateInit::OnShow() {
@@ -618,6 +618,10 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
         enemyQueue.back()->kill();
         lock = 0;
     }
+
+    if (nChar == '4')GotoGameState(GAME_STATE_INIT);
+
+    if (nChar == '5')GotoGameState(GAME_STATE_OVER);
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT = 0x25; // keyboard¥ª½bÀY
