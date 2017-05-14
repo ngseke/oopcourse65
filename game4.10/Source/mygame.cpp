@@ -46,6 +46,7 @@ void CGameStateInit::OnInit() {
     /////
     //
     // 載入選單元素
+    ShowInitProgress(5);
 
     for (int i = 0; i < 5; i++) {		// 5個選單
         char str[40];
@@ -54,6 +55,7 @@ void CGameStateInit::OnInit() {
         menuText.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    ShowInitProgress(10);
     menuText.push_back(new CMovingBitmap);
     menuText.back()->LoadBitmap("Bitmaps/menu/menu_t_be.bmp", RGB(0, 255, 0));	// 返回按鈕
     menuBorder.LoadBitmap("Bitmaps/menu/menu_border.bmp", RGB(0, 255, 0));
@@ -63,6 +65,7 @@ void CGameStateInit::OnInit() {
     noteArrow.LoadBitmap ("Bitmaps/menu/note/note_text_arraw.bmp", RGB(0, 255, 0));	// 說明箭頭
     noteUnselected.LoadBitmap("Bitmaps/menu/note/note_unselected.bmp", RGB(0, 255, 0));
     noteSelected.LoadBitmap("Bitmaps/menu/note/note_selected.bmp", RGB(0, 255, 0));
+    ShowInitProgress(15);
 
     for (int i = 0; i < exkeyNum; i++) {	// 說明框裡面的按鍵動畫
         char str[50];
@@ -77,6 +80,7 @@ void CGameStateInit::OnInit() {
         note.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    ShowInitProgress(20);
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
     characterArrow.LoadBitmap("Bitmaps/menu/character/character_arraw.bmp", RGB(0, 255, 0));
@@ -166,6 +170,7 @@ void CGameStateInit::OnMove() {
     }
 
     //GotoGameState(GAME_STATE_RUN);
+    GotoGameState(GAME_STATE_OVER);
 }
 
 void CGameStateInit::OnShow() {
@@ -285,26 +290,68 @@ void CGameStateOver::OnMove() {
 }
 
 void CGameStateOver::OnBeginState() {
-    counter = 30 * 5; // 5 seconds
+    counter = 1000 * 5; // 5 seconds
+    //
+    score = 9487;
+    level = 99;
+    accuracy = 99.87;
 }
 
 void CGameStateOver::OnInit() {
-    //
-    // 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
-    //     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
-    //
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
-    //
-    // 開始載入資料
-    //
-    Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
-    //
-    // 最終進度為100%
-    //
+    border.LoadBitmap("Bitmaps/gameover/gameover_border.bmp", RGB(0, 255, 0));
+    char str[80];
+
+    for (int i = 0; i < 10; i++) {		// 載入數字圖
+        sprintf(str, "Bitmaps/level/num/%d.bmp", i);
+        numBmp[i].LoadBitmap(str, RGB(0, 255, 0));
+        sprintf(str, "Bitmaps/level/num_s/%d.bmp", i);
+        numBmpSmall[i].LoadBitmap(str, RGB(0, 255, 0));
+    }
+
+    numBmpSmall[10].LoadBitmap("Bitmaps/level/num_s/per.bmp", RGB(0, 255, 0));
+    numBmpSmall[11].LoadBitmap("Bitmaps/level/num_s/dot.bmp", RGB(0, 255, 0));
+    x = (SIZE_X - border.Width()) / 2;
+    y = (SIZE_Y - border.Height()) / 2;
     ShowInitProgress(100);
 }
 
 void CGameStateOver::OnShow() {
+    border.SetTopLeft(x, y);
+    border.ShowBitmap();
+    //
+    int tempScore = score, tempLevel = level, tempAccuracy = int (accuracy * 100.0);
+    int dotPos = 0;
+
+    for (int i = 0; i < 5; i++) {		// 顯示分數數字bmp
+        numBmp[tempScore % 10].SetTopLeft(x + 230 - 20 * i, y + 42);
+        numBmp[tempScore % 10].ShowBitmap();
+        tempScore /= 10;
+    }
+
+    for (int i = 0; i < 2; i++) {		// 顯示關卡數字bmp
+        numBmpSmall[tempLevel % 10].SetTopLeft(x + 130 - 10 * i, y + 87);
+        numBmpSmall[tempLevel % 10].ShowBitmap();
+        tempLevel /= 10;
+    }
+
+    for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
+        numBmpSmall[tempAccuracy % 10].SetTopLeft(x + 155 - 10 * i - dotPos, y + 105);
+        numBmpSmall[tempAccuracy % 10].ShowBitmap();
+        tempAccuracy /= 10;
+
+        if (i == 1) {
+            dotPos = 5;
+            numBmpSmall[11].SetTopLeft(x + 155 - 10 * i - dotPos, y + 105);	// 顯示小數點
+            numBmpSmall[11].ShowBitmap();
+        }
+
+        tempLevel /= 10;
+    }
+
+    numBmpSmall[10].SetTopLeft(x + 155 + 14, y + 105);
+    numBmpSmall[10].ShowBitmap();					// 顯示百分比符號
+    //
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
     f.CreatePointFont(160, "Consolas");			// 產生 font f; 160表示16 point的字
@@ -314,11 +361,6 @@ void CGameStateOver::OnShow() {
     pDC->SetTextColor(RGB(255, 255, 0));
     char str[80];								// Demo 數字對字串的轉換
     sprintf(str, "Game Over(%d)", counter / 30);
-    pDC->TextOut(240, 210, str);
-    //	顯示分數 (not done)
-    // char scoreChr[80];
-    // sprintf(str, "SCORE: %d", score);
-    //
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
@@ -658,9 +700,6 @@ void CGameStateRun::OnShow() {
             pDC->TextOut(20, i * 14 + 60, temp);
         }
 
-        sprintf(temp, "子彈數: %d", bulletList.size());
-        pDC->SetTextColor(RGB(200, 200, 200 ));
-        pDC->TextOut(20, 2, temp);
         ////
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC

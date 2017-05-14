@@ -144,8 +144,13 @@ class CGameStateOver : public CGameState {
     protected:
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
+        CMovingBitmap		border;
+        CMovingBitmap		numBmp[10], numBmpSmall[12];		// 數字圖檔
     private:
-        int counter;	// 倒數之計數器
+        int					counter;	// 倒數之計數器
+        int					x, y;
+        int					score, level;
+        double				accuracy;
 };
 
 }

@@ -94,7 +94,7 @@ void CBossA::LoadBitmap() {
     for (int i = 0; i < 26; i++) {
         letter.push_back(new CMovingBitmap);
         char str[20];
-        sprintf(str, "Bitmaps/char1/%c.bmp", i + 97);
+        sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
         letter.back()->LoadBitmap(str, RGB(255, 255, 255));
     }
 

@@ -11,7 +11,7 @@ namespace game_framework {
 // CLevel: Enemy
 /////////////////////////////////////////////////////////////////////////////
 CLevel::CLevel() {
-    delay_counter = 200000;
+    delay_counter = 200000;	// 設定此數字讓動畫停止播放
     //delay_counter = 0;
     easeC = 0;
     level = 0;
@@ -45,23 +45,23 @@ void CLevel::LoadBitmap() {
 }
 
 void CLevel::OnMove() {
-    if (delay_counter < 30 * 10) delay_counter++;
+    if (delay_counter < 30 * 10) delay_counter++;	// 動畫播放期間delay_counter會持續增加
 
-    if (delay_counter < 30 * 3) {
+    if (delay_counter < 30 * 3) {					// 滑入期間
         if (y < centerPosY) {
             easeC += .60;
             y += 20 - int(easeC)  ;
         }
         else  easeC = 0;
     }
-    else if (delay_counter < 30 * 5) {
+    else if (delay_counter < 30 * 5) {				// 滑出期間
         if (y < btmPosY) {
             easeC += .7;
             y += 0 + int(easeC);
         }
         else  easeC = 0;
     }
-    else if (delay_counter < 30 * 10) {
+    else if (delay_counter < 30 * 10) {				// 停止播放
         //delay_counter = 0;
         easeC = 0;
         y = topPosY;
@@ -75,13 +75,13 @@ void CLevel::OnShow() {
     border.ShowBitmap();
     int tempScore = score, tempLevel = level;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {		// 顯示分數數字bmp
         numBmpSmall[tempScore % 10].SetTopLeft(x + 127 - 10 * i, y + 76);
         numBmpSmall[tempScore % 10].ShowBitmap();
         tempScore /= 10;
     }
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {		// 顯示關卡數字bmp
         numBmp[tempLevel % 10].SetTopLeft(x + 138 - 20 * i, y + 10 );
         numBmp[tempLevel % 10].ShowBitmap();
         tempLevel /=  10;
