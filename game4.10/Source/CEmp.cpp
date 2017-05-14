@@ -145,5 +145,8 @@ bool CEmp::HitRectangle(int tx1, int ty1, int tx2, int ty2) {// 80 160 320 480 4
     }
     else return 0;
 }
+void CEmp::SetEmpTimes(int num) {
+    this->empTimes =  num;
+}
 
 }

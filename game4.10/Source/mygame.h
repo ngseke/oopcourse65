@@ -8,6 +8,7 @@
 #include "CBossA.h"
 #include "CBossB.h"
 #include "CEmp.h"
+#include "CLevel.h"
 
 
 namespace game_framework {
@@ -36,6 +37,7 @@ class CGameStateInit : public CGameState {
         void OnBeginState();							// 設定每次重玩所需的變數
         void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
         void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnMove();
     protected:
         void OnShow();									// 顯示這個狀態的遊戲畫面
@@ -120,12 +122,13 @@ class CGameStateRun : public CGameState {
 
         int				levelEnemyNum[10] = {  5,  6,  6,  7,  8,  8,  8,  8,  9, 10 };		// 該關卡最大的敵人數
         int				levelBossANum[10] = {  0,  0,  1,  1,  1,  2,  1,  1,  2,  2 };
-        int				levelBossBNum[10] = {  0,  0,  0,  0,  0,  0,  1,  2,  2,  3 };
+        int				levelBossBNum[10] = {  01,  0,  0,  0,  0,  0,  1,  2,  2,  3 };
 
         int				lives;
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
         char			keyFlag;
+        CLevel			levelAni;
 };
 
 /////////////////////////////////////////////////////////////////////////////

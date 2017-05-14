@@ -266,6 +266,7 @@
     <ClCompile Include="Source\CDict.cpp" />
     <ClCompile Include="Source\CEmp.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
+    <ClCompile Include="Source\CLevel.cpp" />
     <ClCompile Include="Source\CMap.cpp" />
     <ClCompile Include="Source\CMe.cpp" />
     <ClCompile Include="Source\game.cpp">
@@ -319,6 +320,7 @@
     <ClInclude Include="Source\CDict.h" />
     <ClInclude Include="Source\CEmp.h" />
     <ClInclude Include="Source\CEnemy.h" />
+    <ClInclude Include="Source\CLevel.h" />
     <ClInclude Include="Source\CMap.h" />
     <ClInclude Include="Source\CMe.h" />
     <ClInclude Include="Source\game.h" />

@@ -151,6 +151,9 @@
     <ClCompile Include="Source\CCharacter.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CLevel.cpp">
+      <Filter>MyGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -208,6 +211,9 @@
       <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Source\CCharacter.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CLevel.h">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
