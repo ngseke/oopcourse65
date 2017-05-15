@@ -1,3 +1,4 @@
+#pragma once
 #include "CCharacter.h"
 #include "CMe.h"
 #include "CDict.h"
@@ -28,7 +29,13 @@ enum AUDIO_ID {				// 定義各種音效的編號
 // 這個class為遊戲的遊戲開頭畫面物件
 // 每個Member function的Implementation都要弄懂
 /////////////////////////////////////////////////////////////////////////////
-
+class PublicData {
+    public:
+        static int			score;
+        static int			level;
+        static double		accuracy;
+        static CMe			me;
+};
 
 class CGameStateInit : public CGameState {
     public:
@@ -64,7 +71,7 @@ class CGameStateInit : public CGameState {
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
-        CMe						me;
+        //CMe						me;
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder;
         CMovingBitmap			about;
@@ -91,6 +98,10 @@ class CGameStateRun : public CGameState {
         void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
         void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+
+        //
+
+        int GetScore;
     protected:
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
@@ -102,7 +113,7 @@ class CGameStateRun : public CGameState {
         bool			showDebug = false;								// 是否顯示debug資訊
         CDict			dictionary;										// 所有怪物共用的字典
         CMap			map;											// 背景圖
-        CMe				me;												// 主角
+        //CMe				me;												// 主角
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
         vector<CBullet*>bulletList;										// 儲存飛行中的子彈的Vector
         vector<CBomb*>  bombList;

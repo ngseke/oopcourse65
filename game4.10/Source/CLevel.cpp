@@ -26,7 +26,7 @@ void CLevel::Play(int level, int score) {
 }
 void CLevel::LoadBitmap() {
     char str[50];
-    border.LoadBitmap("Bitmaps/level/level_border_zh.bmp", RGB(0, 255, 0));
+    border.LoadBitmap("Bitmaps/level/level_border.bmp", RGB(0, 255, 0));
     bg.LoadBitmap("Bitmaps/level/level_bg.bmp", RGB(0, 255, 0));
 
     for (int i = 0; i < 10; i++) {		// ¸ü¤J¼Æ¦r¹Ï

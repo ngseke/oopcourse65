@@ -22,24 +22,6 @@ CMe::CMe(): CHARACTER_POS_Y(320) {
 
 void CMe::LoadBitmap() {
     LoadCharacter();
-    /*
-    int character = 2;
-
-
-    if (character == 0) {
-        animation.AddBitmap("Bitmaps/me_ironman.bmp", RGB(255, 255, 255));
-        animation.AddBitmap("Bitmaps/me_ironman1.bmp", RGB(255, 255, 255));
-        animation.SetTopLeft(x, y);
-    }
-    else if (character == 1) {
-        animation.AddBitmap("Bitmaps/me_hulk.bmp", RGB(255, 255, 255));
-        animation.SetTopLeft(x - 4, y - 2);
-    }
-    else if (character == 2) {
-        animation.AddBitmap("Bitmaps/me_captian_american.bmp", RGB(0, 255, 0));
-        animation.SetTopLeft(x, y);
-    }
-    */
 }
 
 void CMe::LoadCharacter() {
@@ -106,7 +88,7 @@ void CMe::OnShow() {
         ////
     }
 }
-void CMe::addSelectedChar(int num) {
+void CMe::AddSelectedChar(int num) {
     int result = selectedChar + num;
 
     if (result >= 0 && result < int(character.size()) ) selectedChar = result;
@@ -132,7 +114,7 @@ int CMe::GetY2() {
     return character[selectedChar]->GetY2();
 }
 
-void CMe::setState(int state) {
+void CMe::SetState(int state) {
     currState = state;
 }
 

@@ -19,8 +19,8 @@ class CMe {
         int  GetY2();					// ME右下角 y 座標
         void SetXY(int nx, int ny);		// 設定擦子左上角座標
         void LoadCharacter();			// 載入角色
-        void addSelectedChar(int);		// 選擇角色時移動游標
-        void setState(int);				// 設定當前顯示的狀態
+        void AddSelectedChar(int);		// 選擇角色時移動游標
+        void SetState(int);				// 設定當前顯示的狀
 
     protected:
         const int CHARACTER_POS_Y;

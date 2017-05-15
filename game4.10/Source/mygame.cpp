@@ -28,6 +28,11 @@ namespace game_framework {
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
 
+int PublicData::score = 0;
+int PublicData::level = 0;
+double PublicData::accuracy = 0.0;
+CMe	PublicData::me;
+
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
       MENU_ITEM_NUM(5), CHARACTER_POS_Y(320) {
@@ -38,7 +43,7 @@ void CGameStateInit::OnInit() {
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
     currSelectItem = displayState = 0;
     noteDisplayState = 0;
-    me.LoadBitmap();
+    PublicData::me.LoadBitmap();
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
@@ -143,8 +148,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     else if (displayState == 2) { // [角色選擇]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
         else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) {
-            if		(nChar == KEY_LEFT)   me.addSelectedChar(-1);
-            else if (nChar == KEY_RIGHT)  me.addSelectedChar(1);
+            if		(nChar == KEY_LEFT)   PublicData::me.AddSelectedChar(-1);
+            else if (nChar == KEY_RIGHT)  PublicData::me.AddSelectedChar(1);
         }
     }
     else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
@@ -162,16 +167,13 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point) {
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
-    me.OnMove();
+    PublicData::me.OnMove();
 
     if (text1_count < 400)text1_count++;
 
     if (text1_count > 5 * 30) {
         text1_y += int((text1_count - 5 * 30) * 1.1);
     }
-
-    //GotoGameState(GAME_STATE_RUN);
-    //GotoGameState(GAME_STATE_OVER);
 }
 
 void CGameStateInit::OnShow() {
@@ -254,7 +256,8 @@ void CGameStateInit::OnShow() {
         characterBorder.ShowBitmap();
         characterArrow.SetTopLeft((SIZE_X - characterArrow.Width()) / 2, CHARACTER_POS_Y + characterBorder.Height() / 2);
         characterArrow.ShowBitmap();
-        me.OnShow();
+        PublicData::me.SetState(1);
+        PublicData::me.OnShow();
     }
     else if (displayState == 4) {      // 顯示關於頁面
         // 關於框
@@ -299,14 +302,14 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 5; // 5 seconds
     //
-    score = 9487;
-    level = 99;
-    accuracy = 99.87;
+    score = PublicData::score;
+    level = PublicData::level;
+    accuracy = PublicData::accuracy;
 }
 
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
-    border.LoadBitmap("Bitmaps/gameover/gameover_border_zh.bmp", RGB(0, 255, 0));
+    border.LoadBitmap("Bitmaps/gameover/gameover_border.bmp", RGB(0, 255, 0));
     char str[80];
     ShowInitProgress(80);
 
@@ -407,7 +410,7 @@ void CGameStateRun::OnBeginState() {
     accuracy = 0;
     emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
     emp.SetEmpTimes(3);
-    me.setState(0);
+    PublicData::me.SetState(0);
 }
 
 void CGameStateRun::OnMove() {						// 移動遊戲元素
@@ -417,6 +420,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //SetCursor(AfxGetApp()->LoadCursor(IDC_GAMECURSOR));
     //
     ////////
+    PublicData::score = score.GetInteger();
+    PublicData::level = currLevel;
+    PublicData::accuracy = accuracy;
     callEnemyCounter--;	//每隻怪物 生成間隔 之 counter
     callBossACounter--;
     callBossBCounter--;
@@ -425,7 +431,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 7, &enemyQueue, &bombList, me.GetX1(), me.GetY1()) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 7, &enemyQueue, &bombList, PublicData::me.GetX1(), PublicData::me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
         currEnemyNum++;
     }
@@ -451,7 +457,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //===判斷Me是否碰到Enemy===
 
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {
-        if (enemyQueue[i]->IsAlive() && enemyQueue[i]->HitMe(&me)) {
+        if (enemyQueue[i]->IsAlive() && enemyQueue[i]->HitMe(&PublicData::me)) {
             lives--;
 
             if (lives <= 0) {
@@ -515,23 +521,13 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     map.OnMove();
     emp.OnMove();
-    me.OnMove();
+    PublicData::me.OnMove();
     levelAni.OnMove();
 }
 
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
-    //
-    // 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
-    //     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
-    //
     srand((unsigned)time(NULL));
     ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
-    //
-    // 開始載入資料
-    //
-    //
-    // 完成部分Loading動作，提高進度
-    //
     ShowInitProgress(50);
     //
     // 繼續載入其他資料
@@ -540,7 +536,6 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     score.LoadBitmap();
     map.LoadBitmap();
     emp.LoadBitmap();
-    me.LoadBitmap();
     levelAni.LoadBitmap();
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
@@ -660,7 +655,7 @@ void CGameStateRun::OnShow() {
     //help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     emp.OnShow();
-    me.OnShow();
+    PublicData::me.OnShow();
     levelAni.OnShow();
 
     /////////
