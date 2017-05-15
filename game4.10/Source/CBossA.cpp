@@ -36,7 +36,7 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
 }
 
 void CBossA::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 3, 0, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2, SIZE_Y));
+    enemyQueue->push_back(new CEnemy(x, y, 2, false, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2, SIZE_Y));
     enemyQueue->back()->LoadBitmap();
     enemyQueue->back()->SetIsAlive(true);
 }

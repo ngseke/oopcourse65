@@ -148,7 +148,7 @@ void CEnemy::OnShow() {
             if (currWordLeng != 0) textCursor.ShowBitmap();
 
             for (int i = 0; i < length; i++) {
-                letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 3);
+                letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 4);
                 letter[vocab[i] - 97]->ShowBitmap();
             }
 
