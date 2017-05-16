@@ -412,27 +412,47 @@ CGameStateRun::CGameStateRun(CGame* g)
     callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
     callBossACounter = maxCallBossACounter = 80;
     callBossBCounter = maxCallBossBCounter = 80;
+    //
+    callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 1;
 }
 CGameStateRun::~CGameStateRun() {
-    //delete[] ball;
-    //delete[] &enemyQueue;
+    delete[] &enemyQueue;
+    delete[] &bulletList;
+    delete[] &bombList;
 }
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
-    help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
     CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
-    score.SetInteger(0);			//設定SCORE為0
+    score.SetInteger(0);								// 設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);
-    currEnemyNum = currBossANum = currBossBNum = 0;
-    lock = false;
-    currLevel = 0;
-    enemyQueue.clear();
+    currEnemyNum = currBossANum = currBossBNum = 0;		// 初始化各關敵人已召喚數量
+    lock = false;										// 取消鎖定
+    currLevel = 0;										// 初始化關卡
+    enemyQueue.clear();									// 清空EQ
     lives = 3;
     totalKeyDownCount = totalCorrectKeyCount = 0;
     accuracy = 0;
     emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
     emp.SetEmpTimes(3);
     PublicData::me.SetState(0);
+}
+void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
+    srand((unsigned)time(NULL));
+    ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
+    //
+    // 繼續載入其他資料
+    //
+    help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));			// 載入說明的圖形
+    score.LoadBitmap();
+    map.LoadBitmap();
+    emp.LoadBitmap();
+    levelAni.LoadBitmap();
+    CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
+    CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
+    ShowInitProgress(50);
+    //
+    // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
+    //
 }
 void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
@@ -549,24 +569,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     PublicData::me.OnMove();
     levelAni.OnMove();
 }
-void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
-    srand((unsigned)time(NULL));
-    ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
-    //
-    // 繼續載入其他資料
-    //
-    help.LoadBitmap(IDB_HELP, RGB(255, 255, 255));			// 載入說明的圖形
-    score.LoadBitmap();
-    map.LoadBitmap();
-    emp.LoadBitmap();
-    levelAni.LoadBitmap();
-    CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
-    CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
-    ShowInitProgress(50);
-    //
-    // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
-    //
-}
+
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT = 0x25;	// keyboard左箭頭
     const char KEY_UP = 0x26;	// keyboard上箭頭
@@ -606,12 +609,12 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
                         targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
                         totalCorrectKeyCount++;							// 正確按鍵數+1
-                        CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
+                        CAudio::Instance()->Play(AUDIO_SHOT, false);	// 撥放 射擊音效
 
                         if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                             targetEnemy->kill();									// 成功殺害怪物
                             lock = false;
-                            score.Add(targetEnemy->GetVocabLeng());						// 分數+= 怪物長度
+                            score.Add(targetEnemy->GetVocabLeng());					// 分數+= 怪物長度
                         }
 
                         break;
@@ -635,7 +638,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     key = NULL;
 
     // 數字鍵作為debug按鈕
-    if (nChar == '1')if (showDebug)showDebug = 1; // 按1 開關debug
+    if (nChar == '1')if (!showDebug)showDebug = 1; // 按1 開關debug
         else showDebug = 0;
 
     if (nChar == '2' && enemyQueue.size() > 0) {  // 按2 清除EQ最後一隻敵人
