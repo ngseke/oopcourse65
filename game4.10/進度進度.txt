@@ -5,6 +5,5 @@
   character:1,score:100,level:9,accuracy:100.00,date:20170101235959;
   character:1,score:100,level:9,accuracy:100.00,date:20170101235959;
 
-
 3.遊戲到差不多第13關時會當機。
 
