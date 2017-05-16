@@ -87,6 +87,13 @@ void CMe::OnShow() {
         CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
         ////
     }
+
+    if (currState == 2) {	// 遊戲結束顯示
+        x = (SIZE_X - character[selectedChar]->GetWidth()) / 2 + 200;
+        y =  400;
+        character[selectedChar]->SetXY(x, y);
+        character[selectedChar]->OnShow();
+    }
 }
 void CMe::AddSelectedChar(int num) {
     int result = selectedChar + num;

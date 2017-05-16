@@ -174,6 +174,8 @@ void CGameStateInit::OnMove() {
     if (text1_count > 5 * 30) {
         text1_y += int((text1_count - 5 * 30) * 1.1);
     }
+
+    //GotoGameState(GAME_STATE_OVER);
 }
 
 void CGameStateInit::OnShow() {
@@ -291,6 +293,10 @@ CGameStateOver::CGameStateOver(CGame* g)
 void CGameStateOver::OnMove() {
     if (counter < 0)
         GotoGameState(GAME_STATE_INIT);
+
+    if (barCounter < 200 && barCounter < accuracy) {
+        barCounter +=  2;
+    }
 }
 void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ENTER = 0xD;
@@ -301,10 +307,14 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 }
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 5; // 5 seconds
+    barCounter = 0;
     //
     score = PublicData::score;
     level = PublicData::level;
     accuracy = PublicData::accuracy;
+    accuracy = 87;
+    //
+    PublicData::me.SetState(2);
 }
 
 void CGameStateOver::OnInit() {
@@ -320,6 +330,8 @@ void CGameStateOver::OnInit() {
         numBmpSmall[i].LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    bar[0].LoadBitmap("Bitmaps/gameover/bar_0.bmp", RGB(0, 255, 0));
+    bar[1].LoadBitmap("Bitmaps/gameover/bar_1.bmp", RGB(0, 255, 0));
     numBmpSmall[10].LoadBitmap("Bitmaps/level/num_s/per.bmp", RGB(0, 255, 0));
     numBmpSmall[11].LoadBitmap("Bitmaps/level/num_s/dot.bmp", RGB(0, 255, 0));
     x = (SIZE_X - border.Width()) / 2;
@@ -327,14 +339,15 @@ void CGameStateOver::OnInit() {
     ShowInitProgress(100);
 }
 
-void CGameStateOver::OnShow() {
+void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
     border.SetTopLeft(x, y);
     border.ShowBitmap();
     //
     int tempScore = score, tempLevel = level, tempAccuracy = int (accuracy * 100.0);
     int dotPos = 0;
     int scorePosX = 230, levelPosX = 130, accPosX = 155, // 定義各數字位置偏移量
-        scorePosY =  45, levelPosY =  90, accPosY = 108 ;
+        scorePosY =  45, levelPosY =  90, accPosY = 108,
+        barPosX = 120, barPosY = 122;
 
     for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
         numBmp[tempScore % 10].SetTopLeft(x + scorePosX - 20 * i, y + scorePosY);
@@ -348,40 +361,51 @@ void CGameStateOver::OnShow() {
         tempLevel /= 10;
     }
 
-    for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
-        numBmpSmall[tempAccuracy % 10].SetTopLeft(x + accPosX - 10 * i - dotPos, y + accPosY);
-        numBmpSmall[tempAccuracy % 10].ShowBitmap();
-        tempAccuracy /= 10;
+    if (accuracy != 100) {								//若正確率非100%
+        for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
+            numBmpSmall[tempAccuracy % 10].SetTopLeft(x + accPosX - 10 * i - dotPos, y + accPosY);
+            numBmpSmall[tempAccuracy % 10].ShowBitmap();
+            tempAccuracy /= 10;
 
-        if (i == 1) {								// 顯示小數點
-            dotPos = 5;
-            numBmpSmall[11].SetTopLeft(x + accPosX - 10 * i - dotPos, y + accPosY);
-            numBmpSmall[11].ShowBitmap();
+            if (i == 1) {								// 顯示小數點
+                dotPos = 5;
+                numBmpSmall[11].SetTopLeft(x + accPosX - 10 * i - dotPos, y + accPosY);
+                numBmpSmall[11].ShowBitmap();
+            }
+
+            tempLevel /= 10;
         }
 
-        tempLevel /= 10;
+        numBmpSmall[10].SetTopLeft(x + accPosX + 14, y + accPosY);
+        numBmpSmall[10].ShowBitmap();					// 顯示百分比符號
+    }
+    else {												// 針對100%顯示
+        numBmpSmall[1].SetTopLeft(x + accPosX - 35, y + accPosY);
+        numBmpSmall[1].ShowBitmap();
+        numBmpSmall[0].SetTopLeft(x + accPosX - 35 + 10, y + accPosY);
+        numBmpSmall[0].ShowBitmap();
+        numBmpSmall[0].SetTopLeft(x + accPosX - 35 + 10 * 2, y + accPosY);
+        numBmpSmall[0].ShowBitmap();
+        numBmpSmall[10].SetTopLeft(x + accPosX - 35 + 10 * 4, y + accPosY);
+        numBmpSmall[10].ShowBitmap();					// 顯示百分比符號
     }
 
-    numBmpSmall[10].SetTopLeft(x + accPosX + 14, y + accPosY);
-    numBmpSmall[10].ShowBitmap();					// 顯示百分比符號
-    //
-    CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
-    CFont f, *fp;
-    f.CreatePointFont(100, "新細明體");			// 產生 font f; 160表示16 point的字
-    fp = pDC->SelectObject(&f);					// 選用 font f
-    pDC->SetBkColor(RGB(0, 0, 0));
-    pDC->SetBkMode(TRANSPARENT);
-    pDC->SetTextColor(RGB(255, 255, 0));
-    char str[80];								// Demo 數字對字串的轉換
-    sprintf(str, "Game Over(%d)", counter / 30);
-    pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-    CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+    for (int i = 0; i < 100; i++) {						// 顯示百分比的進度條
+        bar[0].SetTopLeft(x + barPosX + i, y + barPosY);
+        bar[0].ShowBitmap();
+
+        if (i < barCounter) {
+            bar[1].SetTopLeft(x + barPosX + i, y + barPosY);
+            bar[1].ShowBitmap();
+        }
+    }
+
+    PublicData::me.OnShow();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
-
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), LEVEL(10) {
     srand((unsigned)time(NULL));	// 亂數種子
@@ -389,12 +413,10 @@ CGameStateRun::CGameStateRun(CGame* g)
     callBossACounter = maxCallBossACounter = 80;
     callBossBCounter = maxCallBossBCounter = 80;
 }
-
 CGameStateRun::~CGameStateRun() {
     //delete[] ball;
     //delete[] &enemyQueue;
 }
-
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
     help.SetTopLeft(0, SIZE_Y - help.Height());			// 設定說明圖的起始座標
@@ -412,7 +434,6 @@ void CGameStateRun::OnBeginState() {
     emp.SetEmpTimes(3);
     PublicData::me.SetState(0);
 }
-
 void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
     // 如果希望修改cursor的樣式，則將下面程式的commment取消即可
@@ -420,6 +441,10 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //SetCursor(AfxGetApp()->LoadCursor(IDC_GAMECURSOR));
     //
     ////////
+    if (totalKeyDownCount != 0)
+        accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
+    else accuracy = 100;
+
     PublicData::score = score.GetInteger();
     PublicData::level = currLevel;
     PublicData::accuracy = accuracy;
@@ -524,11 +549,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     PublicData::me.OnMove();
     levelAni.OnMove();
 }
-
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     srand((unsigned)time(NULL));
     ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
-    ShowInitProgress(50);
     //
     // 繼續載入其他資料
     //
@@ -539,6 +562,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     levelAni.LoadBitmap();
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
+    ShowInitProgress(50);
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
@@ -598,28 +622,10 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
 
-        if (totalKeyDownCount != 0)
-            accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
-        else
-            accuracy = 100;
-
         if (nChar == 13) {
             emp.CallEmp();
         }
     }
-
-    if (nChar == '1')showDebug = 1;	// 按1 顯示debug
-
-    if (nChar == '2')showDebug = 0;
-
-    if (nChar == '3' && enemyQueue.size() > 0) {
-        enemyQueue.back()->kill();
-        lock = 0;
-    }
-
-    if (nChar == '4')GotoGameState(GAME_STATE_INIT);
-
-    if (nChar == '5')GotoGameState(GAME_STATE_OVER);
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_LEFT = 0x25; // keyboard左箭頭
@@ -627,8 +633,27 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
     key = NULL;
-}
 
+    // 數字鍵作為debug按鈕
+    if (nChar == '1')if (showDebug)showDebug = 1; // 按1 開關debug
+        else showDebug = 0;
+
+    if (nChar == '2' && enemyQueue.size() > 0) {  // 按2 清除EQ最後一隻敵人
+        enemyQueue.back()->kill();
+        lock = 0;
+    }
+
+    if (nChar == '3' && enemyQueue.size() > 0) {  // 按3 清除EQ中所有敵人
+        for (unsigned int i = 0; i < enemyQueue.size(); i++)
+            enemyQueue[i]->kill();
+
+        lock = 0;
+    }
+
+    if (nChar == '4')GotoGameState(GAME_STATE_INIT);	// 按4 GOTO 起始畫面
+
+    if (nChar == '5')GotoGameState(GAME_STATE_OVER);    // 按5 GOTO 遊戲結束畫面
+}
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) { // 處理滑鼠的動作
 }
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
@@ -652,7 +677,6 @@ void CGameStateRun::OnShow() {
     //
     //
     map.OnShow();						// 貼上背景網子
-    //help.ShowBitmap();					// 貼上說明圖
     score.ShowBitmap();					// 貼上分數
     emp.OnShow();
     PublicData::me.OnShow();
