@@ -407,18 +407,18 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 CGameStateRun::CGameStateRun(CGame* g)
-    : CGameState(g), LEVEL(10) {
+    : CGameState(g), LEVEL(20) {
     srand((unsigned)time(NULL));	// 亂數種子
     callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
     callBossACounter = maxCallBossACounter = 80;
     callBossBCounter = maxCallBossBCounter = 80;
     //
-    callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 1;
+    callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
 }
 CGameStateRun::~CGameStateRun() {
-    delete[] &enemyQueue;
-    delete[] &bulletList;
-    delete[] &bombList;
+    delete &enemyQueue;
+    delete &bulletList;
+    delete &bombList;
 }
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
@@ -435,6 +435,7 @@ void CGameStateRun::OnBeginState() {
     emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
     emp.SetEmpTimes(3);
     PublicData::me.SetState(0);
+    totalEnemyNum = 0;
 }
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     srand((unsigned)time(NULL));
@@ -479,6 +480,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 7, &enemyQueue, &bombList, PublicData::me.GetX1(), PublicData::me.GetY1()) );
         enemyQueue.back()->LoadBitmap();
         currEnemyNum++;
+        totalEnemyNum++;
     }
 
     //==BossA==================================
@@ -488,6 +490,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
+        totalEnemyNum++;
     }
 
     //==BossB==================================
@@ -497,6 +500,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
+        totalEnemyNum++;
     }
 
     //===判斷Me是否碰到Enemy===
@@ -526,6 +530,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         //若Enemy IsAlive=0, 則從vector中移除
         if (!enemyQueue[i]->IsAlive() && enemyQueue[i]->IsBombed()) {
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
+            delete enemyQueue[i];
             enemyQueue.erase(iterenemyQueue + i);
             break;
         }
@@ -556,7 +561,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
             && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
         // 換 關卡
-        currLevel++;
+        //currLevel++;
+        if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
+
         currEnemyNum = currBossANum = currBossBNum = 0;
         callEnemyCounter = maxCallEnemyCounter;
         callBossACounter = maxCallBossACounter;
@@ -590,6 +597,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                             targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
                             bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                             targetEnemy->kill();									// 成功殺害怪物
+                            targetEnemy = NULL;
                             score.Add(targetEnemy->GetVocabLeng());				// 分數+= 怪物長度
                             break;
                         }
@@ -613,6 +621,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
                         if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                             targetEnemy->kill();									// 成功殺害怪物
+                            targetEnemy = NULL;
                             lock = false;
                             score.Add(targetEnemy->GetVocabLeng());					// 分數+= 怪物長度
                         }
@@ -720,7 +729,7 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[100];
-        sprintf(temp, "怪物數量: %d, 命: %d, 本關卡: %d, LOCK: %d", enemyQueue.size(), lives, currLevel, int(lock));
+        sprintf(temp, "怪物數量: %d(capacity: %d), 命: %d, 本關卡: %d, LOCK: %d, totalEnemyNum: %d", enemyQueue.size(), enemyQueue.capacity(), lives, currLevel, bool(lock), totalEnemyNum);
         pDC->SetTextColor(RGB(200, 0, 0));
         pDC->TextOut(20, 40, temp);
         //
