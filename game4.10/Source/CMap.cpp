@@ -9,7 +9,7 @@
 
 namespace game_framework {
 CMap::CMap(): X(0), Y(0), MW(27), MH(27) {
-    delay = delay_counter = 0;
+    delay = delay_counter = index = 0;
     dx = dy = 0;
 }
 void CMap::LoadBitmap() {

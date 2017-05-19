@@ -75,14 +75,12 @@ void CEnemy::LoadBitmap() {
 
     for (int i = 0; i < 26; i++) {
         letter.push_back(new CMovingBitmap);
-        char str[20];
         sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
         letter.back()->LoadBitmap(str, RGB(255, 255, 255));
         //letter[i]->LoadBitmap(str, RGB(255, 255, 255));
     }
 
     for (int i = 0; i < 22; i++) {	// ¸ü¤J°Êµe
-        char str[20];
         sprintf(str, "Bitmaps/target/target_s%d.bmp", i + 1);
         target.AddBitmap(str, RGB(0, 255, 0));
     }
