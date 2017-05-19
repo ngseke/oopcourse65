@@ -7,6 +7,7 @@ namespace game_framework {
 class CEnemy {
     public:
         CEnemy();
+        ~CEnemy();
         CEnemy(int x, int y, int delay, bool alive, CDict* dict, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY);
         bool IsAlive();											// 是否活著
         virtual void LoadBitmap();								// 載入圖形
@@ -36,7 +37,8 @@ class CEnemy {
         CMovingBitmap bmp_center;						// 圓心的圖
         CMovingBitmap textCursor;						// 文字光標 圖
         CMovingBitmap talkBoxL, talkBoxC, talkBoxR;		// 優化過的對話框 圖
-        vector<CMovingBitmap*> letter;					// 文字圖檔
+        //vector<CMovingBitmap*> letter;					// 文字圖檔
+        CMovingBitmap letter[26];
         //          <  =  = ... =  >
         // talkBox: L  C  C ... C  R
         // L(Left), C(Center), R(Right)

@@ -416,9 +416,11 @@ CGameStateRun::CGameStateRun(CGame* g)
     callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
 }
 CGameStateRun::~CGameStateRun() {
-    delete &enemyQueue;
-    delete &bulletList;
-    delete &bombList;
+    for (CEnemy* ce : enemyQueue) delete ce;
+
+    for (CBullet* ce : bulletList) delete ce;
+
+    for (CBomb* ce : bombList) delete ce;
 }
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
@@ -516,9 +518,13 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     // ===Enemy===
+    bool enemyAllDead = true;
 
-    for (unsigned int i = 0; i < enemyQueue.size(); i++)
+    for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         if (enemyQueue[i]->IsAlive())	enemyQueue[i]->OnMove();
+
+        if (enemyQueue[i]->IsAlive()) enemyAllDead = false;
+    }
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         if (enemyQueue[i]->GetX() > SIZE_X + 40 || enemyQueue[i]->GetX() < -40 || enemyQueue[i]->GetY() > SIZE_Y + 40) {
@@ -537,31 +543,47 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     ////===bullet===
+    bool bulletAllDead = true;
 
-    for (unsigned int i = 0; i < bulletList.size(); i++)
+    for (unsigned int i = 0; i < bulletList.size(); i++) {
         bulletList[i]->OnMove();	// 移動bullet
 
+        if (bulletList[i]->IsAlive()) bulletAllDead = false;
+    }
+
+    if (bulletAllDead) {
+        for (CBullet* ce : bulletList) delete ce;
+
+        bulletList.clear();
+    }
+
+    /*
     for (int i = bulletList.size() - 1; i >= 0; i--) {
         //若bullet IsAlive=0, 則從vector中移除
         if (!bulletList[i]->IsAlive())	bulletList.erase(bulletList.begin());
     }
-
+    */
     ////===bomb===
+    bool bombAllDead = true;
 
     for (unsigned int i = 0; i < bombList.size(); i++) {
         bombList[i]->OnMove();
+
+        if (bombList[i]->IsAlive()) bombAllDead = false;
     }
 
-    for (int i = bombList.size() - 1; i >= 0; i--) {
-        //若 bomb IsAlive=0, 則從vector中移除
-        if (!bombList[i]->IsAlive())	bombList.erase(bombList.begin());
+    if (bombAllDead) {
+        for (CBomb* ce : bombList) delete ce;
+
+        bombList.clear();
     }
 
     ////===Change Level===
     if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
             && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
         // 換 關卡
-        //currLevel++;
+        currLevel++;
+
         if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
 
         currEnemyNum = currBossANum = currBossBNum = 0;
@@ -571,6 +593,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         levelAni.Play(currLevel, score.GetInteger());
     }
 
+    //
     map.OnMove();
     emp.OnMove();
     PublicData::me.OnMove();
@@ -597,8 +620,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                             targetEnemy = enemyQueue[i];					// targetEnemy為指標->正在攻擊的敵人
                             bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                             targetEnemy->kill();									// 成功殺害怪物
-                            targetEnemy = NULL;
                             score.Add(targetEnemy->GetVocabLeng());				// 分數+= 怪物長度
+                            targetEnemy = NULL;
                             break;
                         }
                         else {
@@ -621,9 +644,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
                         if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                             targetEnemy->kill();									// 成功殺害怪物
+                            score.Add(targetEnemy->GetVocabLeng());					// 分數+= 怪物長度
                             targetEnemy = NULL;
                             lock = false;
-                            score.Add(targetEnemy->GetVocabLeng());					// 分數+= 怪物長度
                         }
 
                         break;
@@ -708,16 +731,6 @@ void CGameStateRun::OnShow() {
     if (lock && targetEnemy->IsAlive())
         targetEnemy->OnShow();	// 加上這一行 讓被鎖定的怪物再次show, 以防被其他怪物蓋住
 
-    //
-    //  貼上左上及右下角落的圖
-    //
-    /*
-    corner.SetTopLeft(0, 0);
-    corner.ShowBitmap();
-    corner.SetTopLeft(SIZE_X - corner.Width(), SIZE_Y - corner.Height());
-    corner.ShowBitmap();
-    */
-    //
     //
 
     if (showDebug) {		// 顯示debug資訊

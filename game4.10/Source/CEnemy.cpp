@@ -15,8 +15,11 @@ namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // CEnemy: Enemy
 /////////////////////////////////////////////////////////////////////////////
-
-CEnemy::CEnemy() {}
+CEnemy::CEnemy() {
+}
+CEnemy::~CEnemy() {
+    //for (CEnemy* ce : enemyQueue) delete ce;
+}
 CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
     is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
@@ -74,10 +77,10 @@ void CEnemy::LoadBitmap() {
     /////
 
     for (int i = 0; i < 26; i++) {
-        letter.push_back(new CMovingBitmap);
+        //letter.push_back(new CMovingBitmap);
         sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
-        letter.back()->LoadBitmap(str, RGB(255, 255, 255));
-        //letter[i]->LoadBitmap(str, RGB(255, 255, 255));
+        //letter.back()->LoadBitmap(str, RGB(255, 255, 255));
+        letter[i].LoadBitmap(str, RGB(255, 255, 255));
     }
 
     for (int i = 0; i < 22; i++) {	// 載入動畫
@@ -146,8 +149,8 @@ void CEnemy::OnShow() {
             if (currWordLeng != 0) textCursor.ShowBitmap();
 
             for (int i = 0; i < length; i++) {
-                letter[vocab[i] - 97]->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0]->Width() * i, y + dy + 4);
-                letter[vocab[i] - 97]->ShowBitmap();
+                letter[vocab[i] - 97].SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0].Width() * i, y + dy + 4);
+                letter[vocab[i] - 97].ShowBitmap();
             }
 
             for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
