@@ -12,7 +12,7 @@
 
 namespace game_framework {
 CBossA::CBossA() {}
-CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList) {	//	初始值都在此處設定
+CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, vector<CMovingBitmap*>* letter) {	//	初始值都在此處設定
     this->enemyQueue = enemyQueue;
     this->bombList = bombList;
     is_alive = is_bombed = false;
@@ -31,12 +31,13 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     callEnemyCounter = maxCallEnemyCounter = 30 * 7;		// 發動召喚小怪技能的間隔
     endX = SIZE_X / 2;
     endY = SIZE_Y;
+    this->letter = letter;
     //
     SetVocab();
 }
 
 void CBossA::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 2, false, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2, SIZE_Y));
+    enemyQueue->push_back(new CEnemy(x, y, 2, false, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2, SIZE_Y, letter));
     enemyQueue->back()->LoadBitmap();
     enemyQueue->back()->SetIsAlive(true);
 }
@@ -90,13 +91,6 @@ void CBossA::LoadBitmap() {
     talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
     /////
     char* filename[2] = { "Bitmaps/target_m1.bmp", "Bitmaps/target_m2.bmp" };
-
-    for (int i = 0; i < 26; i++) {
-        //letter.push_back(new CMovingBitmap);
-        sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
-        //letter.back()->LoadBitmap(str, RGB(255, 255, 255));
-        letter[i].LoadBitmap(str, RGB(255, 255, 255));
-    }
 
     for (int i = 0; i < 2; i++)		// 載入動畫
         target.AddBitmap(filename[i], RGB(0, 255, 0));

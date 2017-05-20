@@ -13,7 +13,7 @@
 #include <math.h>
 namespace game_framework {
 CBossB::CBossB() {}
-CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList) {	//	初始值都在此處設定
+CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, vector<CMovingBitmap*>* letter) {	//	初始值都在此處設定
     this->enemyQueue = enemyQueue;
     this->bombList = bombList;
     is_alive = is_bombed = false;
@@ -32,6 +32,7 @@ CBossB::CBossB(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     callEnemyCounter = maxCallEnemyCounter = 30 * 10;		// 發動召喚小怪技能的間隔
     endX = SIZE_X / 2;
     endY = SIZE_Y;
+    this->letter = letter;
     //
     SetVocab();
 }
@@ -40,16 +41,16 @@ void CBossB::CallEnemy(int x, int y) {
     const double PI = 3.141592653;						// 定義圓周率
     const int ONE_WORD_ENEMY_NUM = 7;						// 共要生成幾隻小怪, 範圍:3,5,7,9...
     const double ONE_WORD_ENEMY_RADIOUS = (PI / 180.0) * 7.0 ;	// 每一隻小怪的角度偏移量, double內填寫角度
-
     // 兩側的小怪
+
     for (int i = 1; i <= (ONE_WORD_ENEMY_NUM - 1) / 2; i++) {
         double r = ONE_WORD_ENEMY_RADIOUS * i;
         enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 2, false, dict, 1, 1, enemyQueue, bombList, \
-                                         int(double(x) + double(800) * cos(PI / 2 - r)), int(double(y) + double(600) * sin(PI / 2 - r))));
+                                         int(double(x) + double(800) * cos(PI / 2 - r)), int(double(y) + double(600) * sin(PI / 2 - r)), letter));
         enemyQueue->back()->LoadBitmap();
         enemyQueue->back()->SetIsAlive(true);
         enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 2, false, dict, 1, 1, enemyQueue, bombList, \
-                                         int(double(x) + double(800) * cos(PI / 2 + r)), int(double(y) + double(600) * sin(PI / 2 + r))));
+                                         int(double(x) + double(800) * cos(PI / 2 + r)), int(double(y) + double(600) * sin(PI / 2 + r)), letter));
         enemyQueue->back()->LoadBitmap();
         enemyQueue->back()->SetIsAlive(true);
     }
@@ -57,7 +58,7 @@ void CBossB::CallEnemy(int x, int y) {
     ///////////
     // 中間的那隻小怪
     enemyQueue->push_back(new CEnemy(x + (bmp.Width() / 2) - 5, y + 40, 2, false, dict, 1, 1, enemyQueue, bombList, \
-                                     int(double(x) + double(800) * cos(PI / 2)), int(double(y) + double(600) * sin(PI / 2))));
+                                     int(double(x) + double(800) * cos(PI / 2)), int(double(y) + double(600) * sin(PI / 2)), letter));
     enemyQueue->back()->LoadBitmap();
     enemyQueue->back()->SetIsAlive(true);
 }
@@ -104,9 +105,9 @@ void CBossB::LoadBitmap() {
 
     for (int i = 0; i < 26; i++) {
         //letter.push_back(new CMovingBitmap);
-        sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
+        //sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
         //letter.back()->LoadBitmap(str, RGB(255, 255, 255));
-        letter[i].LoadBitmap(str, RGB(255, 255, 255));
+        //letter[i].LoadBitmap(str, RGB(255, 255, 255));
     }
 
     for (int i = 0; i < 2; i++)		// 載入動畫

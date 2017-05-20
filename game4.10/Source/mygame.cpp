@@ -55,7 +55,7 @@ void CGameStateInit::OnInit() {
     ShowInitProgress(5);
 
     for (int i = 0; i < 5; i++) {		// 5個選單
-        char str[40];
+        char str[50];
         sprintf(str, "Bitmaps/menu/menu_t_%de.bmp", i + 1);
         menuText.push_back(new CMovingBitmap);
         menuText.back()->LoadBitmap(str, RGB(0, 255, 0));
@@ -312,9 +312,9 @@ void CGameStateOver::OnBeginState() {
     score = PublicData::score;
     level = PublicData::level;
     accuracy = PublicData::accuracy;
-    accuracy = 87;
     //
     PublicData::me.SetState(2);
+    //
 }
 
 void CGameStateOver::OnInit() {
@@ -412,8 +412,6 @@ CGameStateRun::CGameStateRun(CGame* g)
     callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
     callBossACounter = maxCallBossACounter = 80;
     callBossBCounter = maxCallBossBCounter = 80;
-    //
-    callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
 }
 CGameStateRun::~CGameStateRun() {
     for (CEnemy* ce : enemyQueue) delete ce;
@@ -438,6 +436,12 @@ void CGameStateRun::OnBeginState() {
     emp.SetEmpTimes(3);
     PublicData::me.SetState(0);
     totalEnemyNum = 0;
+
+    //
+    if (1) {
+        levelEnemyNum[0] = 5;
+        callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
+    }
 }
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     srand((unsigned)time(NULL));
@@ -453,9 +457,16 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
     ShowInitProgress(50);
+
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
+    for (int i = 0; i < 26; i++) {
+        char str[50];
+        sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
+        letter.push_back(new CMovingBitmap);
+        letter.back()->LoadBitmap(str, RGB(255, 255, 255));
+    }
 }
 void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
@@ -479,7 +490,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 7, &enemyQueue, &bombList, PublicData::me.GetX1(), PublicData::me.GetY1()) );
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 7, &enemyQueue, &bombList, PublicData::me.GetX1(), PublicData::me.GetY1(), &letter) );
         enemyQueue.back()->LoadBitmap();
         currEnemyNum++;
         totalEnemyNum++;
@@ -489,7 +500,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
         totalEnemyNum++;
@@ -499,7 +510,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100));
-        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList));
+        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
         totalEnemyNum++;
@@ -521,7 +532,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     bool enemyAllDead = true;
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
-        if (enemyQueue[i]->IsAlive())	enemyQueue[i]->OnMove();
+        enemyQueue[i]->OnMove();
 
         if (enemyQueue[i]->IsAlive()) enemyAllDead = false;
     }
@@ -751,11 +762,13 @@ void CGameStateRun::OnShow() {
         pDC->TextOut(20, 20, temp);
 
         //
-        for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
-            char temp[40];
-            sprintf(temp, "%s %d/%d (x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
-            pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
-            pDC->TextOut(20, i * 14 + 60, temp);
+        if (0) {
+            for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
+                char temp[40];
+                sprintf(temp, "%s %d/%d (x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
+                pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
+                pDC->TextOut(20, i * 14 + 60, temp);
+            }
         }
 
         ////

@@ -20,7 +20,7 @@ CEnemy::CEnemy() {
 CEnemy::~CEnemy() {
     //for (CEnemy* ce : enemyQueue) delete ce;
 }
-CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY) {	//	初始值都在此處設定
+CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY, vector<CMovingBitmap*>* letter) {	//	初始值都在此處設定
     is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
@@ -37,6 +37,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     maxVocabLeng = maxVL;
     this->endX = endX;
     this->endY = endY;
+    this->letter = letter;
     SetVocab();
 
     if (maxVocabLeng == 1 && minVocabLeng == 1)  index = 10;
@@ -75,13 +76,6 @@ void CEnemy::LoadBitmap() {
     talkBoxC.LoadBitmap("Bitmaps/talk_box_blur/talk_box_center.bmp", RGB(0, 255, 0));
     talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
     /////
-
-    for (int i = 0; i < 26; i++) {
-        //letter.push_back(new CMovingBitmap);
-        sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
-        //letter.back()->LoadBitmap(str, RGB(255, 255, 255));
-        letter[i].LoadBitmap(str, RGB(255, 255, 255));
-    }
 
     for (int i = 0; i < 22; i++) {	// 載入動畫
         sprintf(str, "Bitmaps/target/target_s%d.bmp", i + 1);
@@ -149,8 +143,8 @@ void CEnemy::OnShow() {
             if (currWordLeng != 0) textCursor.ShowBitmap();
 
             for (int i = 0; i < length; i++) {
-                letter[vocab[i] - 97].SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter[0].Width() * i, y + dy + 4);
-                letter[vocab[i] - 97].ShowBitmap();
+                letter->at(vocab[i] - 97)->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter->at(0)->Width() * i, y + dy + 4);
+                letter->at(vocab[i] - 97)->ShowBitmap();
             }
 
             for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
