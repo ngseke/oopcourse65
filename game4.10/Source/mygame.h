@@ -40,6 +40,7 @@ class PublicData {
 class CGameStateInit : public CGameState {
     public:
         CGameStateInit(CGame* g);
+        ~CGameStateInit();
         void OnInit();  								// 遊戲的初值及圖形設定
         void OnBeginState();							// 設定每次重玩所需的變數
         void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
@@ -59,11 +60,12 @@ class CGameStateInit : public CGameState {
         CMap map;										// 背景
 
         //主選單元素
-        CMovingBitmap menuBorder, menuBorder_ckecked;
-        vector<CMovingBitmap*> menuText;						// 選單文字VECTOR
+        CMovingBitmap			menuBorder, menuBorder_ckecked;
+        vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         int currSelectItem, displayState, noteDisplayState;		// 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
-        CMovingBitmap highScoreBorder;
-        CMovingBitmap userBorder;
+        CMovingBitmap			highScoreBorder;
+        CMovingBitmap			userBorder;
+        CMovingBitmap			numBmp[10], numBmpSmall[12];		// 數字圖檔
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
@@ -71,13 +73,9 @@ class CGameStateInit : public CGameState {
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
-        //CMe						me;
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder;
         CMovingBitmap			about;
-
-
-
 };
 
 /////////////////////////////////////////////////////////////////////////////

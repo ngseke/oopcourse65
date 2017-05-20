@@ -38,6 +38,11 @@ CGameStateInit::CGameStateInit(CGame* g)
       MENU_ITEM_NUM(5), CHARACTER_POS_Y(320) {
 }
 
+CGameStateInit::~CGameStateInit() {
+    for (CMovingBitmap* ce : menuText) delete ce;
+
+    for (CMovingBitmap* ce : note) delete ce;
+}
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
@@ -86,6 +91,14 @@ void CGameStateInit::OnInit() {
         note.back()->LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    for (int i = 0; i < 10; i++) {		// 載入數字圖
+        char str[50];
+        sprintf(str, "Bitmaps/level/num/%d.bmp", i);
+        numBmp[i].LoadBitmap(str, RGB(0, 255, 0));
+        sprintf(str, "Bitmaps/level/num_s/%d.bmp", i);
+        numBmpSmall[i].LoadBitmap(str, RGB(0, 255, 0));
+    }
+
     ShowInitProgress(20);
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
@@ -112,6 +125,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
+    if (nChar == KEY_ESC)    PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+
     if (displayState == 0 && (nChar == KEY_UP || nChar == KEY_DOWN)) { // 移動主選單
         if (nChar == KEY_UP) currSelectItem--;
         else if (nChar == KEY_DOWN) currSelectItem++;
@@ -130,6 +145,9 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         }
         else if (currSelectItem == 2) {
             displayState = 2;	// 角色選擇的state
+        }
+        else if (currSelectItem == 3) {
+            // 統計state
         }
         else if (currSelectItem == 4) {
             displayState = 4;	// 關於的state
@@ -152,11 +170,11 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else if (nChar == KEY_RIGHT)  PublicData::me.AddSelectedChar(1);
         }
     }
+    else if (displayState == 3 && nChar == KEY_ENTER) { // [統計]
+    }
     else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
     }
-
-    //PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -197,25 +215,19 @@ void CGameStateInit::OnShow() {
             menuText[i]->ShowBitmap();
         }
 
-        if (1) {
-            // 顯示最高分
-            int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
-            int HIGHSCORE_POS_Y = MENU_POS_Y + 10;
+        int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
+        int HIGHSCORE_POS_Y = MENU_POS_Y + 10;
+
+        if (1) {					// 顯示最高分(bitmap)
+            int tempScore = 9487;
             highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
             highScoreBorder.ShowBitmap();
-            ////
-            CDC* pDC = CDDraw::GetBackCDC();
-            CFont f, *fp;
-            f.CreatePointFont(100, "新細明體");
-            fp = pDC->SelectObject(&f);
-            pDC->SetBkMode(TRANSPARENT);
-            char temp[20];
-            pDC->SetTextColor(RGB(255, 200, 15));
-            sprintf(temp, "%d", 87487);
-            pDC->TextOut(HIGHSCORE_POS_X + 85, HIGHSCORE_POS_Y + 4, temp);
-            pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-            CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-            ////
+
+            for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
+                numBmpSmall[tempScore % 10].SetTopLeft( HIGHSCORE_POS_X - 10 * i + 130, HIGHSCORE_POS_Y + 5);
+                numBmpSmall[tempScore % 10].ShowBitmap();
+                tempScore /= 10;
+            }
         }
     }
     else if (displayState == 1) {	// 顯示說明文字
@@ -438,8 +450,8 @@ void CGameStateRun::OnBeginState() {
     totalEnemyNum = 0;
 
     //
-    if (1) {
-        levelEnemyNum[0] = 5;
+    if (0) {
+        levelEnemyNum[0] = 50;
         callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
     }
 }
@@ -753,16 +765,19 @@ void CGameStateRun::OnShow() {
         pDC->SetBkMode(TRANSPARENT);
         //
         char temp[100];
-        sprintf(temp, "怪物數量: %d(capacity: %d), 命: %d, 本關卡: %d, LOCK: %d, totalEnemyNum: %d", enemyQueue.size(), enemyQueue.capacity(), lives, currLevel, bool(lock), totalEnemyNum);
-        pDC->SetTextColor(RGB(200, 0, 0));
-        pDC->TextOut(20, 40, temp);
-        //
-        sprintf(temp, "總按鍵數: %d 總正確按鍵數: %d , accuracy正確率: %.2lf%%", totalKeyDownCount, totalCorrectKeyCount, accuracy);
+        sprintf(temp, "TotalKeyNum: %d TotalCorrectKeyNum: %d , Accuracy: %.2lf%%", \
+                totalKeyDownCount, totalCorrectKeyCount, accuracy);
         pDC->SetTextColor(RGB(50, 200, 200));
         pDC->TextOut(20, 20, temp);
+        //
+        sprintf(temp, "EQ size: %d,  Live: %d,  Level: %d,  LOCK: %d,  TotalEnemyNum: %d", \
+                enemyQueue.size(), lives, currLevel, bool(lock), totalEnemyNum);
+        pDC->SetTextColor(RGB(255, 255, 255));
+        pDC->TextOut(20, 40, temp);
+        //
 
         //
-        if (0) {
+        if (1) {
             for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
                 char temp[40];
                 sprintf(temp, "%s %d/%d (x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
