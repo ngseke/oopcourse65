@@ -125,7 +125,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-    if (nChar == KEY_ESC)    PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+    if (nChar == KEY_ESC)   displayState = 0;
 
     if (displayState == 0 && (nChar == KEY_UP || nChar == KEY_DOWN)) { // 移動主選單
         if (nChar == KEY_UP) currSelectItem--;
@@ -205,13 +205,14 @@ void CGameStateInit::OnShow() {
     taipin.ShowBitmap();
 
     if (displayState == 0) {	// 顯示主選單
-        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * currSelectItem);
+        const int MENU_MARGIN_BTM = 40;
+        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + MENU_MARGIN_BTM * currSelectItem);
         menuBorder_ckecked.ShowBitmap();
 
         for (int i = 0; i < MENU_ITEM_NUM; i++) {
-            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + 40 * i);
+            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_POS_Y + MENU_MARGIN_BTM * i);
             menuBorder.ShowBitmap();
-            menuText[i]->SetTopLeft((SIZE_X - menuText[i]->Width()) / 2, MENU_POS_Y + 7 + 40 * i);
+            menuText[i]->SetTopLeft((SIZE_X - menuText[i]->Width()) / 2, MENU_POS_Y + 7 + MENU_MARGIN_BTM * i);
             menuText[i]->ShowBitmap();
         }
 
@@ -421,9 +422,9 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), LEVEL(20) {
     srand((unsigned)time(NULL));	// 亂數種子
-    callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 80;
-    callBossBCounter = maxCallBossBCounter = 80;
+    callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
+    callBossACounter = maxCallBossACounter = 100;
+    callBossBCounter = maxCallBossBCounter = 100;
 }
 CGameStateRun::~CGameStateRun() {
     for (CEnemy* ce : enemyQueue) delete ce;
@@ -439,6 +440,7 @@ void CGameStateRun::OnBeginState() {
     score.SetTopLeft(SCORE_X, SCORE_Y);
     currEnemyNum = currBossANum = currBossBNum = 0;		// 初始化各關敵人已召喚數量
     lock = false;										// 取消鎖定
+    targetEnemy = NULL;
     currLevel = 0;										// 初始化關卡
     enemyQueue.clear();									// 清空EQ
     lives = 3;
@@ -637,6 +639,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                 if (!lock) {										// 尚未鎖定了
                     if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
                         totalCorrectKeyCount++;							// 正確按鍵數+1
+                        map.PlayFlash();
                         CAudio::Instance()->Play(AUDIO_SHOT, false);			// 撥放 射擊音效
 
                         if (enemyQueue[i]->GetVocabLeng() == 1) {
@@ -663,6 +666,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
                         targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
                         totalCorrectKeyCount++;							// 正確按鍵數+1
+                        map.PlayFlash();
                         CAudio::Instance()->Play(AUDIO_SHOT, false);	// 撥放 射擊音效
 
                         if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度

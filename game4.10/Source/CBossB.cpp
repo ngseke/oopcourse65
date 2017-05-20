@@ -103,13 +103,6 @@ void CBossB::LoadBitmap() {
     /////
     char* filename[2] = { "Bitmaps/target_m1.bmp", "Bitmaps/target_m2.bmp" };
 
-    for (int i = 0; i < 26; i++) {
-        //letter.push_back(new CMovingBitmap);
-        //sprintf(str, "Bitmaps/char4/%c.bmp", i + 97);
-        //letter.back()->LoadBitmap(str, RGB(255, 255, 255));
-        //letter[i].LoadBitmap(str, RGB(255, 255, 255));
-    }
-
     for (int i = 0; i < 2; i++)		// ¸ü¤J°Êµe
         target.AddBitmap(filename[i], RGB(0, 255, 0));
 }

@@ -18,7 +18,7 @@ class CBomb {
     protected:
         int x, y;				// 圖形座標
         CAnimation animation;	// 利用動畫作圖形
-        ///
+
         bool is_alive;				// 是否活著
 
 };
