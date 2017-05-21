@@ -18,21 +18,23 @@ CMe::CMe(): CHARACTER_POS_Y(320) {
     selectedChar = 0;
     currState = 1;
 }
-
+CMe::~CMe() {
+    for (CCharacter* cc : character) delete cc;
+}
 
 void CMe::LoadBitmap() {
     LoadCharacter();
 }
 
 void CMe::LoadCharacter() {
-    character.push_back(new CCharacter("Iron Man", "鋼鐵人", "me_ironman", 2, x, y));
-    character.push_back(new CCharacter("Captain American", "美利堅隊長", "me_captain_american.bmp", 1, x, y));
-    character.push_back(new CCharacter("Hulk", "浩克", "me_hulk.bmp", 1, x, y));
-    character.push_back(new CCharacter("Creeper", "苦力怕", "me_creeper.bmp", 1, x, y));
-    character.push_back(new CCharacter("Minion", "小小兵", "me_minion.bmp", 1, x, y));
-    character.push_back(new CCharacter("Zombie Brain", "殭屍腦", "me_zombie.bmp", 1, x, y));
-    character.push_back(new CCharacter("Cow", "牛", "me_cow.bmp", 1, x, y));
-    character.push_back(new CCharacter("Bouncing Ball", "跳動的球", "me_ball", 4, x, y));
+    character.push_back(new CCharacter("Iron Man",			"鋼鐵人",		"me_ironman", 2, x, y));
+    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american.bmp", 1, x, y));
+    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk.bmp", 1, x, y));
+    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper.bmp", 1, x, y));
+    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion.bmp", 1, x, y));
+    character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie.bmp", 1, x, y));
+    character.push_back(new CCharacter("Cow",				"牛",			"me_cow.bmp", 1, x, y));
+    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball", 4, x, y));
 }
 
 void CMe::OnMove() {
