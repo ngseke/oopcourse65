@@ -18,7 +18,6 @@ namespace game_framework {
 CEnemy::CEnemy() {
 }
 CEnemy::~CEnemy() {
-    //for (CEnemy* ce : enemyQueue) delete ce;
 }
 CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, int endX, int endY, vector<CMovingBitmap*>* letter) {	//	初始值都在此處設定
     is_alive = is_bombed = false;
@@ -30,17 +29,16 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     SetXY(x, y);
     SetDelay(delay);
     SetIsAlive(alive);
-    dict = d;
+    this->dict = d;
     this->bombList = bombList;
     this->enemyQueue = enemyQueue;
-    minVocabLeng = minVL;
-    maxVocabLeng = maxVL;
+    this->minVocabLeng = minVL;
+    this->maxVocabLeng = maxVL;
     this->endX = endX;
     this->endY = endY;
     this->letter = letter;
     SetVocab();
-
-    if (maxVocabLeng == 1 && minVocabLeng == 1)  index = 10;
+    index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 10 : 0;
 }
 
 
@@ -134,14 +132,10 @@ void CEnemy::OnShow() {
             ////
             //// show target bmp
             target.SetTopLeft(x + dx + targetX, y + dy + targetY);
-
-            if (currWordLeng != 0) target.OnShow();
+            textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
+            (currWordLeng != 0) ? target.OnShow(), textCursor.ShowBitmap() : 0;
 
             //
-            textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
-
-            if (currWordLeng != 0) textCursor.ShowBitmap();
-
             for (int i = 0; i < length; i++) {
                 letter->at(vocab[i] - 97)->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter->at(0)->Width() * i, y + dy + 4);
                 letter->at(vocab[i] - 97)->ShowBitmap();

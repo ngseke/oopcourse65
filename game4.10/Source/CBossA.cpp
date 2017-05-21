@@ -13,8 +13,6 @@
 namespace game_framework {
 CBossA::CBossA() {}
 CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int maxVL, vector<CEnemy*>* enemyQueue, vector<CBomb*>* bombList, vector<CMovingBitmap*>* letter) {	//	初始值都在此處設定
-    this->enemyQueue = enemyQueue;
-    this->bombList = bombList;
     is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
@@ -24,10 +22,16 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     SetXY(x, y);
     SetDelay(delay);
     SetIsAlive(alive);
-    dict = d;
+    this->dict = d;
     this->bombList = bombList;
-    minVocabLeng = minVL;
-    maxVocabLeng = maxVL;
+    this->enemyQueue = enemyQueue;
+    this->minVocabLeng = minVL;
+    this->maxVocabLeng = maxVL;
+    //this->endX = endX;
+    //this->endY = endY;
+    this->letter = letter;
+    //
+    index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 10 : 0;
     callEnemyCounter = maxCallEnemyCounter = 30 * 7;		// 發動召喚小怪技能的間隔
     endX = SIZE_X / 2;
     endY = SIZE_Y;

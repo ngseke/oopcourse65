@@ -134,12 +134,13 @@ class CGameStateRun : public CGameState {
         int				levelBossANum[20] = {  0,  0,  1,  1,  1,  2,  1,  1,  1,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
         int				levelBossBNum[20] = {  0,  0,  0,  0,  0,  0,  1,  2,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
 
-        int				lives;
+        int				lives;											// 生命值
         int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
-        char			keyFlag;
-        CLevel			levelAni;
-        int				totalEnemyNum;
+        char			keyFlag;										// 防止按鍵卡住的flag
+        CLevel			levelAni;										// 切換關卡時的動畫
+        int				totalEnemyNum;									// 總召喚的敵人數量
+        int				levelChangeFlag, levelChangeDelay, levelChangeDelayMax; // 關卡和關卡間的delay
 };
 
 /////////////////////////////////////////////////////////////////////////////

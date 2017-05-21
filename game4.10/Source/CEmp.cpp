@@ -57,9 +57,8 @@ void CEmp::LoadBitmap() {
     displayNumber[3].LoadBitmap("Bitmaps/emp_text/0.bmp", RGB(0, 255, 0));
     displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
         displayNumber[i].SetTopLeft(SIZE_X - 80 + 14, SIZE_Y - 80 + 8);
-    }
 }
 
 void CEmp::OnMove() {

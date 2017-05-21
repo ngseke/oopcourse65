@@ -18,7 +18,7 @@ CBullet::CBullet(int endX, int endY) {
     this->endY = endY;
     /////
     x = SIZE_X / 2;				// 暫時設為中間底部
-    y = SIZE_Y;
+    y = SIZE_Y - 10;
     LoadBitmap();
 }
 

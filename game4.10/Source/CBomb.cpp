@@ -36,7 +36,7 @@ void CBomb::OnMove() {
 }
 
 void CBomb::OnShow() {
-    if (!is_alive)return;	// 若is_alive為false則不執行OnShow
+    if (!is_alive) return;	// 若is_alive為false則不執行OnShow
 
     animation.SetTopLeft(x - 20, y - 20);
     animation.OnShow();

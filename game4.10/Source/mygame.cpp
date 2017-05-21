@@ -313,10 +313,7 @@ void CGameStateOver::OnMove() {
 }
 void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ENTER = 0xD;
-
-    if (nChar == KEY_ENTER) {
-        GotoGameState(GAME_STATE_INIT);
-    }
+    (nChar == KEY_ENTER) ? GotoGameState(GAME_STATE_INIT) : 0;
 }
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 5; // 5 seconds
@@ -427,11 +424,11 @@ CGameStateRun::CGameStateRun(CGame* g)
     callBossBCounter = maxCallBossBCounter = 100;
 }
 CGameStateRun::~CGameStateRun() {
-    for (CEnemy* ce : enemyQueue) delete ce;
+    for (CEnemy* eq : enemyQueue) delete eq;
 
-    for (CBullet* ce : bulletList) delete ce;
+    for (CBullet* bl : bulletList) delete bl;
 
-    for (CBomb* ce : bombList) delete ce;
+    for (CBomb* cb : bombList) delete cb;
 }
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
@@ -450,9 +447,12 @@ void CGameStateRun::OnBeginState() {
     emp.SetEmpTimes(3);
     PublicData::me.SetState(0);
     totalEnemyNum = 0;
+    levelChangeFlag = 0;
+    levelChangeDelay = -1;
+    levelChangeDelayMax = 4 * 30;						// 設定關卡間delay 3秒
 
     //
-    if (0) {
+    if (0) {		//【DEBUG區】 將第0關設定生成50只怪物，且召喚delay為0秒
         levelEnemyNum[0] = 50;
         callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
     }
@@ -470,7 +470,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     levelAni.LoadBitmap();
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
-    ShowInitProgress(50);
+    ShowInitProgress(40);
 
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
@@ -481,6 +481,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
         letter.push_back(new CMovingBitmap);
         letter.back()->LoadBitmap(str, RGB(255, 255, 255));
     }
+
+    ShowInitProgress(50);
 }
 void CGameStateRun::OnMove() {						// 移動遊戲元素
     //
@@ -489,10 +491,11 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //SetCursor(AfxGetApp()->LoadCursor(IDC_GAMECURSOR));
     //
     ////////
-    if (totalKeyDownCount != 0)
-        accuracy = 100 * double(totalCorrectKeyCount) / double(totalKeyDownCount);
-    else accuracy = 100;
+    if (levelChangeDelay >= 0)	levelChangeDelay--;
 
+    accuracy = (totalKeyDownCount != 0) ? \
+               100 * double(totalCorrectKeyCount) / double(totalKeyDownCount) : \
+               100;     // 計算正確率
     PublicData::score = score.GetInteger();
     PublicData::level = currLevel;
     PublicData::accuracy = accuracy;
@@ -513,7 +516,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //==BossA==================================
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossACounter = maxCallBossACounter;				// 把counter 調回max繼續數
-        int randX = (rand() % (SIZE_X - 100));
+        int randX = (rand() % (SIZE_X - 150));
         enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
@@ -523,7 +526,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     //==BossB==================================
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callBossBCounter = maxCallBossBCounter;				// 把counter 調回max繼續數
-        int randX = (rand() % (SIZE_X - 100));
+        int randX = (rand() % (SIZE_X - 150));
         enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
@@ -535,10 +538,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     for (int unsigned i = 0; i < enemyQueue.size(); i++) {
         if (enemyQueue[i]->IsAlive() && enemyQueue[i]->HitMe(&PublicData::me)) {
             lives--;
-
-            if (lives <= 0) {
-                GotoGameState(GAME_STATE_OVER);
-            }
+            (lives <= 0) ? GotoGameState(GAME_STATE_OVER) : 0;
         }
     }
 
@@ -547,8 +547,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
         enemyQueue[i]->OnMove();
-
-        if (enemyQueue[i]->IsAlive()) enemyAllDead = false;
+        enemyQueue[i]->IsAlive() ? enemyAllDead = false : 0;
     }
 
     for (unsigned int i = 0; i < enemyQueue.size(); i++) {
@@ -607,15 +606,23 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
             && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
         // 換 關卡
-        currLevel++;
+        if (!levelChangeFlag) {								// 先播放切換關卡動畫 並等待delay算完
+            levelAni.Play(currLevel, score.GetInteger());
+            levelChangeFlag = true;
+            levelChangeDelay = levelChangeDelayMax;
+        }
 
-        if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
+        if (levelChangeDelay < 0 && levelChangeFlag) {		// 當delay算完後 再實際切換關卡
+            currLevel++;
 
-        currEnemyNum = currBossANum = currBossBNum = 0;
-        callEnemyCounter = maxCallEnemyCounter;
-        callBossACounter = maxCallBossACounter;
-        callBossBCounter = maxCallBossBCounter;
-        levelAni.Play(currLevel, score.GetInteger());
+            if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
+
+            currEnemyNum = currBossANum = currBossBNum = 0;
+            callEnemyCounter = maxCallEnemyCounter;
+            callBossACounter = maxCallBossACounter;
+            callBossBCounter = maxCallBossBCounter;
+            levelChangeFlag = false;
+        }
     }
 
     //
@@ -684,9 +691,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
 
-        if (nChar == 13) {
+        if (nChar == 13)
             emp.CallEmp();
-        }
     }
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -697,8 +703,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     key = NULL;
 
     // 數字鍵作為debug按鈕
-    if (nChar == '1')if (!showDebug)showDebug = 1; // 按1 開關debug
-        else showDebug = 0;
+    if (nChar == '1')showDebug = showDebug ? false : true;  // 按1 開關debug
 
     if (nChar == '2' && enemyQueue.size() > 0) {  // 按2 清除EQ最後一隻敵人
         enemyQueue.back()->kill();
@@ -706,8 +711,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
 
     if (nChar == '3' && enemyQueue.size() > 0) {  // 按3 清除EQ中所有敵人
-        for (unsigned int i = 0; i < enemyQueue.size(); i++)
-            enemyQueue[i]->kill();
+        for (CEnemy* ce : enemyQueue) ce->kill();
 
         lock = 0;
     }
@@ -731,34 +735,20 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {	// 處理滑鼠的動作
     //eraser.SetMovingRight(false);
 }
 void CGameStateRun::OnShow() {
-    //
-    //  注意：Show裡面千萬不要移動任何物件的座標，移動座標的工作應由Move做才對，d
-    //        否則當視窗重新繪圖時(OnDraw)，物件就會移動，看起來會很怪。換個術語
-    //        說，Move負責MVC中的Model，Show負責View，而View不應更動Model。
-    //
-    //
-    //
     map.OnShow();						// 貼上背景網子
     score.ShowBitmap();					// 貼上分數
-    emp.OnShow();
-    PublicData::me.OnShow();
-    levelAni.OnShow();
+    emp.OnShow();						// 貼上EMP（必殺技）
+    PublicData::me.OnShow();			// 貼上主角
+    levelAni.OnShow();					// 貼上關卡切換動畫
 
-    /////////
-    for (unsigned int i = 0; i < bombList.size(); i++) {
-        bombList[i]->OnShow();
-    }
+    for (CBomb* cb : bombList)	cb->OnShow();
 
-    for (unsigned int i = 0; i < enemyQueue.size(); i++)
-        enemyQueue[i]->OnShow();
+    for (CEnemy* eq : enemyQueue)	eq->OnShow();
 
-    for (unsigned int i = 0; i < bulletList.size(); i++)
-        bulletList[i]->OnShow();
+    for (CBullet* bl : bulletList)	bl->OnShow();
 
     if (lock && targetEnemy->IsAlive())
         targetEnemy->OnShow();	// 加上這一行 讓被鎖定的怪物再次show, 以防被其他怪物蓋住
-
-    //
 
     if (showDebug) {		// 顯示debug資訊
         CDC* pDC = CDDraw::GetBackCDC();
@@ -778,9 +768,9 @@ void CGameStateRun::OnShow() {
                 enemyQueue.size(), lives, currLevel, bool(lock), totalEnemyNum);
         pDC->SetTextColor(RGB(255, 255, 255));
         pDC->TextOut(20, 40, temp);
-        //
 
         //
+
         if (1) {
             for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
                 char temp[40];
