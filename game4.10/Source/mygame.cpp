@@ -39,20 +39,20 @@ CGameStateInit::CGameStateInit(CGame* g)
 }
 
 CGameStateInit::~CGameStateInit() {
-    for (CMovingBitmap* ce : menuText) delete ce;
+    for (CMovingBitmap* mt : menuText) delete mt;
 
-    for (CMovingBitmap* ce : note) delete ce;
+    for (CMovingBitmap* nt : note) delete nt;
 }
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
-    currSelectItem = displayState = 0;
+    currSelectItem = displayState = 0;										// 初始化選單選取項目
     noteDisplayState = 0;
-    PublicData::me.LoadBitmap();
+    PublicData::me.LoadBitmap();											// 主角
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
-    text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 按 滑鼠左鍵開始遊戲
+    text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 操作方式提示bitmap
     highScoreBorder.LoadBitmap("Bitmaps/menu/highscore_border.bmp", RGB(0, 255, 0));
     /////
     //
@@ -125,36 +125,37 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-    if (nChar == KEY_ESC)   displayState = 0;
+    if (nChar == KEY_ESC)   displayState = 0; // ESC鍵返回主選單
 
-    if (displayState == 0 && (nChar == KEY_UP || nChar == KEY_DOWN)) { // 移動主選單
-        if (nChar == KEY_UP) currSelectItem--;
-        else if (nChar == KEY_DOWN) currSelectItem++;
+    if (displayState == 0 ) { // 在主選單...
+        if (nChar == KEY_UP || nChar == KEY_DOWN) {		// 移動光標
+            if (nChar == KEY_UP) currSelectItem--;
+            else if (nChar == KEY_DOWN) currSelectItem++;
 
-        if (currSelectItem < 0)currSelectItem = MENU_ITEM_NUM - 1;
-        else if (currSelectItem > MENU_ITEM_NUM - 1)currSelectItem = 0;
+            if (currSelectItem < 0)currSelectItem = MENU_ITEM_NUM - 1;
+            else if (currSelectItem > MENU_ITEM_NUM - 1)currSelectItem = 0;
+        }
+        else if (nChar == KEY_ENTER) {					// 按下ENTER鍵選取...
+            if (currSelectItem == 0) {
+                GotoGameState(GAME_STATE_RUN);			// 開始遊戲
+            }
+            else if ( currSelectItem == 1 ) {
+                displayState = 1;						// 顯示遊戲說明的state
+                noteDisplayState = 0;
+            }
+            else if (currSelectItem == 2) {
+                displayState = 2;						// 角色選擇的state
+            }
+            else if (currSelectItem == 3) {
+                // 統計的state
+            }
+            else if (currSelectItem == 4) {
+                displayState = 4;	// 關於的state
+            }
+        }
     }
-
-    if (displayState == 0 && nChar == KEY_ENTER ) { // 按下ENTER選擇後...
-        if ( currSelectItem == 0 ) // 開始遊戲
-            GotoGameState(GAME_STATE_RUN);
-
-        if ( currSelectItem == 1 ) {
-            displayState = 1;	// 顯示遊戲說明的state
-            noteDisplayState = 0;
-        }
-        else if (currSelectItem == 2) {
-            displayState = 2;	// 角色選擇的state
-        }
-        else if (currSelectItem == 3) {
-            // 統計state
-        }
-        else if (currSelectItem == 4) {
-            displayState = 4;	// 關於的state
-        }
-    }
-    else if (displayState == 1 ) { // [遊戲說明]
-        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+    else if (displayState == 1 ) {							// [遊戲說明]
+        if (nChar == KEY_ENTER) displayState = 0;			//  ->返回主選單
         else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) { // [遊戲說明] 左右翻頁遊戲說明
             if		(nChar == KEY_LEFT)   noteDisplayState--;
             else if (nChar == KEY_RIGHT) noteDisplayState++;
@@ -177,11 +178,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
 }
 
-void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
-    //GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
-}
-void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point) {
-}
+void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {}
+void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point) {}
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
@@ -189,16 +187,11 @@ void CGameStateInit::OnMove() {
 
     if (text1_count < 400)text1_count++;
 
-    if (text1_count > 5 * 30) {
-        text1_y += int((text1_count - 5 * 30) * 1.1);
-    }
-
-    //GotoGameState(GAME_STATE_OVER);
+    if (text1_count > 5 * 30)  text1_y += int((text1_count - 5 * 30) * 1.1);
 }
 
 void CGameStateInit::OnShow() {
     map.OnShow();
-    // logo
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
     typing_logo.ShowBitmap();
     taipin.SetTopLeft((SIZE_X + typing_logo.Width()) / 2 - 60, 100 + 31);
@@ -274,6 +267,7 @@ void CGameStateInit::OnShow() {
         PublicData::me.SetState(1);
         PublicData::me.OnShow();
     }
+    else if (displayState == 3) {}
     else if (displayState == 4) {      // 顯示關於頁面
         // 關於框
         aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
@@ -304,8 +298,7 @@ CGameStateOver::CGameStateOver(CGame* g)
 }
 
 void CGameStateOver::OnMove() {
-    if (counter < 0)
-        GotoGameState(GAME_STATE_INIT);
+    if (counter < 0)	GotoGameState(GAME_STATE_INIT);
 
     if (barCounter < 200 && barCounter < accuracy) {
         barCounter +=  2;
@@ -316,7 +309,7 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     (nChar == KEY_ENTER) ? GotoGameState(GAME_STATE_INIT) : 0;
 }
 void CGameStateOver::OnBeginState() {
-    counter = 1000 * 5; // 5 seconds
+    counter = 1000 * 5;	 // 5 seconds
     barCounter = 0;
     //
     score = PublicData::score;
@@ -324,7 +317,6 @@ void CGameStateOver::OnBeginState() {
     accuracy = PublicData::accuracy;
     //
     PublicData::me.SetState(2);
-    //
 }
 
 void CGameStateOver::OnInit() {
@@ -452,7 +444,7 @@ void CGameStateRun::OnBeginState() {
     levelChangeDelayMax = 4 * 30;						// 設定關卡間delay 3秒
 
     //
-    if (0) {		//【DEBUG區】 將第0關設定生成50只怪物，且召喚delay為0秒
+    if (0) {	//【DEBUG區】 將第0關設定生成50只怪物，且召喚delay為0秒
         levelEnemyNum[0] = 50;
         callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
     }
@@ -535,8 +527,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
 
     //===判斷Me是否碰到Enemy===
 
-    for (int unsigned i = 0; i < enemyQueue.size(); i++) {
-        if (enemyQueue[i]->IsAlive() && enemyQueue[i]->HitMe(&PublicData::me)) {
+    for (CEnemy* eq : enemyQueue) {
+        if (eq->IsAlive() && eq->HitMe(&PublicData::me)) {
             lives--;
             (lives <= 0) ? GotoGameState(GAME_STATE_OVER) : 0;
         }
@@ -545,14 +537,14 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     // ===Enemy===
     bool enemyAllDead = true;
 
-    for (unsigned int i = 0; i < enemyQueue.size(); i++) {
-        enemyQueue[i]->OnMove();
-        enemyQueue[i]->IsAlive() ? enemyAllDead = false : 0;
+    for (CEnemy* eq : enemyQueue) {
+        eq->OnMove();
+        eq->IsAlive() ? enemyAllDead = false : 0;
     }
 
-    for (unsigned int i = 0; i < enemyQueue.size(); i++) {
-        if (enemyQueue[i]->GetX() > SIZE_X + 40 || enemyQueue[i]->GetX() < -40 || enemyQueue[i]->GetY() > SIZE_Y + 40) {
-            enemyQueue[i]->kill();
+    for (CEnemy* eq : enemyQueue) {		// 當enemy飛出畫面外時kill()
+        if (eq->GetX() > SIZE_X + 40 || eq->GetX() < -40 || eq->GetY() > SIZE_Y + 40) {
+            eq->kill();
         }
     }
 
@@ -569,14 +561,14 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     ////===bullet===
     bool bulletAllDead = true;
 
-    for (unsigned int i = 0; i < bulletList.size(); i++) {
-        bulletList[i]->OnMove();	// 移動bullet
+    for (CBullet* bl : bulletList) {
+        bl->OnMove();	// 移動bullet
 
-        if (bulletList[i]->IsAlive()) bulletAllDead = false;
+        if (bl->IsAlive()) bulletAllDead = false;
     }
 
     if (bulletAllDead) {
-        for (CBullet* ce : bulletList) delete ce;
+        for (CBullet* bl : bulletList) delete bl;
 
         bulletList.clear();
     }
@@ -590,14 +582,14 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     ////===bomb===
     bool bombAllDead = true;
 
-    for (unsigned int i = 0; i < bombList.size(); i++) {
-        bombList[i]->OnMove();
+    for (CBomb* cb : bombList) {
+        cb->OnMove();
 
-        if (bombList[i]->IsAlive()) bombAllDead = false;
+        if (cb->IsAlive()) bombAllDead = false;
     }
 
     if (bombAllDead) {
-        for (CBomb* ce : bombList) delete ce;
+        for (CBomb* cb : bombList) delete cb;
 
         bombList.clear();
     }

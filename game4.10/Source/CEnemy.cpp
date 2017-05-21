@@ -41,8 +41,6 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 10 : 0;
 }
 
-
-
 bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
     int x1 = x + dx;				// 怪物face的左上角x座標
     int y1 = y + dy;				// 怪物face的左上角y座標
@@ -62,10 +60,10 @@ void CEnemy::LoadBitmap() {
     char str[30];
     const unsigned int bitmapNum = 7;		// 圖檔數量
 
-    if (maxVocabLeng == 1 && minVocabLeng == 1) {
+    if (maxVocabLeng == 1 && minVocabLeng == 1)
         sprintf(str, "Bitmaps/face/face_min%d.bmp", rand() % (4) + 1);	// 1字小怪的bmp
-    }
-    else  sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);  // 一般小怪的bmp
+    else
+        sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);  // 一般小怪的bmp
 
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
@@ -85,16 +83,15 @@ void CEnemy::LoadBitmap() {
 
 void CEnemy::OnMove() {
     const int STEPS = 180;	// 切成幾分dx
-    //if (!is_alive) return;
+
+    if (!is_alive) return;
+
     delay_counter--;
     target.OnMove();
 
     if (delay_counter < 0) {
         delay_counter = delay;
         index++;
-        // if (index >= STEPS)
-        //   index = 0;
-        // dx = xMoveDistance / STEPS * index;
         double dxTemp = (double(endX) - x) / STEPS * index;
         double dyTemp = (double(endY) - y) / STEPS * index;
         dx  = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
@@ -156,20 +153,19 @@ void CEnemy::kill() {
 }
 
 
-////////////
-void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
+void  CEnemy::SetVocab() {								// 隨機從dict中抓取一個單字到vocab裡面
     while (1) {
         if (maxVocabLeng == 1 && minVocabLeng == 1) {	// 若為1字小怪
-            vocab = "a";			//要給定值 不然會出錯
-            vocab[0] = 97 + rand() % 26;
+            vocab = "a";								// 先隨意給予1字string
+            vocab[0] = 97 + rand() % 26;				// 隨機挑選單字
             length = 1;
         }
-        else {
-            vocab = dict->GetText();	// 給vocab一個單字
+        else {											// 一般長度怪物
+            vocab = dict->GetText();					// 從字典中隨機挑選單字給vocab
             length = vocab.length();
         }
 
-        if (length >= minVocabLeng && length <= maxVocabLeng) {			// 條件成立,使用break跳出迴圈 確定生成此單字
+        if (length >= minVocabLeng && length <= maxVocabLeng) {	 // 長度符合 ,使用break跳出迴圈 確定生成此單字
             bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
 
             for (int i = enemyQueue->size() - 1; i >= 0; i--) {
@@ -177,16 +173,16 @@ void  CEnemy::SetVocab() {			//隨機從dict中抓取一個單字到vocab裡面
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag && !(enemyQueue->size() >= 24)) {}
+            if (firstWordBounceFlag && !(enemyQueue->size() >= 25)) {}
             else break;
         }
     }
 }
 
-string CEnemy::GetVocab() {		  // 回傳整組單字(ex: "apple")
+string CEnemy::GetVocab() {			  // 回傳整組單字(ex: "apple")
     return vocab;
 }
-char CEnemy::GetFirstWord()		{ // 以char回傳一個字 (ex: 'a')
+char CEnemy::GetFirstWord() {		// 以char回傳一個字 (ex: 'a')
     return vocab[0];
 }
 void CEnemy::AddCurrWordLeng() {
