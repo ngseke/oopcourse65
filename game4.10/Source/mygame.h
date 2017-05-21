@@ -112,11 +112,10 @@ class CGameStateRun : public CGameState {
         CDict			dictionary;										// 所有怪物共用的字典
         CMap			map;											// 背景圖
         vector<CMovingBitmap*>	letter;
-        //CMe				me;												// 主角
+        CAnimation		bomb;
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
         vector<CBullet*>bulletList;										// 儲存飛行中的子彈的Vector
         vector<CBomb*>  bombList;
-
         CEnemy* 		targetEnemy;									// 指標 用於指向瞄準的敵人
         CInteger		score;											// 分數顯示器
         CEmp			emp;

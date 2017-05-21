@@ -11,7 +11,7 @@ namespace game_framework {
 // CLevel: Enemy
 /////////////////////////////////////////////////////////////////////////////
 CLevel::CLevel() {
-    delay_counter = 200000;	// 設定此數字讓動畫停止播放
+    delay_counter = 20000;	// 設定此數字讓動畫停止播放
     //delay_counter = 0;
     easeC = 0;
     level = 0;

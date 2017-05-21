@@ -19,7 +19,6 @@ class CMap {
         int delay;
         int dx, dy;
         int flashCounter, flashCounterMax;
-
 };
 
 }

@@ -31,7 +31,7 @@ class CEmp {
         bool* lock;
         CEnemy** targetEnemy;
         CMovingBitmap displayBG, displayNumber[4];
-        int empTimes;			//EMPΩ计
+        int empTimes;				// 逞緇酬EMPΩ计
     private:
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 琌窱把计絛瞅痻
 
