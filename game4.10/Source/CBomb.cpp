@@ -30,6 +30,8 @@ void CBomb::LoadBitmap() {
 }
 
 void CBomb::OnMove() {
+    if (!is_alive) return;
+
     animation.OnMove();		// 執行一次animation.OnMove()，animation才會換圖
 
     if (animation.GetCurrentBitmapNumber() >= 15) is_alive = false;

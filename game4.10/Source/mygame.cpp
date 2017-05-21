@@ -445,7 +445,7 @@ void CGameStateRun::OnBeginState() {
 
     //
     if (1) {	//【DEBUG區】 將第0關設定生成50只怪物，且召喚delay為0秒
-        levelEnemyNum[0] = 50;
+        levelEnemyNum[0] = 200;
         levelChangeDelayMax = 0;
         callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
     }
@@ -554,8 +554,9 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         if (!enemyQueue[i]->IsAlive() && enemyQueue[i]->IsBombed()) {
             vector<CEnemy*>::iterator iterenemyQueue = enemyQueue.begin();
             delete enemyQueue[i];
+            enemyQueue[i] = NULL;
             enemyQueue.erase(iterenemyQueue + i);
-            break;
+            i = 0;
         }
     }
 
@@ -590,7 +591,10 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
     }
 
     if (bombAllDead) {
-        for (CBomb* cb : bombList) delete cb;
+        for (CBomb* cb : bombList) {
+            delete cb;
+            cb = NULL;
+        }
 
         bombList.clear();
     }
@@ -606,7 +610,8 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         }
 
         if (levelChangeDelay < 0 && levelChangeFlag) {		// 當delay算完後 再實際切換關卡
-            //currLevel++;
+            currLevel++;
+
             if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
 
             currEnemyNum = currBossANum = currBossBNum = 0;
@@ -748,7 +753,6 @@ void CGameStateRun::OnShow() {
         f.CreatePointFont(100, "Fixedsys");
         fp = pDC->SelectObject(&f);
         pDC->SetBkColor(RGB(0, 0, 0));
-        pDC->SetBkMode(TRANSPARENT);
         //
         char temp[100];
         sprintf(temp, "TotalKeyNum: %d TotalCorrectKeyNum: %d , Accuracy: %.2lf%%", \
@@ -756,16 +760,17 @@ void CGameStateRun::OnShow() {
         pDC->SetTextColor(RGB(50, 200, 200));
         pDC->TextOut(20, 20, temp);
         //
-        sprintf(temp, "EQ size: %d,  Live: %d,  Level: %d,  LOCK: %d,  TotalEnemyNum: %d", \
+        char temp1[100];
+        sprintf(temp1, "EQ size: %d,  Live: %d,  Level: %d,  LOCK: %d,  TotalEnemyNum: %d", \
                 enemyQueue.size(), lives, currLevel, bool(lock), totalEnemyNum);
         pDC->SetTextColor(RGB(255, 255, 255));
-        pDC->TextOut(20, 40, temp);
+        pDC->TextOut(20, 40, temp1);
 
         //
 
         if (1) {
             for (unsigned int i = 0; i < enemyQueue.size(); i++) {	// 顯示場上怪物之 單字,curr/length
-                char temp[40];
+                char temp[50];
                 sprintf(temp, "%s %d/%d (x:%d,y:%d)", enemyQueue[i]->GetVocab().c_str(), enemyQueue[i]->GetCurrWordLeng(), enemyQueue[i]->GetVocabLeng(), enemyQueue[i]->GetX(), enemyQueue[i]->GetY());
                 pDC->SetTextColor(RGB(180 + i, 180 + i, 180 + i));
                 pDC->TextOut(20, i * 14 + 60, temp);

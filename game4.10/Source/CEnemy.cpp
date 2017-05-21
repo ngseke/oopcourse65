@@ -110,7 +110,7 @@ void CEnemy::SetXY(int nx, int ny) {
     y = ny;
 }
 void CEnemy::OnShow() {
-    if (1) {
+    if (is_alive) {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
 
