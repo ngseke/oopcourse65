@@ -444,8 +444,9 @@ void CGameStateRun::OnBeginState() {
     levelChangeDelayMax = 4 * 30;						// 設定關卡間delay 3秒
 
     //
-    if (0) {	//【DEBUG區】 將第0關設定生成50只怪物，且召喚delay為0秒
+    if (1) {	//【DEBUG區】 將第0關設定生成50只怪物，且召喚delay為0秒
         levelEnemyNum[0] = 50;
+        levelChangeDelayMax = 0;
         callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
     }
 }
@@ -605,8 +606,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         }
 
         if (levelChangeDelay < 0 && levelChangeFlag) {		// 當delay算完後 再實際切換關卡
-            currLevel++;
-
+            //currLevel++;
             if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
 
             currEnemyNum = currBossANum = currBossBNum = 0;
