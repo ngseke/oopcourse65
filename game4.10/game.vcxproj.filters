@@ -61,15 +61,6 @@
     <None Include="Res\corner.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="RES\eraser1.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\eraser2.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\eraser3.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="res\game.ico">
       <Filter>Resource Files</Filter>
     </None>
@@ -221,28 +212,5 @@
     <ResourceCompile Include="Source\game.rc">
       <Filter>MFC</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\mushroom.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="C:\Users\sean\Desktop\blue.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\blue1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\blue.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Bitmaps\me_hulk.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Bitmaps\me_ironman.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\me_hulk.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

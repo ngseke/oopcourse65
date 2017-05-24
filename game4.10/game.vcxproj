@@ -244,9 +244,6 @@
     <None Include="RES\center.bmp" />
     <None Include="RES\continue.bmp" />
     <None Include="Res\corner.bmp" />
-    <None Include="RES\eraser1.bmp" />
-    <None Include="RES\eraser2.bmp" />
-    <None Include="RES\eraser3.bmp" />
     <None Include="res\game.ico" />
     <None Include="res\game.rc2" />
     <None Include="RES\gamecurs.cur" />
@@ -338,15 +335,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Bitmaps\me_hulk.bmp" />
-    <Image Include="Bitmaps\me_ironman.bmp" />
-    <Image Include="C:\Users\sean\Desktop\blue.bmp" />
-    <Image Include="res\blue.bmp" />
-    <Image Include="res\blue1.bmp" />
-    <Image Include="res\me_hulk.bmp" />
-    <Image Include="res\mushroom.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

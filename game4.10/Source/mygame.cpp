@@ -610,8 +610,7 @@ void CGameStateRun::OnMove() {						// 移動遊戲元素
         }
 
         if (levelChangeDelay < 0 && levelChangeFlag) {		// 當delay算完後 再實際切換關卡
-            currLevel++;
-
+            //currLevel++;
             if (currLevel >= 20)GotoGameState(GAME_STATE_INIT);
 
             currEnemyNum = currBossANum = currBossBNum = 0;
