@@ -263,9 +263,11 @@
     <ClCompile Include="Source\CDict.cpp" />
     <ClCompile Include="Source\CEmp.cpp" />
     <ClCompile Include="Source\CEnemy.cpp" />
+    <ClCompile Include="Source\CFile.cpp" />
     <ClCompile Include="Source\CLevel.cpp" />
     <ClCompile Include="Source\CMap.cpp" />
     <ClCompile Include="Source\CMe.cpp" />
+    <ClCompile Include="Source\CRecord.cpp" />
     <ClCompile Include="Source\game.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -317,9 +319,11 @@
     <ClInclude Include="Source\CDict.h" />
     <ClInclude Include="Source\CEmp.h" />
     <ClInclude Include="Source\CEnemy.h" />
+    <ClInclude Include="Source\CFile.h" />
     <ClInclude Include="Source\CLevel.h" />
     <ClInclude Include="Source\CMap.h" />
     <ClInclude Include="Source\CMe.h" />
+    <ClInclude Include="Source\CRecord.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gameDoc.h" />
     <ClInclude Include="Source\gameView.h" />

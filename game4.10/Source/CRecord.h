@@ -1,4 +1,5 @@
 #pragma once
+#include "CMe.h"
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // 這個class提供會一直彈跳的球
@@ -8,7 +9,7 @@ namespace game_framework {
 class CRecord {
     public:
         CRecord();
-        void WriteRecord(int score, int level, double accuracy, string character, string date);
+        void WriteRecord(int score, int level, double accuracy, int selectedChar);
         int ReadRecordScore_Score(int);  //回傳第x筆裡面的分
         int ReadRecordScore_Level(int);  //回傳第x筆裡面的關
         double ReadRecordScore_Accuracy(int);  //回傳第x筆裡面的正確率
@@ -19,8 +20,8 @@ class CRecord {
         int score;
         int level;
         double accuracy;
-        string character;
         string date;
+        string character;
 
 };
 }

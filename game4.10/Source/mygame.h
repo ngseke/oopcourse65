@@ -10,7 +10,7 @@
 #include "CBossB.h"
 #include "CEmp.h"
 #include "CLevel.h"
-
+#include "CRecord.h"
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -157,6 +157,7 @@ class CGameStateOver : public CGameState {
         int					score, level;
         double				accuracy;
         int					barCounter;
+        CRecord				record;
 };
 
 }

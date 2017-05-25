@@ -126,5 +126,7 @@ int CMe::GetY2() {
 void CMe::SetState(int state) {
     currState = state;
 }
-
+int CMe::GetselectedChar() {
+    return selectedChar;
+}
 }

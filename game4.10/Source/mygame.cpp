@@ -348,6 +348,8 @@ void CGameStateOver::OnInit() {
     x = (SIZE_X - border.Width()) / 2;
     y = (SIZE_Y - border.Height()) / 2;
     ShowInitProgress(100);
+    //-----
+    record.WriteRecord(score, level, accuracy, PublicData::me.GetselectedChar());
 }
 
 void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
