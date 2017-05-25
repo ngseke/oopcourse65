@@ -14,6 +14,9 @@ class CFile {
         double ReadHighScore_Accuracy();  //回傳最高分裡面的正確率
         string  ReadHighScore_Character();  //回傳最高分裡面的角色名
         string  ReadHighScore_Date();  //回傳最高分裡面的日期
+        //---------
+        void WriteCharacter(string);
+        string ReadCharacter();
 
     private:
         int score;
@@ -21,6 +24,6 @@ class CFile {
         double accuracy;
         string character;
         string date;
-
+        string preCharac;
 };
 }

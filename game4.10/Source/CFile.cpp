@@ -30,5 +30,11 @@ string CFile::ReadHighScore_Character() {
 string CFile::ReadHighScore_Date() {
     return date;
 }
+void CFile::WriteCharacter(string preCharac) {
+}
+string CFile::ReadCharacter() {
+    return preCharac;
+}
+
 }
 
