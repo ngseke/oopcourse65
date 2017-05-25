@@ -97,8 +97,18 @@ void CGameStateInit::OnInit() {
         numBmp[i].LoadBitmap(str, RGB(0, 255, 0));
         sprintf(str, "Bitmaps/level/num_s/%d.bmp", i);
         numBmpSmall[i].LoadBitmap(str, RGB(0, 255, 0));
+        sprintf(str, "Bitmaps/level/num_white/%d.bmp", i);
+        numBmp_White[i].LoadBitmap(str, RGB(0, 255, 0));
+        sprintf(str, "Bitmaps/level/num_s_white/%d.bmp", i);
+        numBmpSmall_White[i].LoadBitmap(str, RGB(0, 255, 0));
     }
 
+    numBmpSmall[10].LoadBitmap("Bitmaps/level/num_s/per.bmp", RGB(0, 255, 0));
+    numBmpSmall[11].LoadBitmap("Bitmaps/level/num_s/dot.bmp", RGB(0, 255, 0));
+    numBmpSmall[12].LoadBitmap("Bitmaps/level/num_s/slash.bmp", RGB(0, 255, 0));
+    numBmpSmall_White[10].LoadBitmap("Bitmaps/level/num_s_white/per.bmp", RGB(0, 255, 0));
+    numBmpSmall_White[11].LoadBitmap("Bitmaps/level/num_s_white/dot.bmp", RGB(0, 255, 0));
+    numBmpSmall_White[12].LoadBitmap("Bitmaps/level/num_s_white/slash.bmp", RGB(0, 255, 0));
     ShowInitProgress(20);
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
@@ -262,14 +272,15 @@ void CGameStateInit::OnShow() {
             noteExkey.OnShow();
         }
 
-        // 顯示偽返回按鈕
-        const int BACK_BTN_POS = NOTE_TEXT_Y + noteBorder.Height() + 0;
-        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
-        menuBorder_ckecked.ShowBitmap();
-        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
-        menuBorder.ShowBitmap();
-        menuText[5]->SetTopLeft((SIZE_X - menuText[5]->Width()) / 2,  7 + BACK_BTN_POS);
-        menuText[5]->ShowBitmap();
+        if (0) { // 顯示偽返回按鈕
+            const int BACK_BTN_POS = NOTE_TEXT_Y + noteBorder.Height() + 0;
+            menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+            menuBorder_ckecked.ShowBitmap();
+            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+            menuBorder.ShowBitmap();
+            menuText[5]->SetTopLeft((SIZE_X - menuText[5]->Width()) / 2,  7 + BACK_BTN_POS);
+            menuText[5]->ShowBitmap();
+        }
     }
     else if (displayState == 2) {      // 顯示 選擇角色 頁面
         characterBorder.SetTopLeft((SIZE_X - characterBorder.Width()) / 2, CHARACTER_POS_Y);
@@ -303,25 +314,34 @@ void CGameStateInit::OnShow() {
         // 關於文字
         about.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y  + 11);
         about.ShowBitmap();
-        // 顯示偽返回按鈕
-        const int BACK_BTN_POS = NOTE_TEXT_Y + aboutBorder.Height() - 23;
-        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
-        menuBorder_ckecked.ShowBitmap();
-        menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
-        menuBorder.ShowBitmap();
-        menuText[5]->SetTopLeft((SIZE_X - menuText[5]->Width()) / 2, 7 + BACK_BTN_POS);
-        menuText[5]->ShowBitmap();
+
+        if (0) { // 顯示偽返回按鈕
+            const int BACK_BTN_POS = NOTE_TEXT_Y + aboutBorder.Height() - 23;
+            menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+            menuBorder_ckecked.ShowBitmap();
+            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, BACK_BTN_POS);
+            menuBorder.ShowBitmap();
+            menuText[5]->SetTopLeft((SIZE_X - menuText[5]->Width()) / 2, 7 + BACK_BTN_POS);
+            menuText[5]->ShowBitmap();
+        }
     }
 
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, text1_y);
     text1.ShowBitmap();
 
     if (0) {		// 顯示數字及字體
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 13; i++) {
             numBmpSmall[i].SetTopLeft(10 + i * 10, 300);
             numBmpSmall[i].ShowBitmap();
-            numBmp[i].SetTopLeft(10 + i * 20, 320);
-            numBmp[i].ShowBitmap();
+            numBmpSmall_White[i].SetTopLeft(10 + i * 10, 310);
+            numBmpSmall_White[i].ShowBitmap();
+
+            if (i < 10) {
+                numBmp[i].SetTopLeft(10 + i * 20, 320);
+                numBmp[i].ShowBitmap();
+                numBmp_White[i].SetTopLeft(10 + i * 20, 340);
+                numBmp_White[i].ShowBitmap();
+            }
         }
     }
 }

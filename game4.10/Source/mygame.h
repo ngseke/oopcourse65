@@ -62,9 +62,11 @@ class CGameStateInit : public CGameState {
         int noteDisplayState, statsDisplayState;		// 當前顯示的說明狀態
         //主選單元素
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
-        CMovingBitmap			menuBorder, menuBorder_ckecked;
-        CMovingBitmap			userBorder, highScoreBorder;
-        CMovingBitmap			numBmp[10], numBmpSmall[12];		// 數字圖檔
+        CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
+        CMovingBitmap			userBorder, highScoreBorder;	// 最高分的框
+        CMovingBitmap			numBmp[10], numBmpSmall[13];		// 數字圖檔
+        CMovingBitmap			numBmp_White[10], numBmpSmall_White[13];		// 數字圖檔（白色）
+
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
