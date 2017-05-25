@@ -46,7 +46,7 @@ CGameStateInit::~CGameStateInit() {
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
-    currSelectItem = displayState = 0;										// 初始化選單選取項目
+    currSelectItem = displayState = 3;										// 初始化選單選取項目
     noteDisplayState = 0;
     PublicData::me.LoadBitmap();											// 主角
     map.LoadBitmap();														// 背景網狀動畫
