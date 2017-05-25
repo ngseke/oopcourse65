@@ -47,7 +47,7 @@ void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
     currSelectItem = displayState = 3;										// 初始化選單選取項目
-    noteDisplayState = 0;
+    noteDisplayState  = statsDisplayState = 0;
     PublicData::me.LoadBitmap();											// 主角
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
@@ -102,9 +102,14 @@ void CGameStateInit::OnInit() {
     ShowInitProgress(20);
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
-    characterArrow.LoadBitmap("Bitmaps/menu/character/character_arraw.bmp", RGB(0, 255, 0));
+    characterArrow.LoadBitmap("Bitmaps/menu/character/character_arrow.bmp", RGB(0, 255, 0));
     // 載入統計元素
     statsBorder.LoadBitmap("Bitmaps/menu/stats/stats_border.bmp", RGB(0, 255, 0));
+    statsText[0].LoadBitmap("Bitmaps/menu/stats/stats_border1.bmp", RGB(0, 255, 0));
+    statsText[1].LoadBitmap("Bitmaps/menu/stats/stats_border2.bmp", RGB(0, 255, 0));
+    statsArrow[0].LoadBitmap("Bitmaps/menu/stats/stats_arrow.bmp", RGB(0, 255, 0));
+    statsArrow[1].LoadBitmap("Bitmaps/menu/stats/stats_arrow_right.bmp", RGB(0, 255, 0));
+    statsArrow[2].LoadBitmap("Bitmaps/menu/stats/stats_arrow_left.bmp", RGB(0, 255, 0));
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
     about.LoadBitmap("Bitmaps/menu/about/about_text_p2.bmp", RGB(0, 255, 0)); // 介紹文字
@@ -173,8 +178,12 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else if (nChar == KEY_RIGHT)  PublicData::me.AddSelectedChar(1);
         }
     }
-    else if (displayState == 3 && nChar == KEY_ENTER) { // [統計]
+    else if (displayState == 3) { // [統計]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+        else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) { // [遊戲說明] 左右翻頁遊戲說明
+            if		(nChar == KEY_LEFT)	 statsDisplayState = 0;
+            else if (nChar == KEY_RIGHT) statsDisplayState = 1;
+        }
     }
     else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
@@ -273,6 +282,19 @@ void CGameStateInit::OnShow() {
     else if (displayState == 3) {    	// 顯示 統計 頁面
         statsBorder.SetTopLeft((SIZE_X - statsBorder.Width()) / 2, NOTE_TEXT_Y);
         statsBorder.ShowBitmap();
+
+        if (statsDisplayState == 0) {	// 左頁 最高記錄
+            statsText[0].SetTopLeft((SIZE_X - statsBorder.Width()) / 2, NOTE_TEXT_Y);
+            statsText[0].ShowBitmap();
+            statsArrow[1].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
+            statsArrow[1].ShowBitmap();
+        }
+        else if (statsDisplayState == 1) { // 右頁 遊玩記錄
+            statsText[1].SetTopLeft((SIZE_X - statsBorder.Width()) / 2, NOTE_TEXT_Y);
+            statsText[1].ShowBitmap();
+            statsArrow[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
+            statsArrow[2].ShowBitmap();
+        }
     }
     else if (displayState == 4) {      // 顯示關於頁面
         // 關於框

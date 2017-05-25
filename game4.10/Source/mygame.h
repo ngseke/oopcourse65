@@ -58,11 +58,11 @@ class CGameStateInit : public CGameState {
         CMovingBitmap text1;							// 說明文字
         int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景
-
+        int currSelectItem, displayState;				// 當前選擇的MENU, 當前顯示的狀態
+        int noteDisplayState, statsDisplayState;		// 當前顯示的說明狀態
         //主選單元素
-        CMovingBitmap			menuBorder, menuBorder_ckecked;
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
-        int currSelectItem, displayState, noteDisplayState;		// 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
+        CMovingBitmap			menuBorder, menuBorder_ckecked;
         CMovingBitmap			userBorder, highScoreBorder;
         CMovingBitmap			numBmp[10], numBmpSmall[12];		// 數字圖檔
         // 遊戲說明 元素
@@ -73,7 +73,8 @@ class CGameStateInit : public CGameState {
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         // 統計	   元素
-        CMovingBitmap			statsBorder;
+        CMovingBitmap			statsBorder, statsText[2];
+        CMovingBitmap			statsArrow[3];
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;
 
