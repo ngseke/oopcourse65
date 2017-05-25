@@ -12,10 +12,6 @@
 #define IDB_BITMAP1                     132
 #define IDB_BACKGROUND                  132
 #define IDB_CORNER                      133
-#define IDB_BALL1                       134
-#define IDB_BALL2                       135
-#define IDB_BALL3                       136
-#define IDB_BALL4                       137
 #define IDB_0                           138
 #define IDB_1                           139
 #define IDB_2                           140
@@ -33,11 +29,11 @@
 #define IDB_CONTINUE                    152
 #define IDC_GAMECURSOR                  153
 #define IDB_HELP                        155
-#define IDB_BITMAP2                     156
 #define IDB_LOADING                     156
-#define IDB_MUSHROOM                    157
-#define IDB_HULK                        165
-#define IDB_IRONMAN                     166
+#define IDB_TALK_BOX_CENTER             167
+#define IDB_TALK_BOX_LEFT               168
+#define IDB_TALK_BOX_RIGHT              169
+#define IDB_TEXT_CURSOR                 171
 #define IDC_README                      1001
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
@@ -50,7 +46,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        167
+#define _APS_NEXT_RESOURCE_VALUE        172
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

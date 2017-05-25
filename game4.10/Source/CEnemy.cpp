@@ -23,8 +23,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
-    targetX = -2;
-    targetY = -2;
+    bossType = "enemy";
     ////
     SetXY(x, y);
     SetDelay(delay);
@@ -62,23 +61,25 @@ void CEnemy::LoadBitmap() {
 
     if (maxVocabLeng == 1 && minVocabLeng == 1)
         sprintf(str, "Bitmaps/face/face_min%d.bmp", rand() % (4) + 1);	// 1字小怪的bmp
-    else
+    else {
         sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);  // 一般小怪的bmp
+    }
 
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
-    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //載入 光標
+    textCursor.LoadBitmap(IDB_TEXT_CURSOR, RGB(0, 255, 0));  //載入 光標
     /////
-    talkBoxL.LoadBitmap("Bitmaps/talk_box_blur/talk_box_left.bmp", RGB(0, 255, 0));
-    talkBoxC.LoadBitmap("Bitmaps/talk_box_blur/talk_box_center.bmp", RGB(0, 255, 0));
-    talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
+    talkBoxL.LoadBitmap(IDB_TALK_BOX_LEFT, RGB(0, 255, 0));
+    talkBoxC.LoadBitmap(IDB_TALK_BOX_CENTER, RGB(0, 255, 0));
+    talkBoxR.LoadBitmap(IDB_TALK_BOX_RIGHT, RGB(0, 255, 0));
     /////
-
+    /*
     for (int i = 0; i < 22; i++) {	// 載入動畫
         sprintf(str, "Bitmaps/target/target_s%d.bmp", i + 1);
         target.AddBitmap(str, RGB(0, 255, 0));
     }
 
     target.SetDelayCount(2);
+    */
 }
 
 void CEnemy::OnMove() {
@@ -87,7 +88,7 @@ void CEnemy::OnMove() {
     if (!is_alive) return;
 
     delay_counter--;
-    target.OnMove();
+    // target.OnMove();
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -128,9 +129,9 @@ void CEnemy::OnShow() {
             talkBoxR.ShowBitmap();
             ////
             //// show target bmp
-            target.SetTopLeft(x + dx + targetX, y + dy + targetY);
+            //target.SetTopLeft(x + dx + targetX, y + dy + targetY);
             textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
-            (currWordLeng != 0) ? target.OnShow(), textCursor.ShowBitmap() : 0;
+            (currWordLeng != 0) ? textCursor.ShowBitmap() : 0;
 
             //
             for (int i = 0; i < length; i++) {
@@ -213,7 +214,10 @@ bool CEnemy::HitMe(CMe* me) {
     return HitRectangle(me->GetX1(), me->GetY1(),
                         me->GetX2(), me->GetY2());
 }
-bool  CEnemy::IsBombed() {
+bool CEnemy::IsBombed() {
     return is_bombed;
+}
+string CEnemy::GetBossType() {
+    return bossType;
 }
 }

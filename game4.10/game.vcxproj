@@ -336,6 +336,13 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Bitmaps\talk_box_blur\talk_box_center.bmp" />
+    <Image Include="Bitmaps\talk_box_blur\talk_box_left.bmp" />
+    <Image Include="Bitmaps\talk_box_blur\talk_box_right.bmp" />
+    <Image Include="Bitmaps\text_cursor.bmp" />
+    <Image Include="res\bitmap3.bmp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

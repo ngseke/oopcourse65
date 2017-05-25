@@ -16,8 +16,7 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     is_alive = is_bombed = false;
     dx = dy = index = delay_counter = 0;
     currWordLeng = 0;
-    targetX = -2;
-    targetY = -2;
+    bossType = "bossA";
     ////
     SetXY(x, y);
     SetDelay(delay);
@@ -60,7 +59,6 @@ void CBossA::OnMove() {
 
     delay_counter--;
     callEnemyCounter--;
-    target.OnMove();
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -69,10 +67,10 @@ void CBossA::OnMove() {
         if (index >= STEPS)
             index = 0;
 
-        // dx = xMoveDistance / STEPS * index;
-        double dxTemp = (double(SIZE_X / 2) - x) / STEPS * index;
+        double dxTemp = (double(endX) - x) / STEPS * index;
+        double dyTemp = (double(endY) - y) / STEPS * index;
         dx = int(dxTemp);  // dx為 (Enemy<->Me之x總距離) / STEPS * index;
-        dy = ((SIZE_Y - y) / STEPS) * index;
+        dy = int(dyTemp);
     }
 
     if (callEnemyCounter < 0) {		// BossA技能:召喚小怪
@@ -94,9 +92,6 @@ void CBossA::LoadBitmap() {
     talkBoxC.LoadBitmap("Bitmaps/talk_box_blur/talk_box_center.bmp", RGB(0, 255, 0));
     talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
     /////
-    char* filename[2] = { "Bitmaps/target_m1.bmp", "Bitmaps/target_m2.bmp" };
-
-    for (int i = 0; i < 2; i++)		// 載入動畫
-        target.AddBitmap(filename[i], RGB(0, 255, 0));
 }
+
 }

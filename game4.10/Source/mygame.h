@@ -63,8 +63,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			menuBorder, menuBorder_ckecked;
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         int currSelectItem, displayState, noteDisplayState;		// 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
-        CMovingBitmap			highScoreBorder;
-        CMovingBitmap			userBorder;
+        CMovingBitmap			userBorder, highScoreBorder;
         CMovingBitmap			numBmp[10], numBmpSmall[12];		// 數字圖檔
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
@@ -74,8 +73,8 @@ class CGameStateInit : public CGameState {
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         // 介紹頁面 元素
-        CMovingBitmap			aboutBorder;
-        CMovingBitmap			about;
+        CMovingBitmap			aboutBorder, about;
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -96,50 +95,43 @@ class CGameStateRun : public CGameState {
         void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
         void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-
-        //
-
-        int GetScore;
     protected:
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-        CMovingBitmap	background;	// 背景圖
-        CMovingBitmap	help;		// 說明圖
-        CMovingBitmap	corner;		// 角落圖
-        //////////
         bool			showDebug = false;								// 是否顯示debug資訊
-        CDict			dictionary;										// 所有怪物共用的字典
-        CMap			map;											// 背景圖
-        vector<CMovingBitmap*>	letter;
         CAnimation		bomb;
+        CAnimation		target;			// 鎖定的動畫
+        vector<CMovingBitmap*>	letter;
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
         vector<CBullet*>bulletList;										// 儲存飛行中的子彈的Vector
         vector<CBomb*>  bombList;
+        //
         CEnemy* 		targetEnemy;									// 指標 用於指向瞄準的敵人
+        CDict			dictionary;										// 所有怪物共用的字典
+        CMap			map;											// 背景圖
         CInteger		score;											// 分數顯示器
         CEmp			emp;
-        char			key;											// 記錄所按下的按鍵 用於防止彈跳
+        CLevel			levelAni;										// 切換關卡時的動畫
+        //
         const int		LEVEL;											// 關卡總數
+        char			key;											// 記錄所按下的按鍵 用於防止彈跳
+        bool			lock;											// 判斷是否鎖住第一個字母了
+        int				lives;											// 生命值
+        int				levelEnemyNum[30] = { 4,  5,  5,  6,  7,  7,  7,  7,  8,  9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };		// 該關卡最大的敵人數
+        int				levelBossANum[30] = { 0,  0,  1,  1,  1,  2,  1,  1,  1,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+        int				levelBossBNum[30] = { 0,  0,  0,  0,  0,  0,  1,  2,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
         int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快
         int				callBossACounter, maxCallBossACounter;
         int				callBossBCounter, maxCallBossBCounter;
         int				currEnemyNum;									// 當前該關卡 已召喚的敵人數量
         int				currBossANum, currBossBNum;						// 當前該關卡 已召喚的BossA & BossB數量
-        bool			lock;											// 判斷是否鎖住第一個字母了
         int				currLevel;										// 當前關卡
-
-        int				levelEnemyNum[20] = {  4,  5,  5,  6,  7,  7,  7,  7,  8,  9,  10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };		// 該關卡最大的敵人數
-        int				levelBossANum[20] = {  0,  0,  1,  1,  1,  2,  1,  1,  1,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
-        int				levelBossBNum[20] = {  0,  0,  0,  0,  0,  0,  1,  2,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
-
-        int				lives;											// 生命值
-        int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
-        double			accuracy;										// 正確率
-        char			keyFlag;										// 防止按鍵卡住的flag
-        CLevel			levelAni;										// 切換關卡時的動畫
         int				totalEnemyNum;									// 總召喚的敵人數量
         int				levelChangeFlag, levelChangeDelay, levelChangeDelayMax; // 關卡和關卡間的delay
+        int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
+        double			accuracy;										// 正確率
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -156,10 +148,10 @@ class CGameStateOver : public CGameState {
     protected:
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
+    private:
         CMovingBitmap		border;
         CMovingBitmap		numBmp[10], numBmpSmall[12];		// 數字圖檔
         CMovingBitmap		bar[2];
-    private:
         int					counter;	// 倒數之計數器
         int					x, y;
         int					score, level;
