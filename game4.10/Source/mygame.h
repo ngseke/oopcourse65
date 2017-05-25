@@ -75,8 +75,9 @@ class CGameStateInit : public CGameState {
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         // 統計	   元素
-        CMovingBitmap			statsBorder, statsText[2];
+        CMovingBitmap			statsBorder, statsBg[2];
         CMovingBitmap			statsArrow[3];
+        CMovingBitmap			statsText [3];
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;
 
