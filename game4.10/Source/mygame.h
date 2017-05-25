@@ -72,6 +72,8 @@ class CGameStateInit : public CGameState {
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
+        // 統計	   元素
+        CMovingBitmap			statsBorder;
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;
 

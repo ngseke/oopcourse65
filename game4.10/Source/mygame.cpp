@@ -103,6 +103,8 @@ void CGameStateInit::OnInit() {
     // 載入角色選擇 元素
     characterBorder.LoadBitmap("Bitmaps/menu/character/character_border.bmp", RGB(0, 255, 0));
     characterArrow.LoadBitmap("Bitmaps/menu/character/character_arraw.bmp", RGB(0, 255, 0));
+    // 載入統計元素
+    statsBorder.LoadBitmap("Bitmaps/menu/stats/stats_border.bmp", RGB(0, 255, 0));
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
     about.LoadBitmap("Bitmaps/menu/about/about_text_p2.bmp", RGB(0, 255, 0)); // 介紹文字
@@ -147,10 +149,10 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                 displayState = 2;						// 角色選擇的state
             }
             else if (currSelectItem == 3) {
-                // 統計的state
+                displayState = 3;						// 統計的state
             }
             else if (currSelectItem == 4) {
-                displayState = 4;	// 關於的state
+                displayState = 4;						// 關於的state
             }
         }
     }
@@ -172,6 +174,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         }
     }
     else if (displayState == 3 && nChar == KEY_ENTER) { // [統計]
+        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
     }
     else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
         if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
@@ -267,7 +270,10 @@ void CGameStateInit::OnShow() {
         PublicData::me.SetState(1);
         PublicData::me.OnShow();
     }
-    else if (displayState == 3) {}
+    else if (displayState == 3) {    	// 顯示 統計 頁面
+        statsBorder.SetTopLeft((SIZE_X - statsBorder.Width()) / 2, NOTE_TEXT_Y);
+        statsBorder.ShowBitmap();
+    }
     else if (displayState == 4) {      // 顯示關於頁面
         // 關於框
         aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
@@ -288,7 +294,7 @@ void CGameStateInit::OnShow() {
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, text1_y);
     text1.ShowBitmap();
 
-    if (1) {		// 顯示數字及字體
+    if (0) {		// 顯示數字及字體
         for (int i = 0; i < 10; i++) {
             numBmpSmall[i].SetTopLeft(10 + i * 10, 300);
             numBmpSmall[i].ShowBitmap();
