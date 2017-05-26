@@ -17,6 +17,8 @@ CMe::CMe(): CHARACTER_POS_Y(320) {
     y = SIZE_Y - 60;
     selectedChar = 0;
     currState = 1;
+    highScoreName = "";
+    highScoreCharNum = 0;
 }
 CMe::~CMe() {
     for (CCharacter* cc : character) delete cc;
@@ -96,6 +98,25 @@ void CMe::OnShow() {
         character[selectedChar]->SetXY(x, y);
         character[selectedChar]->OnShow();
     }
+
+    if (currState == 3) {	// 最高紀錄顯示
+        x = 282;
+        y = 420;
+        character[highScoreCharNum]->SetXY(x, y);
+        character[highScoreCharNum]->OnShow();
+    }
+
+    if (currState == 4) {	// 遊玩紀錄顯示
+        x = 160;
+        y = 400;
+        const int LINE_MARGIN = 44;
+
+        for (int i = 0; i < 3; i++) {
+            character[ playingRecordCharNum[i] ]->SetXY(x - character[playingRecordCharNum[i]]->GetWidth() / 2, \
+                    y + LINE_MARGIN * i);
+            character[ playingRecordCharNum[i] ]->OnShow();
+        }
+    }
 }
 void CMe::AddSelectedChar(int num) {
     int result = selectedChar + num;
@@ -106,7 +127,30 @@ void CMe::SetXY(int nx, int ny) {
     x = nx;
     y = ny;
 }
+void CMe::SetHighScoreDisplay( string characterName) {
+    this->highScoreName = characterName;
 
+    for (unsigned int i = 0; i < character.size(); i++) {
+        if (highScoreName == character[i]->GetName()) {
+            highScoreCharNum = i;
+            break;
+        }
+    }
+}
+void CMe::SetPlayingRecordDisplay(string s0, string s1, string s2) {
+    playingRecordName[0] = s0;
+    playingRecordName[1] = s1;
+    playingRecordName[2] = s2;
+
+    for (int j = 0; j < 3; j++) {
+        for (unsigned int i = 0; i < character.size(); i++) {
+            if (playingRecordName[j] == character[i]->GetName()) {
+                playingRecordCharNum[j] = i;
+                break;
+            }
+        }
+    }
+}
 int CMe::GetX1() {
     return character[selectedChar]->GetX1();
 }

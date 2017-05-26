@@ -64,8 +64,8 @@ class CGameStateInit : public CGameState {
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
         CMovingBitmap			userBorder, highScoreBorder;	// 最高分的框
-        CMovingBitmap			numBmp[10], numBmpSmall[13];		// 數字圖檔
-        CMovingBitmap			numBmp_White[10], numBmpSmall_White[13];		// 數字圖檔（白色）
+        CMovingBitmap			numBmp[10], numBmpSmall[14];		// 數字圖檔
+        CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];		// 數字圖檔（白色）
 
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
@@ -76,7 +76,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         // 統計	   元素
         CMovingBitmap			statsBorder, statsBg[2];
-        CMovingBitmap			statsArrow[3], statsArrowV[3];
+        CMovingBitmap			statsArrow[3], statsArrowV[4];
         CMovingBitmap			statsText [3];
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;

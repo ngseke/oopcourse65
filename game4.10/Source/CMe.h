@@ -20,12 +20,15 @@ class CMe {
         void LoadCharacter();			// 載入角色
         void AddSelectedChar(int);		// 選擇角色時移動游標
         void SetState(int);				// 設定當前顯示的狀
-
+        void SetHighScoreDisplay(string);
+        void SetPlayingRecordDisplay(string, string, string);
     protected:
         const int CHARACTER_POS_Y;
         int x, y;						// 圖形左上角座標
         vector<CCharacter*> character;
         int  selectedChar;				// 選中的角色編號
-        int  currState;					// 0: 遊戲中, 1: 選擇角色畫面, 2: GAMEOVER畫面
+        int  currState;					// 0: 遊戲中, 1: 選擇角色畫面, 2: GAMEOVER畫面, 3: 最高分畫面
+        string highScoreName, playingRecordName[3];
+        int highScoreCharNum, playingRecordCharNum[3];
 };
 }
