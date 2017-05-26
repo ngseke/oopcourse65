@@ -49,6 +49,7 @@ void CGameStateInit::OnInit() {
     currSelectItem = displayState = 3;					// 初始化選單選取項目
     noteDisplayState = statsDisplayState = 0;			// 初始化“遊戲說明”及“統計”選取頁面項目
     statsPRItemNum = 0;									// 初始化統計頁面 最高記錄的選取項目
+    wrongKeyNum = 0;
 
     if (1)  statsDisplayState = 1;						// DEBUG用
 
@@ -155,6 +156,10 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
+    if (!(nChar == KEY_ESC || nChar == KEY_LEFT || nChar == KEY_UP || nChar == KEY_RIGHT || nChar == KEY_DOWN || nChar == KEY_ENTER)) {
+        wrongKeyNum++;
+    }
+
     if (nChar == KEY_ESC)   displayState = 0; // ESC鍵返回主選單
 
     if (displayState == 0 ) { // 在主選單...
@@ -226,16 +231,23 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
 }
 
-void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {}
+void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
+    wrongKeyNum++;
+}
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point) {}
 void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     map.OnMove();
     PublicData::me.OnMove();
 
-    if (text1_count < 400)text1_count++;
+    if (text1_count < 400) text1_count++;
 
     if (text1_count > 5 * 30)  text1_y += int((text1_count - 5 * 30) * 1.1);
+
+    if (wrongKeyNum > 3) {	// 若多次按下不相關按鈕，則友善提醒重新播放說明文字
+        text1_y = 550;
+        text1_count = wrongKeyNum = 0;
+    }
 }
 
 void CGameStateInit::OnShow() {

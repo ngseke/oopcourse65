@@ -60,12 +60,14 @@ class CGameStateInit : public CGameState {
         CMap map;										// 背景
         int currSelectItem, displayState;				// 當前選擇的MENU, 當前顯示的狀態
         int noteDisplayState, statsDisplayState;		// 當前顯示的說明狀態
-        int statsPRItemNum;
+        int statsPRItemNum;								// 遊玩記錄的項目數字
+        int wrongKeyNum;								// 錯誤按鍵數
+
         //主選單元素
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
         CMovingBitmap			userBorder, highScoreBorder;	// 最高分的框
-        CMovingBitmap			numBmp[10], numBmpSmall[14];		// 數字圖檔
+        CMovingBitmap			numBmp[10], numBmpSmall[14];	// 數字圖檔
         CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];		// 數字圖檔（白色）
 
         // 遊戲說明 元素
