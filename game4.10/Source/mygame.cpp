@@ -33,6 +33,7 @@ int PublicData::level = 0;
 double PublicData::accuracy = 0.0;
 CMe	PublicData::me;
 vector<CRecord*> PublicData::record;
+CFile PublicData::bestRecord;
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
@@ -329,6 +330,14 @@ void CGameStateOver::OnBeginState() {
     PublicData::me.SetState(2);
     PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName()));
     PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
+
+    if (PublicData::record.size() == 1) {
+        PublicData::bestRecord.WriteHighScore(PublicData::record.back()->ReadRecordScore_Score(), PublicData::record.back()->ReadRecordScore_Level(),
+                                              PublicData::record.back()->ReadRecordScore_Accuracy(), PublicData::record.back()->ReadRecordScore_Character(),
+                                              PublicData::record.back()->ReadRecordScore_Date() );
+    }
+    else {
+    }
 }
 
 void CGameStateOver::OnInit() {

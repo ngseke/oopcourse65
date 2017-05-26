@@ -11,6 +11,7 @@
 #include "CEmp.h"
 #include "CLevel.h"
 #include "CRecord.h"
+#include "CFile.h"
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -36,6 +37,7 @@ class PublicData {
         static double		accuracy;
         static CMe			me;
         static vector<CRecord*>		record;
+        static CFile		bestRecord;
 
 };
 
