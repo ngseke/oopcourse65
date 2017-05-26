@@ -31,8 +31,8 @@ enum AUDIO_ID {				// 定義各種音效的編號
 /////////////////////////////////////////////////////////////////////////////
 class PublicData {
     public:
-        static int			score;
-        static int			level;
+        static int			score;						// 共用變數：儲存分數
+        static int			level;						// 共用變數：儲存關卡
         static double		accuracy;
         static CMe			me;
 };
@@ -76,7 +76,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         // 統計	   元素
         CMovingBitmap			statsBorder, statsBg[2];
-        CMovingBitmap			statsArrow[3];
+        CMovingBitmap			statsArrow[3], statsArrowV[3];
         CMovingBitmap			statsText [3];
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;

@@ -48,6 +48,9 @@ void CGameStateInit::OnInit() {
     const unsigned int exkeyNum = 6;										// 說明框裡面的按鍵動畫 數量
     currSelectItem = displayState = 3;										// 初始化選單選取項目
     noteDisplayState  = statsDisplayState = 0;
+
+    if (1)  statsDisplayState = 1;
+
     PublicData::me.LoadBitmap();											// 主角
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
@@ -120,6 +123,9 @@ void CGameStateInit::OnInit() {
     statsArrow[0].LoadBitmap("Bitmaps/menu/stats/stats_arrow.bmp", RGB(0, 255, 0));
     statsArrow[1].LoadBitmap("Bitmaps/menu/stats/stats_arrow_right.bmp", RGB(0, 255, 0));
     statsArrow[2].LoadBitmap("Bitmaps/menu/stats/stats_arrow_left.bmp", RGB(0, 255, 0));
+    statsArrowV[0].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v.bmp", RGB(0, 255, 0));
+    statsArrowV[1].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_up.bmp", RGB(0, 255, 0));
+    statsArrowV[2].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_down.bmp", RGB(0, 255, 0));
     statsText[0].LoadBitmap("Bitmaps/menu/stats/stats_text_hl.bmp", RGB(0, 255, 0));
     statsText[1].LoadBitmap("Bitmaps/menu/stats/stats_text_tkc.bmp", RGB(0, 255, 0));
     statsText[2].LoadBitmap("Bitmaps/menu/stats/stats_text_acc.bmp", RGB(0, 255, 0));
@@ -296,7 +302,7 @@ void CGameStateInit::OnShow() {
     else if (displayState == 3) {    	// 顯示 統計 頁面
         const int STATS_POS_X = (SIZE_X - statsBorder.Width()) / 2;	// 統計框之位置
         const int STATS_TEXT_POS_Y = 120, STATS_TEXT_POS_X = 310;	// 統計頁文字之位置
-        const int 	STATS_TEXT_MARGIN = 30;	// 文字之 行距
+        const int STATS_TEXT_MARGIN = 30;	// 文字之 行距
         statsBorder.SetTopLeft(STATS_POS_X, NOTE_TEXT_Y);
         statsBorder.ShowBitmap();
 
@@ -385,6 +391,8 @@ void CGameStateInit::OnShow() {
             statsBg[1].ShowBitmap();
             statsArrow[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
             statsArrow[2].ShowBitmap();
+            statsArrowV[0].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 155);
+            statsArrowV[0].ShowBitmap();
         }
     }
     else if (displayState == 4) {      // 顯示關於頁面
@@ -436,7 +444,7 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     (nChar == KEY_ENTER) ? GotoGameState(GAME_STATE_INIT) : 0;
 }
 void CGameStateOver::OnBeginState() {
-    counter = 1000 * 5;	 // 5 seconds
+    counter = 1000 * 30;	 // 5 seconds
     barCounter = 0;
     //
     score = PublicData::score;
