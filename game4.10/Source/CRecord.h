@@ -21,5 +21,6 @@ class CRecord {
         double accuracy;
         string date;
         string meName;
+        char chDate[80];
 };
 }
