@@ -51,15 +51,16 @@ class CGameStateInit : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
-        const int MENU_POS_Y;							// 定義 MENU 的Y軸
+        const int MENU_Y;								// 定義 MENU 的Y軸
         const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
-        const int CHARACTER_POS_Y;
+        const int CHARACTER_Y;
         CMovingBitmap typing_logo, taipin;				// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
         int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景
         int currSelectItem, displayState;				// 當前選擇的MENU, 當前顯示的狀態
         int noteDisplayState, statsDisplayState;		// 當前顯示的說明狀態
+        int statsPRItemNum;
         //主選單元素
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
@@ -78,6 +79,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			statsBorder, statsBg[2];
         CMovingBitmap			statsArrow[3], statsArrowV[4];
         CMovingBitmap			statsText [3];
+        CMovingBitmap			statsNoRecord;
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;
 

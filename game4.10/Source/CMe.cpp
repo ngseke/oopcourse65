@@ -42,6 +42,15 @@ void CMe::LoadCharacter() {
 void CMe::OnMove() {
     if (currState == 0) character[selectedChar]->OnMove();
     else if (currState == 1) character[selectedChar]->OnMove();
+    else if (currState == 3) {
+        character[highScoreCharNum]->OnMove();
+    }
+    else if (currState == 4) {
+        for (int i = 0; i < 3; i++) {
+            if (playingRecordCharNum[i] != 999)
+                character[playingRecordCharNum[i]]->OnMove();
+        }
+    }
 }
 
 void CMe::OnShow() {
@@ -109,14 +118,18 @@ void CMe::OnShow() {
     if (currState == 4) {	// 遊玩紀錄顯示
         x = 160;
         y = 400;
-        const int LINE_MARGIN = 44;
+        const int LINE_MARGIN = 44;		// 角色間的Y軸距離
 
         for (int i = 0; i < 3; i++) {
-            character[ playingRecordCharNum[i] ]->SetXY(x - character[playingRecordCharNum[i]]->GetWidth() / 2, \
-                    y + LINE_MARGIN * i);
-            character[ playingRecordCharNum[i] ]->OnShow();
+            if (playingRecordCharNum[i] != 999) {
+                character[ playingRecordCharNum[i] ]->SetXY(x - character[playingRecordCharNum[i]]->GetWidth() / 2, \
+                        y + LINE_MARGIN * i);
+                character[ playingRecordCharNum[i] ]->OnShow();
+            }
         }
     }
+
+    if (currState == 5) {}
 }
 void CMe::AddSelectedChar(int num) {
     int result = selectedChar + num;
@@ -144,9 +157,14 @@ void CMe::SetPlayingRecordDisplay(string s0, string s1, string s2) {
 
     for (int j = 0; j < 3; j++) {
         for (unsigned int i = 0; i < character.size(); i++) {
-            if (playingRecordName[j] == character[i]->GetName()) {
-                playingRecordCharNum[j] = i;
-                break;
+            if (playingRecordName[j] == character[i]->GetName()) {	// 若輸入的角色名和Vector內匹配
+                if (playingRecordName[j] == "") {	// 不顯示主角Bitmap
+                    playingRecordCharNum[j] = 999;	// 999 表示不顯示主角Bitmap
+                }
+                else {
+                    playingRecordCharNum[j] = i;
+                    break;
+                }
             }
         }
     }
