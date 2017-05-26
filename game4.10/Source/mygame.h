@@ -35,6 +35,8 @@ class PublicData {
         static int			level;
         static double		accuracy;
         static CMe			me;
+        static vector<CRecord*>		record;
+
 };
 
 class CGameStateInit : public CGameState {
@@ -157,7 +159,6 @@ class CGameStateOver : public CGameState {
         int					score, level;
         double				accuracy;
         int					barCounter;
-        CRecord				record;
 };
 
 }

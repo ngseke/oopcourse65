@@ -21,6 +21,7 @@ class CMe {
         void AddSelectedChar(int);		// 選擇角色時移動游標
         void SetState(int);				// 設定當前顯示的狀
         int GetselectedChar();			// 取得選中的角色編號
+        string GetMeName();				// 取得選中的角色名
     protected:
         const int CHARACTER_POS_Y;
         int x, y;						// 圖形左上角座標

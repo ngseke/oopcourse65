@@ -8,20 +8,18 @@ namespace game_framework {
 
 class CRecord {
     public:
-        CRecord();
-        void WriteRecord(int score, int level, double accuracy, int selectedChar);
-        int ReadRecordScore_Score(int);  //回傳第x筆裡面的分
-        int ReadRecordScore_Level(int);  //回傳第x筆裡面的關
-        double ReadRecordScore_Accuracy(int);  //回傳第x筆裡面的正確率
-        string  ReadRecordScore_Character(int);  //回傳第x筆裡面的角色名
-        string  ReadRecordScore_Date(int);  //回傳第x筆裡面的日期
-
+        CRecord(int score, int level, double accuracy, string meName);
+        void WriteRecord(int score, int level, double accuracy, string meName);
+        int ReadRecordScore_Score();  //回傳第x筆裡面的分
+        int ReadRecordScore_Level();  //回傳第x筆裡面的關
+        double ReadRecordScore_Accuracy();  //回傳第x筆裡面的正確率
+        string  ReadRecordScore_Character();  //回傳第x筆裡面的角色名
+        string  ReadRecordScore_Date();  //回傳第x筆裡面的日期
     private:
         int score;
         int level;
         double accuracy;
         string date;
-        string character;
-
+        string meName;
 };
 }

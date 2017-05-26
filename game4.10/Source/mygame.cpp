@@ -32,6 +32,7 @@ int PublicData::score = 0;
 int PublicData::level = 0;
 double PublicData::accuracy = 0.0;
 CMe	PublicData::me;
+vector<CRecord*> PublicData::record;
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
@@ -326,6 +327,8 @@ void CGameStateOver::OnBeginState() {
     accuracy = PublicData::accuracy;
     //
     PublicData::me.SetState(2);
+    PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName()));
+    PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
 }
 
 void CGameStateOver::OnInit() {
@@ -348,8 +351,6 @@ void CGameStateOver::OnInit() {
     x = (SIZE_X - border.Width()) / 2;
     y = (SIZE_Y - border.Height()) / 2;
     ShowInitProgress(100);
-    //-----
-    record.WriteRecord(score, level, accuracy, PublicData::me.GetselectedChar());
 }
 
 void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示

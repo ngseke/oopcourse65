@@ -129,4 +129,7 @@ void CMe::SetState(int state) {
 int CMe::GetselectedChar() {
     return selectedChar;
 }
+string CMe:: GetMeName() {
+    return character[selectedChar]->GetName();
+}
 }

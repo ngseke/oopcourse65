@@ -9,28 +9,30 @@
 #include <iomanip>
 #include <fstream>
 #include <ctime>
+#include <string>
+#include <sstream>
 
 namespace game_framework {
 
-CRecord::CRecord() {
+CRecord::CRecord(int score, int level, double accuracy, string meName) {
+    this->score = score;
+    this->level = level;
+    this->accuracy = accuracy;
+    this->meName = meName;
 }
-void CRecord::WriteRecord(int score, int level, double accuracy, int selectedChar) {
-    char filename[] = "user.txt";
+void CRecord::WriteRecord(int score, int level, double accuracy, string meName) {
+    char filename[] = "user/user.txt";
     fstream	fp;
     struct tm* T = NULL;
     time_t t;
     time(&t);
     T = localtime(&t);
     fp.open(filename, ios::out | ios::app);
-
-    if (!fp) {
-    }
-
-    fp << "character:" << selectedChar
+    fp << "character:" << meName
        << ",score:" << score
        << ",level:" << level
        << ",accuracy:" << accuracy
-       << ",date:" << T->tm_year + 1900 << ","
+       << ",date:" << T->tm_year + 1900
        << setw(2) << setfill('0') << T->tm_mon + 1
        << setw(2) << setfill('0') << T->tm_mday
        << setw(2) << setfill('0') << T->tm_hour
@@ -38,20 +40,21 @@ void CRecord::WriteRecord(int score, int level, double accuracy, int selectedCha
        << setw(2) << setfill('0') << T->tm_sec << endl;
 }
 
-int CRecord::ReadRecordScore_Score(int x) {
+int CRecord::ReadRecordScore_Score() {
     return score;
 }
-int CRecord::ReadRecordScore_Level(int x) {
+int CRecord::ReadRecordScore_Level() {
     return level;
 }
-double CRecord::ReadRecordScore_Accuracy(int x) {
+double CRecord::ReadRecordScore_Accuracy() {
     return accuracy;
 }
-string CRecord::ReadRecordScore_Character(int x) {
-    return character;
+string CRecord::ReadRecordScore_Character() {
+    return meName;
 }
-string CRecord::ReadRecordScore_Date(int x) {
+string CRecord::ReadRecordScore_Date() {
     return date;
 }
+
 }
 
