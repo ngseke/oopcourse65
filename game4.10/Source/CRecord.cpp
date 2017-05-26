@@ -27,12 +27,8 @@ CRecord::CRecord(int score, int level, double accuracy, string meName) {
     this->date.assign(chDate);
 }
 void CRecord::WriteRecord(int score, int level, double accuracy, string meName) {
-    char filename[] = "user/user.txt";
+    char filename[] = "user/record.txt";
     fstream	fp;
-    struct tm* T = NULL;
-    time_t t;
-    time(&t);
-    T = localtime(&t);
     fp.open(filename, ios::out | ios::app);
     fp << "character:" << meName
        << ",score:" << score
@@ -62,6 +58,11 @@ string CRecord::ReadRecordScore_Character() {
 string CRecord::ReadRecordScore_Date() {
     return date;
 }
-
+void CRecord::WriteCharacter(string preCharac) {
+    this->preCharac = preCharac;
+}
+string CRecord::ReadCharacter() {
+    return preCharac;
+}
 }
 

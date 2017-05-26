@@ -15,6 +15,9 @@ class CRecord {
         double ReadRecordScore_Accuracy();  //回傳第x筆裡面的正確率
         string  ReadRecordScore_Character();  //回傳第x筆裡面的角色名
         string  ReadRecordScore_Date();  //回傳第x筆裡面的日期
+        //---------
+        void WriteCharacter(string);	//上次選的角色
+        string ReadCharacter();			//回傳上次選的角色
     private:
         int score;
         int level;
@@ -22,5 +25,7 @@ class CRecord {
         string date;
         string meName;
         char chDate[80];
+        string preCharac;
+
 };
 }

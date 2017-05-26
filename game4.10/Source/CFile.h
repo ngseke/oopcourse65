@@ -7,23 +7,21 @@ namespace game_framework {
 
 class CFile {
     public:
-        CFile();
-        void WriteHighScore(int score, int level, double accuracy, string character, string date);
+        CFile(int score, int level, double accuracy, string meName, string date));
+        void WriteHighScore(int score, int level, double accuracy, string meName, string date);
         int ReadHighScore_Score();  //回傳最高分裡面的分
         int ReadHighScore_Level();  //回傳最高分裡面的關
         double ReadHighScore_Accuracy();  //回傳最高分裡面的正確率
         string  ReadHighScore_Character();  //回傳最高分裡面的角色名
         string  ReadHighScore_Date();  //回傳最高分裡面的日期
-        //---------
-        void WriteCharacter(string);
-        string ReadCharacter();
+
 
     private:
         int score;
         int level;
         double accuracy;
-        string character;
         string date;
-        string preCharac;
+        string meName;
+
 };
 }
