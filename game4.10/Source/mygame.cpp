@@ -398,10 +398,8 @@ void CGameStateInit::OnShow() {
             statsBg[1].ShowBitmap();
             statsArrow[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
             statsArrow[2].ShowBitmap();
-            statsArrowV[0].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 155);
+            statsArrowV[0].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
             statsArrowV[0].ShowBitmap();
-            statsArrowV[3].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 155);
-            statsArrowV[3].ShowBitmap();
 
             for (int j = 0; j < 3; j++) {
                 int tempScore = 12345, tempLevel = 87, tempKeyCount = 67890, tempAccuracy = int(94.87 * 100.0);
@@ -440,7 +438,7 @@ void CGameStateInit::OnShow() {
                 }
 
                 for (int i = 0; i < 5; i++) {		// 顯示分數數字bmp
-                    numBmpSmall[tempScore % 10].SetTopLeft(STATS_POS_X + STATS_PR_NUM_POS_X + 165 - 10 * i,
+                    numBmpSmall[tempScore % 10].SetTopLeft(STATS_POS_X + STATS_PR_NUM_POS_X + 170 - 10 * i,
                                                            NOTE_TEXT_Y + 130 + j * LINE_MARGIN);
                     numBmpSmall[tempScore % 10].ShowBitmap();
                     tempScore /= 10;
@@ -546,7 +544,7 @@ void CGameStateOver::OnMove() {
 }
 void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ENTER = 0xD;
-    (nChar == KEY_ENTER) ? GotoGameState(GAME_STATE_INIT) : 0;
+    (nChar == KEY_ENTER) ? GotoGameState(GAME_STATE_INIT) : 0;	// 按下Enter鍵返回開頭頁面
 }
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 30;	 // 5 seconds
@@ -681,7 +679,7 @@ void CGameStateRun::OnBeginState() {
     levelChangeDelayMax = int( 3.5 * 30 );						// 設定關卡間delay 3秒
 
     //
-    if (1) {	//【DEBUG區】 將第0關設定生成200只怪物，且召喚delay為0秒
+    if (0) {	//【DEBUG區】 將第0關設定生成200只怪物，且召喚delay為0秒
         levelEnemyNum[0] = 200;
         levelChangeDelayMax = 0;
         callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
