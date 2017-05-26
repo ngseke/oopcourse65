@@ -727,7 +727,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 7, &enemyQueue, &bombList, \
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 6, &enemyQueue, &bombList, \
                                         PublicData::me.GetX1(), PublicData::me.GetY1(), &letter) ); // 將召喚的新怪放入vecotr內
         enemyQueue.back()->LoadBitmap();	// 載入召喚的新怪
         currEnemyNum++;						// 在本關卡已召喚的怪物計數器
