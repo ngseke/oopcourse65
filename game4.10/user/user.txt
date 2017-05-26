@@ -1,1 +1,6 @@
 character:Creeper,score:64,level:0,accuracy:92.7536,date:20170526114606
+character:Captain American,score:28,level:0,accuracy:90.3226,date:20170526115712
+character:Captain American,score:53,level:0,accuracy:96.3636,date:20170526115757
+character:Cow,score:14,level:0,accuracy:93.3333,date:20170526115855
+character:Cow,score:52,level:0,accuracy:91.6667,date:20170526120042
+character:Bouncing Ball,score:7,level:0,accuracy:100,date:20170526120114
