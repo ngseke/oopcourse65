@@ -32,8 +32,8 @@ enum AUDIO_ID {				// 定義各種音效的編號
 /////////////////////////////////////////////////////////////////////////////
 class PublicData {
     public:
-        static int			score;
-        static int			level;
+        static int			score;						// 共用變數：儲存分數
+        static int			level;						// 共用變數：儲存關卡
         static double		accuracy;
         static CMe			me;
         static vector<CRecord*>		record;
@@ -55,20 +55,25 @@ class CGameStateInit : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
-        const int MENU_POS_Y;							// 定義 MENU 的Y軸
+        const int MENU_Y;								// 定義 MENU 的Y軸
         const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
-        const int CHARACTER_POS_Y;
+        const int CHARACTER_Y;
         CMovingBitmap typing_logo, taipin;				// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
         int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景
+        int currSelectItem, displayState;				// 當前選擇的MENU, 當前顯示的狀態
+        int noteDisplayState, statsDisplayState;		// 當前顯示的說明狀態
+        int statsPRItemNum;								// 遊玩記錄的項目數字
+        int wrongKeyNum;								// 錯誤按鍵數
 
         //主選單元素
-        CMovingBitmap			menuBorder, menuBorder_ckecked;
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
-        int currSelectItem, displayState, noteDisplayState;		// 當前選擇的MENU, 當前顯示的狀態, 當前顯示的說明狀態
-        CMovingBitmap			userBorder, highScoreBorder;
-        CMovingBitmap			numBmp[10], numBmpSmall[12];		// 數字圖檔
+        CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
+        CMovingBitmap			userBorder, highScoreBorder;	// 最高分的框
+        CMovingBitmap			numBmp[10], numBmpSmall[14];	// 數字圖檔
+        CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];		// 數字圖檔（白色）
+
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
@@ -76,6 +81,11 @@ class CGameStateInit : public CGameState {
         vector<CMovingBitmap*>	note;							// 多頁的說明文字
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
+        // 統計	   元素
+        CMovingBitmap			statsBorder, statsBg[2];
+        CMovingBitmap			statsArrow[3], statsArrowV[4];
+        CMovingBitmap			statsText [3];
+        CMovingBitmap			statsNoRecord;
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;
 
@@ -103,7 +113,8 @@ class CGameStateRun : public CGameState {
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-        bool			showDebug = false;								// 是否顯示debug資訊
+        bool			showDebug = false;				// 是否顯示debug資訊
+        bool			quickCall = false;
         CAnimation		bomb;
         CAnimation		target;			// 鎖定的動畫
         vector<CMovingBitmap*>	letter;

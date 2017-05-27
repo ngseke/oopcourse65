@@ -45,10 +45,7 @@ bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
     int y1 = y + dy;				// 怪物face的左上角y座標
     int x2 = x1 + bmp.Width();		// 怪物face的右下角x座標
     int y2 = y1 + bmp.Height();		// 怪物face的右下角y座標
-    //
-    // 檢測怪物face的矩形與參數矩形是否有交集
-    //
-    return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
+    return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);	// 檢測怪物face的矩形與參數矩形是否有交集
 }
 
 bool CEnemy::IsAlive() {
@@ -57,29 +54,19 @@ bool CEnemy::IsAlive() {
 
 void CEnemy::LoadBitmap() {
     char str[30];
-    const unsigned int bitmapNum = 7;		// 圖檔數量
+    const unsigned int bitmapNum = 7;										// 圖檔總數量
 
     if (maxVocabLeng == 1 && minVocabLeng == 1)
-        sprintf(str, "Bitmaps/face/face_min%d.bmp", rand() % (4) + 1);	// 1字小怪的bmp
+        sprintf(str, "Bitmaps/face/face_min%d.bmp", rand() % (4) + 1);		// 1字小怪的bmp
     else {
-        sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);  // 一般小怪的bmp
+        sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);	// 一般小怪的bmp
     }
 
-    bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
-    textCursor.LoadBitmap(IDB_TEXT_CURSOR, RGB(0, 255, 0));  //載入 光標
-    /////
-    talkBoxL.LoadBitmap(IDB_TALK_BOX_LEFT, RGB(0, 255, 0));
-    talkBoxC.LoadBitmap(IDB_TALK_BOX_CENTER, RGB(0, 255, 0));
-    talkBoxR.LoadBitmap(IDB_TALK_BOX_RIGHT, RGB(0, 255, 0));
-    /////
-    /*
-    for (int i = 0; i < 22; i++) {	// 載入動畫
-        sprintf(str, "Bitmaps/target/target_s%d.bmp", i + 1);
-        target.AddBitmap(str, RGB(0, 255, 0));
-    }
-
-    target.SetDelayCount(2);
-    */
+    bmp.LoadBitmap(str, RGB(0, 255, 0));						// 載入 怪物SKIN
+    textCursor.LoadBitmap(IDB_TEXT_CURSOR, RGB(0, 255, 0));		// 載入 光標
+    talkBoxL.LoadBitmap(IDB_TALK_BOX_LEFT, RGB(0, 255, 0));		// 載入 對話框左
+    talkBoxC.LoadBitmap(IDB_TALK_BOX_CENTER, RGB(0, 255, 0));	// 載入 對話框中
+    talkBoxR.LoadBitmap(IDB_TALK_BOX_RIGHT, RGB(0, 255, 0));	// 載入 對話框右
 }
 
 void CEnemy::OnMove() {
@@ -88,7 +75,6 @@ void CEnemy::OnMove() {
     if (!is_alive) return;
 
     delay_counter--;
-    // target.OnMove();
 
     if (delay_counter < 0) {
         delay_counter = delay;
@@ -127,13 +113,9 @@ void CEnemy::OnShow() {
 
             talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
             talkBoxR.ShowBitmap();
-            ////
-            //// show target bmp
-            //target.SetTopLeft(x + dx + targetX, y + dy + targetY);
             textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
             (currWordLeng != 0) ? textCursor.ShowBitmap() : 0;
 
-            //
             for (int i = 0; i < length; i++) {
                 letter->at(vocab[i] - 97)->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter->at(0)->Width() * i, y + dy + 4);
                 letter->at(vocab[i] - 97)->ShowBitmap();
@@ -167,7 +149,7 @@ void  CEnemy::SetVocab() {								// 隨機從dict中抓取一個單字到vocab裡面
         }
 
         if (length >= minVocabLeng && length <= maxVocabLeng) {	 // 長度符合 ,使用break跳出迴圈 確定生成此單字
-            bool firstWordBounceFlag = 0;		//	有撞到第一個單字的flag
+            bool firstWordBounceFlag = 0;				// 有撞到第一個單字的flag
 
             for (int i = enemyQueue->size() - 1; i >= 0; i--) {
                 if (vocab[0] == enemyQueue->at(i)->GetFirstWord() && enemyQueue->at(i)->IsAlive())
@@ -180,7 +162,7 @@ void  CEnemy::SetVocab() {								// 隨機從dict中抓取一個單字到vocab裡面
     }
 }
 
-string CEnemy::GetVocab() {			  // 回傳整組單字(ex: "apple")
+string CEnemy::GetVocab() {			// 回傳整組單字(ex: "apple")
     return vocab;
 }
 char CEnemy::GetFirstWord() {		// 以char回傳一個字 (ex: 'a')

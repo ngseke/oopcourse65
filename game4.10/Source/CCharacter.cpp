@@ -8,7 +8,7 @@
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
-// CCharacter: Enemy
+// CCharacter: еDид
 /////////////////////////////////////////////////////////////////////////////
 
 CCharacter::CCharacter(string name, string subName, string fn, int bmpNum, int x, int y) {
@@ -18,7 +18,6 @@ CCharacter::CCharacter(string name, string subName, string fn, int bmpNum, int x
     this->x = x;
     this->y = y;
     this->fileName = fn;
-    //for (int i = 0; i < bmpNum; i++) this->pathName[i] = pathName[i];
     LoadBitmap();
 }
 

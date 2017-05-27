@@ -85,13 +85,10 @@ void CBossA::LoadBitmap() {
     const unsigned int bitmapNum = 7;		// 瓜郎计秖
     sprintf(str, "Bitmaps/face/face_boss%d.bmp", rand() % bitmapNum + 1);
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 更 ┣SKIN
-    //
-    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  //更 夹
-    /////
+    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  // 更 夹
     talkBoxL.LoadBitmap("Bitmaps/talk_box_blur/talk_box_left.bmp", RGB(0, 255, 0));
     talkBoxC.LoadBitmap("Bitmaps/talk_box_blur/talk_box_center.bmp", RGB(0, 255, 0));
     talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
-    /////
 }
 
 }

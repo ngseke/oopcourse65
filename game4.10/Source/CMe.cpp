@@ -10,7 +10,7 @@
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
-// CMe: 主角
+// CMe: 控制顯示主角的中樞
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -19,6 +19,8 @@ CMe::CMe(): CHARACTER_POS_Y(320) {
     y = SIZE_Y - 60;
     currState = 1;
     selectedChar = 0;
+    highScoreName = "";
+    highScoreCharNum = 0;
 }
 CMe::~CMe() {
     for (CCharacter* cc : character) delete cc;
@@ -42,6 +44,15 @@ void CMe::LoadCharacter() {
 void CMe::OnMove() {
     if (currState == 0) character[selectedChar]->OnMove();
     else if (currState == 1) character[selectedChar]->OnMove();
+    else if (currState == 3) {
+        character[highScoreCharNum]->OnMove();
+    }
+    else if (currState == 4) {
+        for (int i = 0; i < 3; i++) {
+            if (playingRecordCharNum[i] != 999)
+                character[playingRecordCharNum[i]]->OnMove();
+        }
+    }
 }
 
 void CMe::OnShow() {
@@ -98,6 +109,29 @@ void CMe::OnShow() {
         character[selectedChar]->SetXY(x, y);
         character[selectedChar]->OnShow();
     }
+
+    if (currState == 3) {	// 最高紀錄顯示
+        x = 282;
+        y = 420;
+        character[highScoreCharNum]->SetXY(x, y);
+        character[highScoreCharNum]->OnShow();
+    }
+
+    if (currState == 4) {	// 遊玩紀錄顯示
+        x = 160;
+        y = 400;
+        const int LINE_MARGIN = 44;		// 角色間的Y軸距離
+
+        for (int i = 0; i < 3; i++) {
+            if (playingRecordCharNum[i] != 999) {
+                character[ playingRecordCharNum[i] ]->SetXY(x - character[playingRecordCharNum[i]]->GetWidth() / 2, \
+                        y + LINE_MARGIN * i);
+                character[ playingRecordCharNum[i] ]->OnShow();
+            }
+        }
+    }
+
+    if (currState == 5) {}
 }
 void CMe::AddSelectedChar(int num) {
     int result = selectedChar + num;
@@ -108,7 +142,35 @@ void CMe::SetXY(int nx, int ny) {
     x = nx;
     y = ny;
 }
+void CMe::SetHighScoreDisplay( string characterName) {
+    this->highScoreName = characterName;
 
+    for (unsigned int i = 0; i < character.size(); i++) {
+        if (highScoreName == character[i]->GetName()) {
+            highScoreCharNum = i;
+            break;
+        }
+    }
+}
+void CMe::SetPlayingRecordDisplay(string s0, string s1, string s2) {
+    playingRecordName[0] = s0;
+    playingRecordName[1] = s1;
+    playingRecordName[2] = s2;
+
+    for (int j = 0; j < 3; j++) {
+        for (unsigned int i = 0; i < character.size(); i++) {
+            if (playingRecordName[j] == character[i]->GetName()) {	// 若輸入的角色名和Vector內匹配
+                if (playingRecordName[j] == "") {	// 不顯示主角Bitmap
+                    playingRecordCharNum[j] = 999;	// 999 表示不顯示主角Bitmap
+                }
+                else {
+                    playingRecordCharNum[j] = i;
+                    break;
+                }
+            }
+        }
+    }
+}
 int CMe::GetX1() {
     return character[selectedChar]->GetX1();
 }

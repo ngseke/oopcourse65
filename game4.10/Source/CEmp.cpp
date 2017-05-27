@@ -10,7 +10,7 @@
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
-// CMe: ¥D¨¤
+// CEmp: EMP(¹qºÏªi)
 /////////////////////////////////////////////////////////////////////////////
 
 CEmp::CEmp() {
@@ -58,7 +58,7 @@ void CEmp::LoadBitmap() {
     displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
 
     for (int i = 0; i < 4; i++)
-        displayNumber[i].SetTopLeft(SIZE_X - 80 + 12, SIZE_Y - 80 + 7);
+        displayNumber[i].SetTopLeft(SIZE_X - 80 + 16, SIZE_Y - 80 + 12);
 }
 
 void CEmp::OnMove() {

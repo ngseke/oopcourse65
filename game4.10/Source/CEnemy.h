@@ -30,7 +30,7 @@ class CEnemy {
         int			GetX(), GetY();						// 取得X軸(x+dx), Y軸(y+dy)
         int			GetX2(), GetY2();
         void		MinusIndex(int num);				// 擊退怪物 num為擊退多少index
-        bool		HitMe(CMe* me);
+        bool		HitMe(CMe* me);						// 是否碰到主角
         bool		IsBombed();							// 是否爆炸過了
         virtual void	 kill();
         string		GetBossType();
@@ -45,10 +45,10 @@ class CEnemy {
         vector<CMovingBitmap*>* letter;					// 文字圖檔
         CDict* dict;				// 字典檔指標
         string vocab;				// 儲存單字
-        string bossType;
+        string bossType;			// 怪物的類型
         int x, y;					// 圓心的座標
         int dx, dy;					// 球距離圓心的位移量
-        int endX, endY;
+        int endX, endY;				// 飛行的終點坐標
         int index;					// 將距離切成index等分
         int delay_counter;			// 掉落速度的計數器
         int delay;					// 掉落的速度
