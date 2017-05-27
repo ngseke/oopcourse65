@@ -138,6 +138,14 @@ void CMe::AddSelectedChar(int num) {
 
     if (result >= 0 && result < int(character.size()) ) selectedChar = result;
 }
+void CMe::SetSelectedChar(string characterName) {
+    for (unsigned int i = 0; i < character.size(); i++) {
+        if (characterName == character[i]->GetName()) {
+            selectedChar = i;
+            break;
+        }
+    }
+}
 void CMe::SetXY(int nx, int ny) {
     x = nx;
     y = ny;

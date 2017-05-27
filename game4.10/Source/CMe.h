@@ -25,9 +25,10 @@ class CMe {
         void SetState(int);				// 設定當前顯示的狀
 
         int GetselectedChar();			// 取得選中的角色編號
-        void SetselectedChar(int);			// 設定選中的角色編號
+        void SetselectedChar(int);		// 設定選中的角色編號
         string GetMeName();				// 取得選中的角色名
-
+        void SetSelectedChar(string);
+        //
         void SetHighScoreDisplay(string);
         void SetPlayingRecordDisplay(string, string, string);
 

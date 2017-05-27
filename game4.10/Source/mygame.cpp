@@ -58,6 +58,7 @@ void CGameStateInit::OnInit() {
     if (1)  statsDisplayState = 1;						// DEBUG用
 
     PublicData::me.LoadBitmap();											// 主角
+    PublicData::me.SetSelectedChar("Iron Man");
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
