@@ -7,7 +7,7 @@ namespace game_framework {
 
 class CFile {
     public:
-        CFile(int score, int level, double accuracy, string meName, string date));
+        CFile(int score, int level, double accuracy, string meName, string date);
         void WriteHighScore(int score, int level, double accuracy, string meName, string date);
         int ReadHighScore_Score();  //回傳最高分裡面的分
         int ReadHighScore_Level();  //回傳最高分裡面的關
