@@ -653,9 +653,9 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), LEVEL(30) {
     srand((unsigned)time(NULL));	// 亂數種子
-    callEnemyCounter = maxCallEnemyCounter = 30;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 100;
-    callBossBCounter = maxCallBossBCounter = 100;
+    callEnemyCounter = maxCallEnemyCounter = 25;	// maxCallEnemyCounter 決定怪物生成速度
+    callBossACounter = maxCallBossACounter = 75;
+    callBossBCounter = maxCallBossBCounter = 90;
 }
 CGameStateRun::~CGameStateRun() {
     for (CEnemy* eq : enemyQueue) delete eq;
@@ -684,13 +684,7 @@ void CGameStateRun::OnBeginState() {
     levelChangeFlag = 0;
     levelChangeDelay = -1;
     levelChangeDelayMax = int( 3.5 * 30 );						// 設定關卡間delay 3秒
-
     //
-    if (0) {	//【DEBUG區】 將第0關設定生成200只怪物，且召喚delay為0秒
-        levelEnemyNum[0] = 200;
-        levelChangeDelayMax = 0;
-        callEnemyCounter = maxCallEnemyCounter = callBossACounter = maxCallBossACounter = callBossBCounter = maxCallBossBCounter = 0;
-    }
 }
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     srand((unsigned)time(NULL));
@@ -735,6 +729,18 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     callBossACounter--;
     callBossBCounter--;
 
+    if (quickCall) {	//【DEBUG區】 將第0關設定生成200只怪物，且召喚delay為0秒
+        //levelEnemyNum[0] = 200;
+        levelChangeDelayMax = 0;
+        maxCallEnemyCounter = maxCallBossACounter  = maxCallBossBCounter = 0;
+    }
+    else {
+        levelChangeDelayMax = int(3.5 * 30);
+        maxCallEnemyCounter = 25;
+        maxCallBossACounter = 75;
+        maxCallBossBCounter = 90;
+    }
+
     //==小怪==================================
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
@@ -749,7 +755,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     //==BossA==================================
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {
         callBossACounter = maxCallBossACounter;
-        int randX = (rand() % (SIZE_X - 150));
+        int randX = (rand() % (SIZE_X - 350) + 200);
         enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
@@ -759,7 +765,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     //==BossB==================================
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {
         callBossBCounter = maxCallBossBCounter;
-        int randX = (rand() % (SIZE_X - 150));
+        int randX = (rand() % (SIZE_X - 350) + 200);
         enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
@@ -844,7 +850,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
         if (levelChangeDelay < 0 && levelChangeFlag) {		// 當delay算完後 再實際切換關卡
             currLevel++;
 
-            if (currLevel >= LEVEL)GotoGameState(GAME_STATE_OVER);	// 若當前關卡大於最大關卡則GOTO遊戲結束的STATE
+            if (currLevel > LEVEL)GotoGameState(GAME_STATE_OVER);	// 若當前關卡大於最大關卡則GOTO遊戲結束的STATE
 
             currEnemyNum = currBossANum = currBossBNum = 0;	// 重置該關卡已召喚的怪物數量
             callEnemyCounter = maxCallEnemyCounter;			// 調回召喚怪物的計數器
@@ -951,6 +957,8 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (nChar == '4')GotoGameState(GAME_STATE_INIT);		// 按4 GOTO 起始畫面
 
         if (nChar == '5')GotoGameState(GAME_STATE_OVER);		// 按5 GOTO 遊戲結束畫面
+
+        if (nChar == '6')quickCall = quickCall ? false : true;	// 按6 開關快速召喚
     }
 }
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {}

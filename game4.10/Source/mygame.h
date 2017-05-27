@@ -109,7 +109,8 @@ class CGameStateRun : public CGameState {
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-        bool			showDebug = false;								// 是否顯示debug資訊
+        bool			showDebug = false;				// 是否顯示debug資訊
+        bool			quickCall = false;
         CAnimation		bomb;
         CAnimation		target;			// 鎖定的動畫
         vector<CMovingBitmap*>	letter;
