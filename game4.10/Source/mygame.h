@@ -37,7 +37,7 @@ class PublicData {
         static double		accuracy;
         static CMe			me;
         static vector<CRecord*>		record;
-        static CFile*		bestRecord;
+        //static CFile		bestRecord;
 
 };
 

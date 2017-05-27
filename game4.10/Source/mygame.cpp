@@ -33,7 +33,8 @@ int PublicData::level = 0;
 double PublicData::accuracy = 0.0;
 CMe	PublicData::me;
 vector<CRecord*> PublicData::record;
-CFile* PublicData::bestRecord;
+CFile PublicData::bestRecord;
+
 
 
 
@@ -567,9 +568,12 @@ void CGameStateOver::OnBeginState() {
     accuracy = PublicData::accuracy;
     //
     PublicData::me.SetState(2);
-    PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName(), PublicData::me.GetselectedChar()));
-    PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
-
+    //PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName(), PublicData::me.GetselectedChar()));
+    //PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
+    PublicData::bestRecord.WriteHighScore(PublicData::record.back()->ReadRecordScore_Score(), PublicData::record.back()->ReadRecordScore_Level(),
+                                          PublicData::record.back()->ReadRecordScore_Accuracy(), PublicData::record.back()->ReadRecordScore_Character(),
+                                          PublicData::record.back()->ReadRecordScore_Date());
+    /*
     if (PublicData::record.size() == 1 || PublicData::score > PublicData::bestRecord->ReadHighScore_Score()) {
         PublicData::bestRecord = new CFile(PublicData::record.back()->ReadRecordScore_Score(), PublicData::record.back()->ReadRecordScore_Level(),
                                            PublicData::record.back()->ReadRecordScore_Accuracy(), PublicData::record.back()->ReadRecordScore_Character(),
@@ -578,6 +582,7 @@ void CGameStateOver::OnBeginState() {
                                                PublicData::record.back()->ReadRecordScore_Accuracy(), PublicData::record.back()->ReadRecordScore_Character(),
                                                PublicData::record.back()->ReadRecordScore_Date() );
     }
+    */
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%

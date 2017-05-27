@@ -1,1 +1,1 @@
-character:Iron Man,score:27,level:0,accuracy:93.1034,date:201705271539
+character:Iron Man,score:10000,level:0,accuracy:93.1034,date:201705271539
