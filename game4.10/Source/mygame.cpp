@@ -35,6 +35,8 @@ CMe	PublicData::me;
 vector<CRecord*> PublicData::record;
 CFile* PublicData::bestRecord;
 
+
+
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_POS_Y(320),
       MENU_ITEM_NUM(5), CHARACTER_POS_Y(320) {
@@ -116,6 +118,10 @@ void CGameStateInit::OnInit() {
 void CGameStateInit::OnBeginState() {
     text1_y = 550;
     text1_count = 0;
+
+    if (PublicData::record.size() != 0) {
+        PublicData::me.SetselectedChar(PublicData::record.back()->ReadRecordScore_selectedChar());
+    }
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -328,7 +334,7 @@ void CGameStateOver::OnBeginState() {
     accuracy = PublicData::accuracy;
     //
     PublicData::me.SetState(2);
-    PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName()));
+    PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName(), PublicData::me.GetselectedChar()));
     PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
 
     if (PublicData::record.size() == 1 || PublicData::score > PublicData::bestRecord->ReadHighScore_Score()) {

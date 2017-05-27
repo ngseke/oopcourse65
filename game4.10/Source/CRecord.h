@@ -8,8 +8,8 @@ namespace game_framework {
 
 class CRecord {
     public:
-        CRecord(int score, int level, double accuracy, string meName, int selectedChar);
-        void WriteRecord(int score, int level, double accuracy, string meName);
+        CRecord(int score, int level, double accuracy, string meName, int selectedChar);//分數 關卡 正確率 主角名稱 主角編號
+        void WriteRecord(int score, int level, double accuracy, string meName);			//寫入:分數 關卡 正確率 主角名稱
         int ReadRecordScore_Score();  //回傳第x筆裡面的分
         int ReadRecordScore_Level();  //回傳第x筆裡面的關
         double ReadRecordScore_Accuracy();  //回傳第x筆裡面的正確率
@@ -17,8 +17,8 @@ class CRecord {
         string  ReadRecordScore_Date();  //回傳第x筆裡面的日期
         int		ReadRecordScore_selectedChar();	//回傳第x筆裡面的主角編號
         //---------
-        void WriteCharacter(string);	//上次選的角色
-        string ReadCharacter();			//回傳上次選的角色
+        //void WriteCharacter(string);	//上次選的角色
+        //string ReadCharacter();			//回傳上次選的角色
     private:
         int score;				//得分
         int level;				//關卡
@@ -27,7 +27,7 @@ class CRecord {
         string meName;			//主角名稱(英文)
         int	   selectedChar;	//主角編號
         char chDate[80];		//char型態的日期
-        string preCharac;		//上一隻主角的名稱
+        //string preCharac;		//上一隻主角的名稱
 
 };
 }

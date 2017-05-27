@@ -35,7 +35,8 @@ void CRecord::WriteRecord(int score, int level, double accuracy, string meName) 
        << ",score:" << score
        << ",level:" << level
        << ",accuracy:" << accuracy
-       << ",date:" << date << endl;
+       << ",date:" << date
+       << ",characterNum:" << selectedChar << endl;
     /*T->tm_year + 1900
     << setw(2) << setfill('0') << T->tm_mon + 1
     << setw(2) << setfill('0') << T->tm_mday
@@ -62,11 +63,13 @@ string CRecord::ReadRecordScore_Date() {
 int CRecord::ReadRecordScore_selectedChar() {
     return selectedChar;
 }
+/*
 void CRecord::WriteCharacter(string preCharac) {
     this->preCharac = preCharac;
 }
 string CRecord::ReadCharacter() {
     return preCharac;
 }
+*/
 }
 
