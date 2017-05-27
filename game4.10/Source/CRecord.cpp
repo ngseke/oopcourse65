@@ -14,7 +14,7 @@
 
 namespace game_framework {
 
-CRecord::CRecord(int score, int level, double accuracy, string meName) {
+CRecord::CRecord(int score, int level, double accuracy, string meName, int selectedChar) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -23,6 +23,7 @@ CRecord::CRecord(int score, int level, double accuracy, string meName) {
     this->level = level;
     this->accuracy = accuracy;
     this->meName = meName;
+    this->selectedChar = selectedChar;
     sprintf(chDate, "%d%02d%02d%02d%02d", int(T->tm_year + 1900), int(T->tm_mon + 1), int(T->tm_mday), int(T->tm_hour), int(T->tm_min));
     this->date.assign(chDate);
 }
@@ -57,6 +58,9 @@ string CRecord::ReadRecordScore_Character() {
 }
 string CRecord::ReadRecordScore_Date() {
     return date;
+}
+int CRecord::ReadRecordScore_selectedChar() {
+    return selectedChar;
 }
 void CRecord::WriteCharacter(string preCharac) {
     this->preCharac = preCharac;

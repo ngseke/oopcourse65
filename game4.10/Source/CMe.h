@@ -1,10 +1,13 @@
 #pragma once
 #include "CCharacter.h"
 
+
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // 控制所有的主角CHARACTER
 /////////////////////////////////////////////////////////////////////////////
+
+
 class CMe {
     public:
         CMe();
@@ -21,6 +24,7 @@ class CMe {
         void AddSelectedChar(int);		// 選擇角色時移動游標
         void SetState(int);				// 設定當前顯示的狀
         int GetselectedChar();			// 取得選中的角色編號
+        void SetselectedChar(int);			// 設定選中的角色編號
         string GetMeName();				// 取得選中的角色名
     protected:
         const int CHARACTER_POS_Y;

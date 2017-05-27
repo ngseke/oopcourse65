@@ -6,17 +6,19 @@
 #include "gamelib.h"
 #include "CEnemy.h"
 #include "CMe.h"
+#include "CRecord.h"
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
 // CMe: еDид
 /////////////////////////////////////////////////////////////////////////////
 
+
 CMe::CMe(): CHARACTER_POS_Y(320) {
     x = 100;
     y = SIZE_Y - 60;
-    selectedChar = 0;
     currState = 1;
+    selectedChar = 0;
 }
 CMe::~CMe() {
     for (CCharacter* cc : character) delete cc;
@@ -131,5 +133,8 @@ int CMe::GetselectedChar() {
 }
 string CMe:: GetMeName() {
     return character[selectedChar]->GetName();
+}
+void CMe::SetselectedChar(int selectedChar) {
+    this->selectedChar = selectedChar;
 }
 }
