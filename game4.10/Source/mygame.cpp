@@ -118,10 +118,6 @@ void CGameStateInit::OnInit() {
 void CGameStateInit::OnBeginState() {
     text1_y = 550;
     text1_count = 0;
-
-    if (PublicData::record.size() != 0) {
-        PublicData::me.SetselectedChar(PublicData::record.back()->ReadRecordScore_selectedChar());
-    }
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
