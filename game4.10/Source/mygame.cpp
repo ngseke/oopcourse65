@@ -50,12 +50,12 @@ CGameStateInit::~CGameStateInit() {
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
     const unsigned int exkeyNum = 6;					// 說明框裡面的按鍵動畫 數量
-    currSelectItem = displayState = 3;					// 初始化選單選取項目
-    noteDisplayState = statsDisplayState = 0;			// 初始化“遊戲說明”及“統計”選取頁面項目
+    currSelectItem = displayState = 0;					// 初始化選單選取項目
+    noteDisplayState = statsDisplayState = aboutDisplayState = 0;			// 初始化“遊戲說明”及“統計”選取頁面項目
     statsPRItemNum = 0;									// 初始化統計頁面 最高記錄的選取項目
     wrongKeyNum = 0;
 
-    if (1)  statsDisplayState = 1;						// DEBUG用
+    if (0)  statsDisplayState = 1;						// DEBUG用
 
     PublicData::me.LoadBitmap();											// 主角
     PublicData::me.SetSelectedChar("Iron Man");
@@ -135,6 +135,9 @@ void CGameStateInit::OnInit() {
     statsArrowV[1].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_up.bmp", RGB(0, 255, 0));
     statsArrowV[2].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_down.bmp", RGB(0, 255, 0));
     statsArrowV[3].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_none.bmp", RGB(0, 255, 0));
+
+    for (int i = 0; i < 4; i++) statsArrowV[i].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
+
     statsText[0].LoadBitmap("Bitmaps/menu/stats/stats_text_hl.bmp", RGB(0, 255, 0));
     statsText[1].LoadBitmap("Bitmaps/menu/stats/stats_text_tkc.bmp", RGB(0, 255, 0));
     statsText[2].LoadBitmap("Bitmaps/menu/stats/stats_text_acc.bmp", RGB(0, 255, 0));
@@ -142,6 +145,7 @@ void CGameStateInit::OnInit() {
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
     about.LoadBitmap("Bitmaps/menu/about/about_text_p2.bmp", RGB(0, 255, 0)); // 介紹文字
+    delText.LoadBitmap("Bitmaps/menu/about/about_del_text.bmp", RGB(0, 255, 0));	// 確認刪除視窗
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -152,6 +156,7 @@ void CGameStateInit::OnBeginState() {
     text1_count = 0;
     PublicData::bestRecord.ReadHighScoreFile();
     PublicData::bestRecord.ReadRecordFile();
+    statsPRItemNum = 0;		// 遊玩記錄的項目數字歸零（回到第一筆資料）
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -163,13 +168,18 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-    if (!(nChar == KEY_ESC || nChar == KEY_LEFT || nChar == KEY_UP || nChar == KEY_RIGHT || nChar == KEY_DOWN || nChar == KEY_ENTER)) {
+    if (!(nChar == KEY_ESC || nChar == KEY_LEFT || nChar == KEY_UP || nChar == KEY_RIGHT || nChar == KEY_DOWN || nChar == KEY_ENTER || nChar == 'D' || nChar == 'Y' || nChar == 'N' || (nChar <= '5' && nChar >= '1'))) {
         wrongKeyNum++;
     }
 
-    if (nChar == KEY_ESC)   displayState = 0; // ESC鍵返回主選單
+    if ((nChar <= '5' && nChar >= '1')) {		// 提供以數字鍵1～5來操縱選單
+        currSelectItem = displayState = nChar - '1';
+        noteDisplayState = statsDisplayState = aboutDisplayState = 0;
+    }
 
-    if (displayState == 0 ) { // 在主選單...
+    if (nChar == KEY_ESC)   displayState = 0;	// ESC鍵返回主選單
+
+    if (displayState == 0 ) {					// 在主選單...
         if (nChar == KEY_UP || nChar == KEY_DOWN) {		// 移動光標
             if (nChar == KEY_UP) currSelectItem--;
             else if (nChar == KEY_DOWN) currSelectItem++;
@@ -181,20 +191,9 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             if (currSelectItem == 0) {
                 GotoGameState(GAME_STATE_RUN);			// 開始遊戲
             }
-            else if ( currSelectItem == 1 ) {
-                displayState = 1;						// 顯示遊戲說明的state
-                noteDisplayState = 0;
-            }
-            else if (currSelectItem == 2) {
-                displayState = 2;						// 角色選擇的state
-            }
-            else if (currSelectItem == 3) {
-                displayState = 3;						// 統計的state
-                statsDisplayState = 0;
-                PublicData::me.SetHighScoreDisplay("Creeper");	// 設定最高紀錄顯示的怪物bitmap
-            }
-            else if (currSelectItem == 4) {
-                displayState = 4;						// 關於的state
+            else {
+                displayState = currSelectItem;				// 前往所選取的state
+                noteDisplayState = statsDisplayState = aboutDisplayState = 0;	// 初始化說明文字的選取項目 及 遊玩記錄的項目數字
             }
         }
     }
@@ -231,8 +230,21 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             }
         }
     }
-    else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
-        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+    else if (displayState == 4 ) { // [關於]
+        if (aboutDisplayState == 0 && nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+
+        if (aboutDisplayState == 0 && nChar == 'D' ) {
+            aboutDisplayState = 1;    // 顯示清除遊玩紀錄視窗
+        }
+
+        if (aboutDisplayState == 1) {
+            if (nChar == 'Y') {
+                displayState = 0;
+            }
+            else if (nChar == 'N') {
+                aboutDisplayState = 0;
+            }
+        }
     }
 }
 
@@ -253,6 +265,8 @@ void CGameStateInit::OnMove() {
         text1_y = 550;
         text1_count = wrongKeyNum = 0;
     }
+
+    if (0) GotoGameState(GAME_STATE_OVER);
 }
 
 void CGameStateInit::OnShow() {
@@ -417,24 +431,17 @@ void CGameStateInit::OnShow() {
             statsArrow[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
             statsArrow[2].ShowBitmap();
 
+            // 設定顯示的箭頭樣式
             if (PublicData::bestRecord.GetRecordNum() <= 3 && PublicData::bestRecord.GetRecordNum() > 0) {
-                // 箭頭樣式：全暗
-                statsArrowV[3].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
-                statsArrowV[3].ShowBitmap();
+                statsArrowV[3].ShowBitmap();		// 箭頭樣式：全暗
             }
             else {
-                if (statsPRItemNum == 0) {	// 箭頭樣式：下亮
-                    statsArrowV[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
-                    statsArrowV[2].ShowBitmap();
-                }
-                else if (statsPRItemNum == PublicData::bestRecord.GetRecordNum() - 3) { // 箭頭樣式：下亮
-                    statsArrowV[1].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
-                    statsArrowV[1].ShowBitmap();
-                }
-                else {	// 箭頭樣式：全亮
-                    statsArrowV[0].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
-                    statsArrowV[0].ShowBitmap();
-                }
+                if (statsPRItemNum == 0)
+                    statsArrowV[2].ShowBitmap();	// 箭頭樣式：下亮
+                else if (statsPRItemNum == PublicData::bestRecord.GetRecordNum() - 3)
+                    statsArrowV[1].ShowBitmap();	// 箭頭樣式：下亮
+                else
+                    statsArrowV[0].ShowBitmap();	// 箭頭樣式：全亮
             }
 
             if (PublicData::bestRecord.GetRecordNum() == 0) {		// 當查無遊戲記錄時
@@ -443,7 +450,7 @@ void CGameStateInit::OnShow() {
                 statsNoRecord.ShowBitmap();
             }
 
-            PublicData::me.SetPlayingRecordDisplay
+            PublicData::me.SetPlayingRecordDisplay	// 顯示該筆紀錄的ME(若不存在則不顯示)
             (statsPRItemNum >= PublicData::bestRecord.GetRecordNum() ? "" :
              PublicData::bestRecord.ReadRecord_Character(statsPRItemNum),
              statsPRItemNum + 1 >= PublicData::bestRecord.GetRecordNum() ? "" :
@@ -553,10 +560,16 @@ void CGameStateInit::OnShow() {
         PublicData::me.OnShow();									// 顯示統計頁之角色（最高分和遊玩記錄）
     }
     else if (displayState == 4) {      // 顯示關於頁面
-        aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
-        aboutBorder.ShowBitmap(); // 顯示關於框
-        about.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y  + 11);
-        about.ShowBitmap();		  // 顯示關於文字
+        if (aboutDisplayState == 0) {
+            aboutBorder.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y);
+            aboutBorder.ShowBitmap(); // 顯示關於框
+            about.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y + 11);
+            about.ShowBitmap();		  // 顯示關於文字
+        }
+        else if (aboutDisplayState == 1) {	// 刪除遊戲紀錄頁
+            delText.SetTopLeft((SIZE_X - delText.Width()) / 2, (NOTE_TEXT_Y + delText.Height() / 2) );
+            delText.ShowBitmap();
+        }
     }
 
     text1.SetTopLeft((SIZE_X - text1.Width()) / 2, text1_y);
@@ -608,8 +621,6 @@ void CGameStateOver::OnBeginState() {
     accuracy = PublicData::accuracy;
     //
     PublicData::me.SetState(2);
-    //PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName(), PublicData::me.GetselectedChar()));
-    //PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
     PublicData::bestRecord.ReadHighScoreFile();
 
     if (score > PublicData::bestRecord.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
@@ -618,16 +629,6 @@ void CGameStateOver::OnBeginState() {
     }
 
     PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
-    /*
-    if (PublicData::record.size() == 1 || PublicData::score > PublicData::bestRecord->ReadHighScore_Score()) {
-        PublicData::bestRecord = new CFile(PublicData::record.back()->ReadRecordScore_Score(), PublicData::record.back()->ReadRecordScore_Level(),
-                                           PublicData::record.back()->ReadRecordScore_Accuracy(), PublicData::record.back()->ReadRecordScore_Character(),
-                                           PublicData::record.back()->ReadRecordScore_Date());
-        PublicData::bestRecord->WriteHighScore(PublicData::record.back()->ReadRecordScore_Score(), PublicData::record.back()->ReadRecordScore_Level(),
-                                               PublicData::record.back()->ReadRecordScore_Accuracy(), PublicData::record.back()->ReadRecordScore_Character(),
-                                               PublicData::record.back()->ReadRecordScore_Date() );
-    }
-    */
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
@@ -635,10 +636,10 @@ void CGameStateOver::OnInit() {
     newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs1.bmp", RGB(0, 255, 0));
     newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs2.bmp", RGB(0, 255, 0));
     newHS_text.SetDelayCount(20);
-    char str[80];
     ShowInitProgress(80);
 
     for (int i = 0; i < 10; i++) {		// 載入數字圖
+        char str[80];
         sprintf(str, "Bitmaps/level/num/%d.bmp", i);
         numBmp[i].LoadBitmap(str, RGB(0, 255, 0));
         sprintf(str, "Bitmaps/level/num_s/%d.bmp", i);
@@ -657,8 +658,8 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
     border.SetTopLeft(x, y);
     border.ShowBitmap();
 
-    if (isHighScore) {
-        newHS_text.SetTopLeft((SIZE_X - newHS_text.Width()) / 2, y + border.Height() + 10);
+    if (isHighScore) {	// 顯示破紀錄動畫
+        newHS_text.SetTopLeft((SIZE_X - newHS_text.Width()) / 2, y + border.Height() + 20);
         newHS_text.OnShow();
     }
 
@@ -1048,11 +1049,11 @@ void CGameStateRun::OnShow() {
     PublicData::me.OnShow();			// 顯示主角
     levelAni.OnShow();					// 顯示關卡切換動畫
 
-    for (CEnemy* eq : enemyQueue)	eq->OnShow();	//顯示VECTOR中所有的 怪物
-
     for (CBomb* cb : bombList)	cb->OnShow();		//顯示VECTOR中所有的 爆炸
 
     for (CBullet* bl : bulletList)	bl->OnShow();	//顯示VECTOR中所有的 子彈
+
+    for (CEnemy* eq : enemyQueue)	eq->OnShow();	//顯示VECTOR中所有的 怪物
 
     if (lock && targetEnemy != NULL) {
         targetEnemy->OnShow();						// 加上這一行 讓被鎖定的怪物再次顯示, 以防被其他怪物蓋住

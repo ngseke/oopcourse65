@@ -62,7 +62,7 @@ class CGameStateInit : public CGameState {
         int text1_y, text1_count;						// 說明文字移出效果
         CMap map;										// 背景
         int currSelectItem, displayState;				// 當前選擇的MENU, 當前顯示的狀態
-        int noteDisplayState, statsDisplayState;		// 當前顯示的說明狀態
+        int noteDisplayState, statsDisplayState, aboutDisplayState;		// 當前顯示的說明狀態
         int statsPRItemNum;								// 遊玩記錄的項目數字
         int wrongKeyNum;								// 錯誤按鍵數
 
@@ -87,6 +87,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			statsNoRecord;
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;
+        CMovingBitmap			delText;
 
 };
 

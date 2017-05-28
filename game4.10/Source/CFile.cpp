@@ -147,9 +147,7 @@ double CFile::ReadRecord_Accuracy(int num) {
     return record.at(num)->ReadRecordScore_Accuracy();
 }
 string CFile::ReadRecord_Character(int num) {
-    //if (num < int(record.size()))
     return record.at(num)->ReadRecordScore_Character();
-    //else return "";
 }
 string CFile::ReadRecord_Date(int num) {
     return record.at(num)->ReadRecordScore_Date();
@@ -159,6 +157,9 @@ int	CFile::ReadRecord_KeyCount(int num) {
 }
 int CFile::GetRecordNum() {
     return int( record.size() );
+}
+
+void CFile::DeleteAllData() {
 }
 }
 

@@ -24,6 +24,10 @@ class CFile {
         string  ReadRecord_Date(int);						 //回傳第x筆裡面的日期
         int		ReadRecord_KeyCount(int);		 //回傳第x筆裡面的正確按鍵數量
         int     GetRecordNum();
+        //================================
+
+        //================================
+        void DeleteAllData();					//清除所有記錄
 
     private:
         int HighScore_Score;				//最高紀錄的得分
