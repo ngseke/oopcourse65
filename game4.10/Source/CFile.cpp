@@ -5,6 +5,7 @@
 #include "audio.h"
 #include "gamelib.h"
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <ctime>
 #include "CFile.h"
@@ -20,21 +21,45 @@ void CFile::WriteHighScore(int score, int level, double accuracy, string meName)
     time_t t;
     time(&t);
     T = localtime(&t);
-    char filename[] = "user/bestRecord.txt";
-    fstream	fp;
-    fp.open(filename, ios::out);
+    fstream	fp, test;
+    fp.open("user/bestRecord.txt", ios::out);
     sprintf(ChDate, "%d%02d%02d%02d%02d", int(T->tm_year + 1900), int(T->tm_mon + 1), int(T->tm_mday), int(T->tm_hour), int(T->tm_min));
     this->HighScore_Date.assign(ChDate);
     fp << "character:" << meName
        << ",score:" << score
        << ",level:" << level
        << ",accuracy:" << accuracy
-       << ",date:" << date << endl;
+       << ",date:" << HighScore_Date << endl;
+    fp.close();
 }
-void CFile::ReadHighScoreFile() {}
+void CFile::ReadHighScoreFile() {
+    string slideOne, slideTwo[10];
+    char temp[100];
+    int i = 0;
+    fstream	fp;
+    fp.open("user/bestRecord.txt", ios::in);
+    //test.open("user/test.txt", ios::out);
+
+    while (fp.getline(temp, sizeof(temp), ',')) {
+        slideOne = temp;
+        stringstream ss(slideOne);
+
+        while (getline(ss, slideTwo[i], ':')) {
+            if (i == 1) this->HighScore_MeName = slideTwo[1];
+            else if (i == 3) this->HighScore_Score = stoi(slideTwo[3], nullptr, 10);
+            else if (i == 5) this->HighScore_Level = stoi(slideTwo[5], nullptr, 10);
+            else if (i == 7) this->HighScore_Accuracy = stod(slideTwo[7], nullptr);
+            else if (i == 9) this->HighScore_Date = slideTwo[9];
+
+            i++;
+        }
+    }
+
+    fp.close();
+}
 
 int CFile::ReadHighScore_Score() {
-    return this->HighScore_Accuracy;
+    return this->HighScore_Score;
 }
 int CFile::ReadHighScore_Level() {
     return this->HighScore_Level;
@@ -63,7 +88,7 @@ int CFile::ReadRecordScore_Level() {
 double CFile::ReadRecordScore_Accuracy() {
     return this->record_Accuracy;
 }
-string CFile::ReadHighScore_Character() {
+string CFile::ReadRecordScore_Character() {
     return this->record_MeName;
 }
 string CFile::ReadRecordScore_Date() {
