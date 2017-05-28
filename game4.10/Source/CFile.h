@@ -5,37 +5,41 @@ namespace game_framework {
 class CFile {
     public:
         CFile();
-        void WriteHighScore(int score, int level, double accuracy, string meName);
+        void WriteHighScore(int score, int level, double accuracy, string meName, int totalCorrectKeyCount);
         void ReadHighScoreFile();
-        int ReadHighScore_Score();  //回傳最高分裡面的分
-        int ReadHighScore_Level();  //回傳最高分裡面的關
-        double ReadHighScore_Accuracy();  //回傳最高分裡面的正確率
-        string  ReadHighScore_Character();  //回傳最高分裡面的角色名
-        string  ReadHighScore_Date();  //回傳最高分裡面的日期
-        bool isHighScoreExist();		//回傳是否存在最高紀錄
+        int ReadHighScore_Score();							 //回傳最高分裡面的分
+        int ReadHighScore_Level();  						 //回傳最高分裡面的關
+        double ReadHighScore_Accuracy();					 //回傳最高分裡面的正確率
+        string  ReadHighScore_Character();					 //回傳最高分裡面的角色名
+        string  ReadHighScore_Date();						 //回傳最高分裡面的日期
+        int		ReadHighScore_TotalCorrectKeyCount();		 //回傳最高分裡面的正確按鍵數量
+        bool isHighScoreExist();							 //回傳是否存在最高紀錄
         //================================
-        void WriteRecord(int score, int level, double accuracy, string meName);			//寫入:分數 關卡 正確率 主角名稱
+        void WriteRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount);			//寫入:分數 關卡 正確率 主角名稱
         void ReadRecordFile();
-        int ReadRecordScore_Score();  //回傳第x筆裡面的分
-        int ReadRecordScore_Level();  //回傳第x筆裡面的關
-        double ReadRecordScore_Accuracy();  //回傳第x筆裡面的正確率
-        string  ReadRecordScore_Character();  //回傳第x筆裡面的角色名
-        string  ReadRecordScore_Date();  //回傳第x筆裡面的日期
+        int ReadRecordScore_Score();						 //回傳第x筆裡面的分
+        int ReadRecordScore_Level();						 //回傳第x筆裡面的關
+        double ReadRecordScore_Accuracy();					 //回傳第x筆裡面的正確率
+        string  ReadRecordScore_Character();				 //回傳第x筆裡面的角色名
+        string  ReadRecordScore_Date();						 //回傳第x筆裡面的日期
+        int		ReadRecordScore_TotalCorrectKeyCount();		 //回傳第x筆裡面的正確按鍵數量
 
     private:
-        int HighScore_Score;
-        int HighScore_Level;
-        double HighScore_Accuracy;
-        string HighScore_Date;
-        string HighScore_MeName;
+        int HighScore_Score;				//最高紀錄的得分
+        int HighScore_Level;				//最高紀錄的關卡
+        double HighScore_Accuracy;			//最高紀錄的正確率
+        string HighScore_Date;				//最高紀錄的日期
+        string HighScore_MeName;			//最高紀錄主角名稱(英文)
+        int HighScore_TotalCorrectKeyCount;	//最高紀錄的正確按鍵數量
         //===================
         vector<CRecord*> record;
-        int record_Score;				//得分
-        int record_Level;				//關卡
-        double record_Accuracy;		//正確率
-        string record_Date;			//日期
-        string record_MeName;			//主角名稱(英文)
-        int	   record_SelectedChar;	//主角編號
-        char ChDate[80];		//char型態的日期
+        int record_Score;					//得分
+        int record_Level;					//關卡
+        double record_Accuracy;				//正確率
+        string record_Date;					//日期
+        string record_MeName;				//主角名稱(英文)
+        int	   record_SelectedChar;			//主角編號
+        int	   record_TotalCorrectKeyCount; //正確案件數
+        char ChDate[80];					//char型態的日期
 };
 }

@@ -16,7 +16,7 @@ namespace game_framework {
 
 CFile::CFile() {
 }
-void CFile::WriteHighScore(int score, int level, double accuracy, string meName) {
+void CFile::WriteHighScore(int score, int level, double accuracy, string meName, int totalCorrectKeyCount) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -29,11 +29,12 @@ void CFile::WriteHighScore(int score, int level, double accuracy, string meName)
        << ",score:" << score
        << ",level:" << level
        << ",accuracy:" << accuracy
-       << ",date:" << HighScore_Date << endl;
+       << ",date:" << HighScore_Date
+       << ",totalCorrectKeyCount:" << totalCorrectKeyCount << endl;
     fp.close();
 }
 void CFile::ReadHighScoreFile() {
-    string slideOne, slideTwo[10];
+    string slideOne, slideTwo[12];
     char temp[100];
     int i = 0;
     fstream	fp;
@@ -49,6 +50,7 @@ void CFile::ReadHighScoreFile() {
             else if (i == 5) this->HighScore_Level = stoi(slideTwo[5], nullptr, 10);
             else if (i == 7) this->HighScore_Accuracy = stod(slideTwo[7], nullptr);
             else if (i == 9) this->HighScore_Date = slideTwo[9];
+            else if (i == 11) this->HighScore_TotalCorrectKeyCount = stoi(slideTwo[11], nullptr, 10);
 
             i++;
         }
@@ -72,11 +74,14 @@ string CFile::ReadHighScore_Character() {
 string CFile::ReadHighScore_Date() {
     return this->HighScore_Date;
 }
+int	CFile::ReadHighScore_TotalCorrectKeyCount() {
+    return this->HighScore_TotalCorrectKeyCount;
+}
 bool CFile::isHighScoreExist() {
     return 1;
 }
 //======================================
-void CFile::WriteRecord(int score, int level, double accuracy, string meName) {
+void CFile::WriteRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -89,7 +94,8 @@ void CFile::WriteRecord(int score, int level, double accuracy, string meName) {
        << ",score:" << score
        << ",level:" << level
        << ",accuracy:" << accuracy
-       << ",date:" << record_Date << endl;
+       << ",date:" << record_Date
+       << ",totalCorrectKeyCount:" << totalCorrectKeyCount << endl;
 }
 void CFile::ReadRecordFile() {
 }
@@ -107,6 +113,9 @@ string CFile::ReadRecordScore_Character() {
 }
 string CFile::ReadRecordScore_Date() {
     return this->record_Date;
+}
+int	CFile::ReadRecordScore_TotalCorrectKeyCount() {
+    return this->record_TotalCorrectKeyCount;
 }
 }
 

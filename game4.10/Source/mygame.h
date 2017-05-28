@@ -34,11 +34,10 @@ class PublicData {
     public:
         static int			score;						// 共用變數：儲存分數
         static int			level;						// 共用變數：儲存關卡
-        static double		accuracy;
-        static CMe			me;
-        static vector<CRecord*>		record;
+        static double		accuracy;					// 共用變數：正確率
+        static CMe			me;							// 共用變數：主角參數
         static CFile		bestRecord;
-
+        static int			totalCorrectKeyCount;		// 共用變數：正確按鍵數
 };
 
 class CGameStateInit : public CGameState {
@@ -144,7 +143,7 @@ class CGameStateRun : public CGameState {
         int				currLevel;										// 當前關卡
         int				totalEnemyNum;									// 總召喚的敵人數量
         int				levelChangeFlag, levelChangeDelay, levelChangeDelayMax; // 關卡和關卡間的delay
-        int				totalKeyDownCount, totalCorrectKeyCount;		// 總按鍵數, 總正確按鍵數
+        int				totalKeyDownCount;		// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
 
 };
