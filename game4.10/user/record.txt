@@ -1,14 +1,4 @@
-character:Iron Man,score:25,level:1,accuracy:92.5926,date:201705281948,totalCorrectKeyCount:25
-character:Cow,score:41,level:1,accuracy:89.1304,date:201705281949,totalCorrectKeyCount:41
-character:Iron Man,score:0,level:0,accuracy:100,date:201705282252,totalCorrectKeyCount:0
-character:Bouncing Ball,score:17,level:1,accuracy:100,date:201705282300,totalCorrectKeyCount:17
-character:Captain American,score:7,level:0,accuracy:100,date:201705282302,totalCorrectKeyCount:7
-character:Zombie Brain,score:19,level:0,accuracy:86.3636,date:201705282305,totalCorrectKeyCount:19
-character:Captain American,score:10,level:0,accuracy:100,date:201705282319,totalCorrectKeyCount:10
-character:Hulk,score:5,level:0,accuracy:100,date:201705282323,totalCorrectKeyCount:5
-character:Minion,score:0,level:0,accuracy:100,date:201705290119,totalCorrectKeyCount:0
-character:Iron Man,score:143,level:4,accuracy:95.9732,date:201705290130,totalCorrectKeyCount:143
-character:Iron Man,score:22,level:0,accuracy:100,date:201705290132,totalCorrectKeyCount:22
-character:Creeper,score:0,level:0,accuracy:100,date:201705290132,totalCorrectKeyCount:0
-character:Iron Man,score:0,level:0,accuracy:100,date:201705290146,totalCorrectKeyCount:0
-character:Creeper,score:0,level:0,accuracy:100,date:201705290201,totalCorrectKeyCount:0
+character:Mushroom,score:0,level:0,accuracy:100,date:201705290717,totalCorrectKeyCount:0
+character:Mushroom,score:0,level:0,accuracy:100,date:201705290717,totalCorrectKeyCount:0
+character:Iron Man,score:0,level:0,accuracy:100,date:201705290724,totalCorrectKeyCount:0
+character:Iron Man,score:0,level:0,accuracy:100,date:201705290725,totalCorrectKeyCount:0

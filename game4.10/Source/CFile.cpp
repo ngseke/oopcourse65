@@ -102,9 +102,10 @@ void CFile::ReadRecordFile() {
     fstream	fp;
     fp.open("user/record.txt", ios::in);
     int i = 0;
-    char line[100];
+    char line[200];
     string SlideOne, SlideTwo, SlideThree[100];
 
+    /*
     for (unsigned int i = 0; i < record.size(); i++) {					//清空Record
         vector<CRecord*>::iterator iterenemyQueue = record.begin();
         delete record[i];
@@ -112,6 +113,10 @@ void CFile::ReadRecordFile() {
         record.erase(iterenemyQueue + i);
         i = 0;
     }
+    */
+    for (CRecord* cr : record) delete cr;
+
+    record.clear();
 
     while (fp.getline(line, sizeof(line), '\n')) {
         SlideOne = line;
@@ -134,8 +139,11 @@ void CFile::ReadRecordFile() {
             }
         }
 
-        record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_TotalCorrectKeyCount, record_Date));	//從頭插進去
+        if (record_MeName != "")
+            record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_TotalCorrectKeyCount, record_Date));	//從頭插進去
     }
+
+    TRACE("size[%d]\n", record.size());
 }
 int CFile::ReadRecord_Score(int num) {
     return record.at(num)->ReadRecordScore_Score();

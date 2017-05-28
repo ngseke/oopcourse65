@@ -55,7 +55,11 @@ void CGameStateInit::OnInit() {
     statsPRItemNum = 0;									// 初始化統計頁面 最高記錄的選取項目
     wrongKeyNum = 0;
 
-    if (0)  statsDisplayState = 1;						// DEBUG用
+    if (0) {// DEBUG用
+        displayState = 1;
+        noteDisplayState = 0;
+        statsDisplayState = 1;
+    }
 
     PublicData::me.LoadBitmap();											// 主角
     PublicData::me.SetSelectedChar("Iron Man");
@@ -93,6 +97,8 @@ void CGameStateInit::OnInit() {
         sprintf(str, "Bitmaps/menu/note/note1_exkey_%d.bmp", i + 1);
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
     }
+
+    noteExkey.SetDelayCount(10);
 
     for (int i = 0; i < 8; i++) {		// 多頁的說明文字
         char str[50];

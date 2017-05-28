@@ -38,6 +38,7 @@ void CMe::LoadCharacter() {
     character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion.bmp", 1, x, y));
     character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie.bmp", 1, x, y));
     character.push_back(new CCharacter("Cow",				"牛",			"me_cow.bmp", 1, x, y));
+    character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的香菇", "me_mushroom.bmp", 1, x, y));
     character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball", 4, x, y));
 }
 
