@@ -111,9 +111,9 @@ void CMe::OnShow() {
     }
 
     if (currState == 3) {	// 最高紀錄顯示
-        x = 282;
+        x = 294;
         y = 420;
-        character[highScoreCharNum]->SetXY(x, y);
+        character[highScoreCharNum]->SetXY(x - character[highScoreCharNum]->GetWidth() / 2, y );
         character[highScoreCharNum]->OnShow();
     }
 
