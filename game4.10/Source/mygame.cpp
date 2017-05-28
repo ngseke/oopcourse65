@@ -342,7 +342,7 @@ void CGameStateInit::OnShow() {
             //從 CFile 中取得最高分內容並顯示
             int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
                 tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
-                tempKeyCount = 0,
+                tempKeyCount = PublicData::bestRecord.ReadHighScore_TotalCorrectKeyCount(),
                 tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
             PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
 
