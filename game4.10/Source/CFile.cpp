@@ -96,8 +96,46 @@ void CFile::WriteRecord(int score, int level, double accuracy, string meName, in
        << ",accuracy:" << accuracy
        << ",date:" << record_Date
        << ",totalCorrectKeyCount:" << totalCorrectKeyCount << endl;
+    fp.close();
 }
 void CFile::ReadRecordFile() {
+    fstream	fp;
+    fp.open("user/record.txt", ios::in);
+    int i = 0;
+    char line[100];
+    string SlideOne, SlideTwo, SlideThree[100];
+
+    for (unsigned int i = 0; i < record.size(); i++) {					//清空Record
+        vector<CRecord*>::iterator iterenemyQueue = record.begin();
+        delete record[i];
+        record[i] = NULL;
+        record.erase(iterenemyQueue + i);
+        i = 0;
+    }
+
+    while (fp.getline(line, sizeof(line), '\n')) {
+        SlideOne = line;
+        stringstream ss(SlideOne);
+
+        while (getline(ss, SlideTwo, ',')) {
+            stringstream ss2(SlideTwo);
+
+            while (getline(ss2, SlideThree[i], ':')) {
+                if (i == 1) this->record_MeName = SlideThree[1];
+                else if (i == 3) this->record_Score = stoi(SlideThree[3], nullptr, 10);
+                else if (i == 5) this->record_Level = stoi(SlideThree[5], nullptr, 10);
+                else if (i == 7) this->record_Accuracy = stod(SlideThree[7], nullptr);
+                else if (i == 9) this->record_Date = SlideThree[9];
+                else if (i == 11) this->record_TotalCorrectKeyCount = stoi(SlideThree[11], nullptr, 10);
+
+                i++;
+
+                if (i == 12) i = 0;
+            }
+        }
+
+        record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_TotalCorrectKeyCount, record_Date));	//從頭插進去
+    }
 }
 int CFile::ReadRecordScore_Score() {
     return this->record_Score;

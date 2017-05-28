@@ -151,6 +151,7 @@ void CGameStateInit::OnBeginState() {
     text1_y = 550;
     text1_count = 0;
     PublicData::bestRecord.ReadHighScoreFile();
+    PublicData::bestRecord.ReadRecordFile();
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
