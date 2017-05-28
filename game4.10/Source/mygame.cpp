@@ -325,7 +325,7 @@ void CGameStateInit::OnShow() {
 
         // 說明打字動畫
         if (noteDisplayState == 0) {
-            noteExkey.SetTopLeft((SIZE_X - noteExkey.Width()) / 2, NOTE_TEXT_Y + 150);
+            noteExkey.SetTopLeft((SIZE_X - noteExkey.Width()) / 2, NOTE_TEXT_Y + 160);
             noteExkey.OnShow();
         }
     }
