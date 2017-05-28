@@ -557,6 +557,8 @@ CGameStateOver::CGameStateOver(CGame* g)
     : CGameState(g) {
 }
 void CGameStateOver::OnMove() {
+    if (isHighScore)newHS_text.OnMove();
+
     if (counter < 0)	GotoGameState(GAME_STATE_INIT);
 
     if (barCounter < 200 && barCounter < accuracy) {
@@ -570,6 +572,7 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 30;	 // 5 seconds
     barCounter = 0;
+    isHighScore = false;
     //
     score = PublicData::score;
     level = PublicData::level;
@@ -580,8 +583,10 @@ void CGameStateOver::OnBeginState() {
     //PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
     PublicData::bestRecord.ReadHighScoreFile();
 
-    if (score > PublicData::bestRecord.ReadHighScore_Score())		// 若本次分數大於 最高分則寫入
+    if (score > PublicData::bestRecord.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
         PublicData::bestRecord.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName());
+        isHighScore = true;
+    }
 
     PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName());
     /*
@@ -598,6 +603,9 @@ void CGameStateOver::OnBeginState() {
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
     border.LoadBitmap("Bitmaps/gameover/gameover_border.bmp", RGB(0, 255, 0));
+    newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs1.bmp", RGB(0, 255, 0));
+    newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs2.bmp", RGB(0, 255, 0));
+    newHS_text.SetDelayCount(20);
     char str[80];
     ShowInitProgress(80);
 
@@ -619,6 +627,12 @@ void CGameStateOver::OnInit() {
 void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
     border.SetTopLeft(x, y);
     border.ShowBitmap();
+
+    if (isHighScore) {
+        newHS_text.SetTopLeft((SIZE_X - newHS_text.Width()) / 2, y + border.Height() + 10);
+        newHS_text.OnShow();
+    }
+
     //
     int tempScore = score, tempLevel = level, tempAccuracy = int (accuracy * 100.0);
     int dotPos = 0;

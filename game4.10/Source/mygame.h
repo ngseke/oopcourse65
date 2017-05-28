@@ -167,11 +167,14 @@ class CGameStateOver : public CGameState {
         CMovingBitmap		border;
         CMovingBitmap		numBmp[10], numBmpSmall[12];		// 數字圖檔
         CMovingBitmap		bar[2];
+        CAnimation			newHS_text;
+        bool				isHighScore;	//本次遊玩的是否破紀錄
         int					counter;	// 倒數之計數器
         int					x, y;
         int					score, level;
         double				accuracy;
         int					barCounter;
+
 };
 
 }
