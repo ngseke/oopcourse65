@@ -168,13 +168,12 @@ void CMe::SetPlayingRecordDisplay(string s0, string s1, string s2) {
     for (int j = 0; j < 3; j++) {
         for (unsigned int i = 0; i < character.size(); i++) {
             if (playingRecordName[j] == character[i]->GetName()) {	// 若輸入的角色名和Vector內匹配
-                if (playingRecordName[j] == "") {	// 不顯示主角Bitmap
-                    playingRecordCharNum[j] = 999;	// 999 表示不顯示主角Bitmap
-                }
-                else {
-                    playingRecordCharNum[j] = i;
-                    break;
-                }
+                playingRecordCharNum[j] = i;
+                break;
+            }
+            else if (playingRecordName[j] == "") {	// 不顯示主角Bitmap
+                playingRecordCharNum[j] = 999;	// 999 表示不顯示主角Bitmap
+                break;
             }
         }
     }

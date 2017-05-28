@@ -6,3 +6,4 @@ character:Captain American,score:7,level:0,accuracy:100,date:201705282302,totalC
 character:Zombie Brain,score:19,level:0,accuracy:86.3636,date:201705282305,totalCorrectKeyCount:19
 character:Captain American,score:10,level:0,accuracy:100,date:201705282319,totalCorrectKeyCount:10
 character:Hulk,score:5,level:0,accuracy:100,date:201705282323,totalCorrectKeyCount:5
+character:Minion,score:0,level:0,accuracy:100,date:201705290119,totalCorrectKeyCount:0

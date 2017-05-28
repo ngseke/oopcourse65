@@ -17,12 +17,13 @@ class CFile {
         //================================
         void WriteRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount);			//寫入:分數 關卡 正確率 主角名稱
         void ReadRecordFile();
-        int ReadRecordScore_Score();						 //回傳第x筆裡面的分
-        int ReadRecordScore_Level();						 //回傳第x筆裡面的關
-        double ReadRecordScore_Accuracy();					 //回傳第x筆裡面的正確率
-        string  ReadRecordScore_Character();				 //回傳第x筆裡面的角色名
-        string  ReadRecordScore_Date();						 //回傳第x筆裡面的日期
-        int		ReadRecordScore_TotalCorrectKeyCount();		 //回傳第x筆裡面的正確按鍵數量
+        int ReadRecord_Score(int);						 //回傳第x筆裡面的分
+        int ReadRecord_Level(int);						 //回傳第x筆裡面的關
+        double ReadRecord_Accuracy(int);					 //回傳第x筆裡面的正確率
+        string  ReadRecord_Character(int);				 //回傳第x筆裡面的角色名
+        string  ReadRecord_Date(int);						 //回傳第x筆裡面的日期
+        int		ReadRecord_KeyCount(int);		 //回傳第x筆裡面的正確按鍵數量
+        int     GetRecordNum();
 
     private:
         int HighScore_Score;				//最高紀錄的得分

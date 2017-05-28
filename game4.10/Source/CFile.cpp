@@ -137,23 +137,28 @@ void CFile::ReadRecordFile() {
         record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_TotalCorrectKeyCount, record_Date));	//從頭插進去
     }
 }
-int CFile::ReadRecordScore_Score() {
-    return this->record_Score;
+int CFile::ReadRecord_Score(int num) {
+    return record.at(num)->ReadRecordScore_Score();
 }
-int CFile::ReadRecordScore_Level() {
-    return this->record_Level;
+int CFile::ReadRecord_Level(int num) {
+    return record.at(num)->ReadRecordScore_Level();
 }
-double CFile::ReadRecordScore_Accuracy() {
-    return this->record_Accuracy;
+double CFile::ReadRecord_Accuracy(int num) {
+    return record.at(num)->ReadRecordScore_Accuracy();
 }
-string CFile::ReadRecordScore_Character() {
-    return this->record_MeName;
+string CFile::ReadRecord_Character(int num) {
+    //if (num < int(record.size()))
+    return record.at(num)->ReadRecordScore_Character();
+    //else return "";
 }
-string CFile::ReadRecordScore_Date() {
-    return this->record_Date;
+string CFile::ReadRecord_Date(int num) {
+    return record.at(num)->ReadRecordScore_Date();
 }
-int	CFile::ReadRecordScore_TotalCorrectKeyCount() {
-    return this->record_TotalCorrectKeyCount;
+int	CFile::ReadRecord_KeyCount(int num) {
+    return record.at(num)->ReadRecordScore_TotalCorrectKeyCount();
+}
+int CFile::GetRecordNum() {
+    return int( record.size() );
 }
 }
 

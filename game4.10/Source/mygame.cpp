@@ -223,14 +223,12 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         }
 
         if (statsDisplayState == 1) {				// 若為 遊玩記錄狀態
-            PublicData::me.SetPlayingRecordDisplay("Iron Man", "Bouncing Ball", "Captain American");
-
-            if		(nChar == KEY_UP) {
-                if (statsPRItemNum > 1)statsPRItemNum--;
-            }			// 向上查找記錄
-            else if (nChar == KEY_DOWN) {
-                if (statsPRItemNum < 100 - 3)statsPRItemNum++;
-            }			// 向下查找記錄
+            if		(nChar == KEY_UP) {   // 向上查找記錄
+                if (statsPRItemNum > 0)statsPRItemNum--;
+            }
+            else if (nChar == KEY_DOWN) { // 向下查找記錄
+                if (statsPRItemNum < PublicData::bestRecord.GetRecordNum() - 3)statsPRItemNum++;
+            }
         }
     }
     else if (displayState == 4 && nChar == KEY_ENTER) { // [關於]
@@ -418,18 +416,50 @@ void CGameStateInit::OnShow() {
             statsBg[1].ShowBitmap();
             statsArrow[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
             statsArrow[2].ShowBitmap();
-            statsArrowV[3].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
-            statsArrowV[3].ShowBitmap();
 
-            if (0) {		// 當查無遊戲記錄時
+            if (PublicData::bestRecord.GetRecordNum() <= 3 && PublicData::bestRecord.GetRecordNum() > 0) {
+                // 箭頭樣式：全暗
+                statsArrowV[3].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
+                statsArrowV[3].ShowBitmap();
+            }
+            else {
+                if (statsPRItemNum == 0) {	// 箭頭樣式：下亮
+                    statsArrowV[2].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
+                    statsArrowV[2].ShowBitmap();
+                }
+                else if (statsPRItemNum == PublicData::bestRecord.GetRecordNum() - 3) { // 箭頭樣式：下亮
+                    statsArrowV[1].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
+                    statsArrowV[1].ShowBitmap();
+                }
+                else {	// 箭頭樣式：全亮
+                    statsArrowV[0].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
+                    statsArrowV[0].ShowBitmap();
+                }
+            }
+
+            if (PublicData::bestRecord.GetRecordNum() == 0) {		// 當查無遊戲記錄時
                 PublicData::me.SetState(5);
                 statsNoRecord.SetTopLeft((SIZE_X - statsNoRecord.Width()) / 2, NOTE_TEXT_Y + 163);
                 statsNoRecord.ShowBitmap();
             }
 
+            PublicData::me.SetPlayingRecordDisplay
+            (statsPRItemNum >= PublicData::bestRecord.GetRecordNum() ? "" :
+             PublicData::bestRecord.ReadRecord_Character(statsPRItemNum),
+             statsPRItemNum + 1 >= PublicData::bestRecord.GetRecordNum() ? "" :
+             PublicData::bestRecord.ReadRecord_Character(statsPRItemNum + 1),
+             statsPRItemNum + 2 >= PublicData::bestRecord.GetRecordNum() ? "" :
+             PublicData::bestRecord.ReadRecord_Character(statsPRItemNum + 2) );
+
             for (int j = 0; j < 3; j++) {
-                int tempScore = 12345, tempLevel = 87, tempKeyCount = 67890, tempAccuracy = int(94.87 * 100.0);
-                string tempDate = "201701012359";
+                if (statsPRItemNum + j >= PublicData::bestRecord.GetRecordNum())
+                    break;
+
+                int tempScore = PublicData::bestRecord.ReadRecord_Score(statsPRItemNum + j),
+                    tempLevel = PublicData::bestRecord.ReadRecord_Level(statsPRItemNum + j),
+                    tempKeyCount = PublicData::bestRecord.ReadRecord_KeyCount(statsPRItemNum + j),
+                    tempAccuracy = int(PublicData::bestRecord.ReadRecord_Accuracy(statsPRItemNum + j) * 100.0);
+                string tempDate = PublicData::bestRecord.ReadRecord_Date(statsPRItemNum + j);
                 const int STATS_PR_NUM_POS_X = 135, STATS_PR_NUM_PER_POS_X = 380;
                 const int LINE_MARGIN = 44;
 
@@ -437,7 +467,6 @@ void CGameStateInit::OnShow() {
                     numBmpSmall_White[tempDate[i] - '0'].SetTopLeft(STATS_POS_X + STATS_PR_NUM_POS_X - 40 + 10 * i + signNum * 8,
                             NOTE_TEXT_Y + 130 + j * LINE_MARGIN);
                     numBmpSmall_White[tempDate[i] - '0'].ShowBitmap();
-                    tempScore /= 10;
 
                     if (i == 3) {
                         numBmpSmall_White[12].SetTopLeft(STATS_POS_X + STATS_PR_NUM_POS_X - 40 + 10 * i + 10 + signNum * 8,
