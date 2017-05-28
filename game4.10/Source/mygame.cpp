@@ -151,6 +151,7 @@ void CGameStateInit::OnInit() {
 void CGameStateInit::OnBeginState() {
     text1_y = 550;
     text1_count = 0;
+    PublicData::bestRecord.ReadHighScoreFile();
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -279,7 +280,7 @@ void CGameStateInit::OnShow() {
         int HIGHSCORE_POS_Y = MENU_Y + 10;
 
         if (1) {					// 陪ボ程蔼だ(bitmap)
-            int tempScore = 9487;
+            int tempScore = PublicData::bestRecord.ReadHighScore_Score();
             highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
             highScoreBorder.ShowBitmap();
 
@@ -337,8 +338,15 @@ void CGameStateInit::OnShow() {
             statsBg[0].ShowBitmap();
             statsArrow[1].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
             statsArrow[1].ShowBitmap();
-            int tempScore = 12345, tempLevel = 87, tempKeyCount = 67890, tempAccuracy = int(94.87 * 100.0);
+            //
+            //眖 CFile い眔程蔼だず甧陪ボ
+            int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
+                tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
+                tempKeyCount = 0,
+                tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
+            PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
 
+            //
             for (int i = 0; i < 5; i++) {					// 陪ボだ计计bmp
                 numBmp[tempScore % 10].SetTopLeft(STATS_POS_X + 227 - 20 * i, NOTE_TEXT_Y + 196 );
                 numBmp[tempScore % 10].ShowBitmap();
@@ -570,8 +578,11 @@ void CGameStateOver::OnBeginState() {
     PublicData::me.SetState(2);
     //PublicData::record.push_back(new CRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName(), PublicData::me.GetselectedChar()));
     //PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
-    PublicData::bestRecord.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName());
     PublicData::bestRecord.ReadHighScoreFile();
+
+    if (score > PublicData::bestRecord.ReadHighScore_Score())		// 璝セΩだ计 程蔼だ玥糶
+        PublicData::bestRecord.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName());
+
     PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName());
     /*
     if (PublicData::record.size() == 1 || PublicData::score > PublicData::bestRecord->ReadHighScore_Score()) {
