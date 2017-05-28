@@ -1,14 +1,2 @@
-character:Iron Man,score:7,level:0,accuracy:77.7778,date:201705271354
-character:Hulk,score:22,level:0,accuracy:100,date:201705271356
-character:Creeper,score:25,level:0,accuracy:92.5926,date:201705271356
-character:Cow,score:12,level:0,accuracy:92.3077,date:201705271512
-character:Cow,score:1042,level:1,accuracy:86.0465,date:201705271512
-character:Iron Man,score:6,level:0,accuracy:100,date:201705271513
-character:Bouncing Ball,score:45,level:0,accuracy:93.75,date:201705271517
-character:Hulk,score:17,level:0,accuracy:100,date:201705271519
-character:Bouncing Ball,score:21,level:0,accuracy:91.3043,date:201705271522characterNum:7
-character:Iron Man,score:8,level:0,accuracy:100,date:201705271525,characterNum:0
-character:Iron Man,score:7,level:0,accuracy:100,date:201705271537,characterNum:0
-character:Bouncing Ball,score:50,level:0,accuracy:83.3333,date:201705271538,characterNum:7
-character:Iron Man,score:27,level:0,accuracy:93.1034,date:201705271539,characterNum:0
-character:Captain American,score:13,level:0,accuracy:76.4706,date:201705271539,characterNum:1
+character:Minion,score:16,level:0,accuracy:100,date:201705281224
+character:Bouncing Ball,score:19,level:0,accuracy:100,date:201705281224

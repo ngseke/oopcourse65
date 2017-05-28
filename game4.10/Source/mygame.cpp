@@ -572,6 +572,7 @@ void CGameStateOver::OnBeginState() {
     //PublicData::record.back()->WriteRecord(PublicData::score, PublicData::level, PublicData::accuracy, PublicData::me.GetMeName());
     PublicData::bestRecord.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName());
     PublicData::bestRecord.ReadHighScoreFile();
+    PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName());
     /*
     if (PublicData::record.size() == 1 || PublicData::score > PublicData::bestRecord->ReadHighScore_Score()) {
         PublicData::bestRecord = new CFile(PublicData::record.back()->ReadRecordScore_Score(), PublicData::record.back()->ReadRecordScore_Level(),

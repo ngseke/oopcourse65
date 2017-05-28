@@ -1,1 +1,1 @@
-character:Minion,score:5,level:0,accuracy:100,date:201705281159
+character:Bouncing Ball,score:19,level:0,accuracy:100,date:201705281224

@@ -1,10 +1,6 @@
 #pragma once
 #include "CRecord.h"
 namespace game_framework {
-/////////////////////////////////////////////////////////////////////////////
-// 這個class提供會一直彈跳的球
-// 看懂就可以改寫成自己的程式了
-/////////////////////////////////////////////////////////////////////////////
 
 class CFile {
     public:
@@ -19,6 +15,7 @@ class CFile {
         bool isHighScoreExist();		//回傳是否存在最高紀錄
         //================================
         void WriteRecord(int score, int level, double accuracy, string meName);			//寫入:分數 關卡 正確率 主角名稱
+        void ReadRecordFile();
         int ReadRecordScore_Score();  //回傳第x筆裡面的分
         int ReadRecordScore_Level();  //回傳第x筆裡面的關
         double ReadRecordScore_Accuracy();  //回傳第x筆裡面的正確率

@@ -38,7 +38,6 @@ void CFile::ReadHighScoreFile() {
     int i = 0;
     fstream	fp;
     fp.open("user/bestRecord.txt", ios::in);
-    //test.open("user/test.txt", ios::out);
 
     while (fp.getline(temp, sizeof(temp), ',')) {
         slideOne = temp;
@@ -78,6 +77,21 @@ bool CFile::isHighScoreExist() {
 }
 //======================================
 void CFile::WriteRecord(int score, int level, double accuracy, string meName) {
+    struct tm* T = NULL;
+    time_t t;
+    time(&t);
+    T = localtime(&t);
+    fstream	fp;
+    fp.open("user/record.txt", ios::out | ios::app);
+    sprintf(ChDate, "%d%02d%02d%02d%02d", int(T->tm_year + 1900), int(T->tm_mon + 1), int(T->tm_mday), int(T->tm_hour), int(T->tm_min));
+    this->record_Date.assign(ChDate);
+    fp << "character:" << meName
+       << ",score:" << score
+       << ",level:" << level
+       << ",accuracy:" << accuracy
+       << ",date:" << record_Date << endl;
+}
+void CFile::ReadRecordFile() {
 }
 int CFile::ReadRecordScore_Score() {
     return this->record_Score;

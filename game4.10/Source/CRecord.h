@@ -1,15 +1,10 @@
 #pragma once
 #include "CMe.h"
 namespace game_framework {
-/////////////////////////////////////////////////////////////////////////////
-// 這個class提供會一直彈跳的球
-// 看懂就可以改寫成自己的程式了
-/////////////////////////////////////////////////////////////////////////////
 
 class CRecord {
     public:
-        CRecord(int score, int level, double accuracy, string meName, int selectedChar);//分數 關卡 正確率 主角名稱 主角編號
-		void WriteRecord(int score, int level, double accuracy, string meName);			//寫入:分數 關卡 正確率 主角名稱
+        CRecord();
         int ReadRecordScore_Score();  //回傳第x筆裡面的分
         int ReadRecordScore_Level();  //回傳第x筆裡面的關
         double ReadRecordScore_Accuracy();  //回傳第x筆裡面的正確率
