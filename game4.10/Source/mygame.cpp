@@ -244,10 +244,13 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         }
 
         if (aboutDisplayState == 1) {
-            if (nChar == 'Y') {
-                displayState = 0;
+            if (nChar == 'Y') {	// 選YES確認刪除遊戲紀錄
+                PublicData::bestRecord.DeleteAllData();		// 清空txt黨
+                PublicData::bestRecord.ReadHighScoreFile(); // 重新載入遊戲紀錄
+                PublicData::bestRecord.ReadRecordFile();
+                displayState = 0;							// 返回主選單
             }
-            else if (nChar == 'N') {
+            else if (nChar == 'N') {	// 選NO取消
                 aboutDisplayState = 0;
             }
         }
@@ -297,7 +300,7 @@ void CGameStateInit::OnShow() {
         int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
         int HIGHSCORE_POS_Y = MENU_Y + 10;
 
-        if (1) {					// 顯示最高分(bitmap)
+        if (PublicData::bestRecord.isHighScoreExist()) {					// 顯示最高分(bitmap)
             int tempScore = PublicData::bestRecord.ReadHighScore_Score();
             highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
             highScoreBorder.ShowBitmap();
@@ -356,78 +359,86 @@ void CGameStateInit::OnShow() {
             statsBg[0].ShowBitmap();
             statsArrow[1].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2, NOTE_TEXT_Y + (statsBorder.Height() - statsArrow[0].Height()) / 2 + 4);
             statsArrow[1].ShowBitmap();
+
             //
             //從 CFile 中取得最高分內容並顯示
-            int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
-                tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
-                tempKeyCount = PublicData::bestRecord.ReadHighScore_TotalCorrectKeyCount(),
-                tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
-            PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
-
-            //
-            for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
-                numBmp[tempScore % 10].SetTopLeft(STATS_POS_X + 227 - 20 * i, NOTE_TEXT_Y + 196 );
-                numBmp[tempScore % 10].ShowBitmap();
-                tempScore /= 10;
+            if (!PublicData::bestRecord.isHighScoreExist()) {		// 若最高分不存在
+                PublicData::me.SetState(5);
+                statsNoRecord.SetTopLeft((SIZE_X - statsNoRecord.Width()) / 2 + 115, NOTE_TEXT_Y + 150);
+                statsNoRecord.ShowBitmap();
             }
+            else {
+                int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
+                    tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
+                    tempKeyCount = PublicData::bestRecord.ReadHighScore_TotalCorrectKeyCount(),
+                    tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
+                PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
 
-            for (int j = 0; j < 3; j++) {					// 顯示項目文字（高關、按鍵、正確）及數字
-                statsText[j].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X, \
-                                        NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN  * j);
-                statsText[j].ShowBitmap();					// 顯示項目文字
-                const int  STATS_TEXT_MARGIN_R = 150;		// 項目文字 與 數字 之距離
-
-                if (j == 0) {		// 0為顯示 關卡數字
-                    for (int i = 0; i < 2; i++) {		// 顯示關卡數字bmp
-                        numBmpSmall_White[tempLevel % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
-                                NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                        numBmpSmall_White[tempLevel % 10].ShowBitmap();
-                        tempLevel /= 10;
-                    }
+                //
+                for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
+                    numBmp[tempScore % 10].SetTopLeft(STATS_POS_X + 227 - 20 * i, NOTE_TEXT_Y + 196 );
+                    numBmp[tempScore % 10].ShowBitmap();
+                    tempScore /= 10;
                 }
-                else if (j == 1) {	// 1為顯示 總按鍵數
-                    for (int i = 0; i < 5; i++) {		// 顯示總按鍵數數字bmp
-                        numBmpSmall_White[tempKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
-                                NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                        numBmpSmall_White[tempKeyCount % 10].ShowBitmap();
-                        tempKeyCount /= 10;
-                    }
-                }
-                else if (j == 2) {	// 2為顯示 正確率
-                    if (tempAccuracy != 10000) {						//若正確率非100%
-                        for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
-                            numBmpSmall_White[tempAccuracy % 10].SetTopLeft \
-                            (STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i - dotPos, \
-                             NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                            numBmpSmall_White[tempAccuracy % 10].ShowBitmap();
-                            tempAccuracy /= 10;
 
-                            if (i == 1) {								// 顯示小數點
-                                dotPos = 5;
-                                numBmpSmall_White[11].SetTopLeft\
-                                (STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i - dotPos, \
-                                 NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                                numBmpSmall_White[11].ShowBitmap();
-                            }
+                for (int j = 0; j < 3; j++) {					// 顯示項目文字（高關、按鍵、正確）及數字
+                    statsText[j].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X, \
+                                            NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN  * j);
+                    statsText[j].ShowBitmap();					// 顯示項目文字
+                    const int  STATS_TEXT_MARGIN_R = 150;		// 項目文字 與 數字 之距離
 
+                    if (j == 0) {		// 0為顯示 關卡數字
+                        for (int i = 0; i < 2; i++) {		// 顯示關卡數字bmp
+                            numBmpSmall_White[tempLevel % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
+                                    NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                            numBmpSmall_White[tempLevel % 10].ShowBitmap();
                             tempLevel /= 10;
                         }
                     }
-                    else {												// 針對100%顯示
-                        numBmpSmall_White[1].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * 2, \
-                                                        NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                        numBmpSmall_White[1].ShowBitmap();
-                        numBmpSmall_White[0].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10, \
-                                                        NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                        numBmpSmall_White[0].ShowBitmap();
-                        numBmpSmall_White[0].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R, \
-                                                        NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                        numBmpSmall_White[0].ShowBitmap();
+                    else if (j == 1) {	// 1為顯示 總按鍵數
+                        for (int i = 0; i < 5; i++) {		// 顯示總按鍵數數字bmp
+                            numBmpSmall_White[tempKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
+                                    NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                            numBmpSmall_White[tempKeyCount % 10].ShowBitmap();
+                            tempKeyCount /= 10;
+                        }
                     }
+                    else if (j == 2) {	// 2為顯示 正確率
+                        if (tempAccuracy != 10000) {						//若正確率非100%
+                            for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
+                                numBmpSmall_White[tempAccuracy % 10].SetTopLeft \
+                                (STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i - dotPos, \
+                                 NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                                numBmpSmall_White[tempAccuracy % 10].ShowBitmap();
+                                tempAccuracy /= 10;
 
-                    numBmpSmall_White[10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R + 14, \
-                                                     NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                    numBmpSmall_White[10].ShowBitmap();					// 顯示百分比符號
+                                if (i == 1) {								// 顯示小數點
+                                    dotPos = 5;
+                                    numBmpSmall_White[11].SetTopLeft\
+                                    (STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i - dotPos, \
+                                     NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                                    numBmpSmall_White[11].ShowBitmap();
+                                }
+
+                                tempLevel /= 10;
+                            }
+                        }
+                        else {												// 針對100%顯示
+                            numBmpSmall_White[1].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * 2, \
+                                                            NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                            numBmpSmall_White[1].ShowBitmap();
+                            numBmpSmall_White[0].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10, \
+                                                            NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                            numBmpSmall_White[0].ShowBitmap();
+                            numBmpSmall_White[0].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R, \
+                                                            NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                            numBmpSmall_White[0].ShowBitmap();
+                        }
+
+                        numBmpSmall_White[10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R + 14, \
+                                                         NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                        numBmpSmall_White[10].ShowBitmap();					// 顯示百分比符號
+                    }
                 }
             }
         }
@@ -438,7 +449,7 @@ void CGameStateInit::OnShow() {
             statsArrow[2].ShowBitmap();
 
             // 設定顯示的箭頭樣式
-            if (PublicData::bestRecord.GetRecordNum() <= 3 && PublicData::bestRecord.GetRecordNum() > 0) {
+            if (PublicData::bestRecord.GetRecordNum() <= 3 && PublicData::bestRecord.GetRecordNum() >= 0) {
                 statsArrowV[3].ShowBitmap();		// 箭頭樣式：全暗
             }
             else {
@@ -635,6 +646,7 @@ void CGameStateOver::OnBeginState() {
     }
 
     PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
+    PublicData::bestRecord.ReadRecordFile();
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%

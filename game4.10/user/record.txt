@@ -1,8 +1,1 @@
-character:Mushroom,score:0,level:0,accuracy:100,date:201705290717,totalCorrectKeyCount:0
-character:Mushroom,score:0,level:0,accuracy:100,date:201705290717,totalCorrectKeyCount:0
-character:Iron Man,score:0,level:0,accuracy:100,date:201705290724,totalCorrectKeyCount:0
-character:Iron Man,score:0,level:0,accuracy:100,date:201705290725,totalCorrectKeyCount:0
-character:Kirby,score:0,level:0,accuracy:100,date:201705290749,totalCorrectKeyCount:0
-character:Pikachu,score:0,level:0,accuracy:100,date:201705290812,totalCorrectKeyCount:0
-character:Flappy Bird,score:5,level:1,accuracy:83.3333,date:201705290952,totalCorrectKeyCount:5
-character:Doge,score:17,level:0,accuracy:80.9524,date:201705291002,totalCorrectKeyCount:17
+character:Iron Man,score:46,level:2,accuracy:92,date:201705291254,totalCorrectKeyCount:46

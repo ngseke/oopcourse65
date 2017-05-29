@@ -35,7 +35,7 @@ void CFile::WriteHighScore(int score, int level, double accuracy, string meName,
 }
 void CFile::ReadHighScoreFile() {
     string slideOne, slideTwo[12];
-    char temp[100];
+    char temp[200];
     int i = 0;
     fstream	fp;
     fp.open("user/bestRecord.txt", ios::in);
@@ -56,7 +56,10 @@ void CFile::ReadHighScoreFile() {
         }
     }
 
+    if (!fp.is_open())HighScore_Score = 0;
+
     fp.close();
+    TRACE("%d, %d\n", HighScore_Score, HighScore_Level);
 }
 
 int CFile::ReadHighScore_Score() {
@@ -78,7 +81,8 @@ int	CFile::ReadHighScore_TotalCorrectKeyCount() {
     return this->HighScore_TotalCorrectKeyCount;
 }
 bool CFile::isHighScoreExist() {
-    return 1;
+    if (!(HighScore_Score == 0))return 1;
+    else return 0;
 }
 //======================================
 void CFile::WriteRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount) {
@@ -107,11 +111,11 @@ void CFile::ReadRecordFile() {
 
     /*
     for (unsigned int i = 0; i < record.size(); i++) {					//²MªÅRecord
-        vector<CRecord*>::iterator iterenemyQueue = record.begin();
-        delete record[i];
-        record[i] = NULL;
-        record.erase(iterenemyQueue + i);
-        i = 0;
+    	vector<CRecord*>::iterator iterenemyQueue = record.begin();
+    	delete record[i];
+    	record[i] = NULL;
+    	record.erase(iterenemyQueue + i);
+    	i = 0;
     }
     */
     for (CRecord* cr : record) delete cr;
@@ -164,10 +168,18 @@ int	CFile::ReadRecord_KeyCount(int num) {
     return record.at(num)->ReadRecordScore_TotalCorrectKeyCount();
 }
 int CFile::GetRecordNum() {
-    return int( record.size() );
+    return int(record.size());
 }
 
 void CFile::DeleteAllData() {
-}
+    fstream	fp, test;
+    fp.open("user/bestRecord.txt", ios::out);
+    fp << "";
+    fp.close();
+    fp.open("user/record.txt", ios::out);
+    fp << "";
+    fp.close();
+    DeleteFile("user/bestRecord.txt");
 }
 
+}
