@@ -25,7 +25,7 @@ void CCharacter::LoadBitmap() {
     char str[50];
 
     if (bmpNum == 1) {
-        sprintf(str, "Bitmaps/me/%s", fileName.c_str());
+        sprintf(str, "Bitmaps/me/%s.bmp", fileName.c_str());
         animation.AddBitmap(str, RGB(0, 255, 0));
     }
     else {
@@ -34,6 +34,8 @@ void CCharacter::LoadBitmap() {
             animation.AddBitmap(str, RGB(0, 255, 0));
         }
     }
+
+    if (name == "Tsai Ing-wen")animation.SetDelayCount(5);
 }
 
 void CCharacter::OnMove() {
