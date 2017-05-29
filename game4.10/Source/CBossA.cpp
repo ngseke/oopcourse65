@@ -31,8 +31,8 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->letter = letter;
     //
     index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 10 : 0;
-    callEnemyCounter = maxCallEnemyCounter = 30 * 7;		// 發動召喚小怪技能的間隔
-    endX = SIZE_X / 2;
+    callEnemyCounter = maxCallEnemyCounter = 30 * 5;		// 發動召喚小怪技能的間隔
+    endX = SIZE_X / 2 - 30 + rand() % 60;
     endY = SIZE_Y;
     this->letter = letter;
     //
@@ -40,7 +40,7 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
 }
 
 void CBossA::CallEnemy(int x, int y) {
-    enemyQueue->push_back(new CEnemy(x, y, 2, false, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2, SIZE_Y, letter));
+    enemyQueue->push_back(new CEnemy(x, y, 2, false, dict, 3, 4, enemyQueue, bombList, SIZE_X / 2 - 50 + rand() % 100, SIZE_Y, letter));
     enemyQueue->back()->LoadBitmap();
     enemyQueue->back()->SetIsAlive(true);
 }
@@ -53,7 +53,7 @@ void CBossA::kill() {
 }
 
 void CBossA::OnMove() {
-    const int STEPS = 300;	// 切成幾分dx
+    const int STEPS = 200;	// 切成幾分dx
 
     if (!is_alive) return;
 

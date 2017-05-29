@@ -747,9 +747,9 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), LEVEL(30) {
     srand((unsigned)time(NULL));	// 亂數種子
-    callEnemyCounter = maxCallEnemyCounter = 25;	// maxCallEnemyCounter 決定怪物生成速度
-    callBossACounter = maxCallBossACounter = 75;
-    callBossBCounter = maxCallBossBCounter = 90;
+    callEnemyCounter = maxCallEnemyCounter = 20;	// maxCallEnemyCounter 決定怪物生成速度
+    callBossACounter = maxCallBossACounter = 65;
+    callBossBCounter = maxCallBossBCounter = 75;
 }
 CGameStateRun::~CGameStateRun() {
     for (CEnemy* eq : enemyQueue) delete eq;
@@ -840,7 +840,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
         enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 6, &enemyQueue, &bombList, \
-                                        PublicData::me.GetX1(), PublicData::me.GetY1(), &letter) ); // 將召喚的新怪放入vecotr內
+                                        PublicData::me.GetX1() - 30 + rand() % 60, PublicData::me.GetY1(), &letter) ); // 將召喚的新怪放入vecotr內
         enemyQueue.back()->LoadBitmap();	// 載入召喚的新怪
         currEnemyNum++;						// 在本關卡已召喚的怪物計數器
         totalEnemyNum++;					// 總以召喚的怪物數量

@@ -1,0 +1,7 @@
+character:Pikachu,score:16,level:0,accuracy:84.2105,date:201705291943,totalCorrectKeyCount:16
+character:Pikachu,score:17,level:0,accuracy:89.4737,date:201705291944,totalCorrectKeyCount:17
+character:Tsai Ing-wen,score:16,level:0,accuracy:100,date:201705291945,totalCorrectKeyCount:16
+character:Flappy Bird,score:78,level:2,accuracy:91.7647,date:201705291947,totalCorrectKeyCount:78
+character:Flappy Bird,score:959,level:14,accuracy:90.5534,date:201705291954,totalCorrectKeyCount:949
+character:Iron Man,score:0,level:0,accuracy:100,date:201705292002,totalCorrectKeyCount:0
+character:Iron Man,score:0,level:0,accuracy:100,date:201705292007,totalCorrectKeyCount:0
