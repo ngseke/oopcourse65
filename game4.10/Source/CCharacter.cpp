@@ -36,6 +36,8 @@ void CCharacter::LoadBitmap() {
     }
 
     if (name == "Tsai Ing-wen")animation.SetDelayCount(5);
+
+    if (name == "Kirby")animation.SetDelayCount(3);
 }
 
 void CCharacter::OnMove() {

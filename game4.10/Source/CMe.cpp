@@ -43,7 +43,7 @@ void CMe::LoadCharacter() {
     character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen",				10, x, y));
     character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump",					1, x, y));
     character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom",				1, x, y));
-    character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",					1, x, y));
+    character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",					6, x, y));
     character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird",			2, x, y));
     character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball",					4, x, y));
 }
@@ -103,6 +103,7 @@ void CMe::OnShow() {
         pDC->SetTextColor(RGB(200, 200, 200));
         sprintf(temp, "%s", character[selectedChar]->GetName().c_str());
         pDC->TextOut(350, CHARACTER_POS_Y + 60 + 60, temp);
+        pDC->SetTextColor(RGB(255, 200, 15));
         sprintf(temp, "%s", character[selectedChar]->GetSubName().c_str());
         pDC->TextOut(350, CHARACTER_POS_Y + 60 + 74, temp);
         pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
