@@ -49,7 +49,6 @@ CGameStateInit::~CGameStateInit() {
 }
 void CGameStateInit::OnInit() {
     ShowInitProgress(0);	// 一開始的loading進度為0%
-    const unsigned int exkeyNum = 6;					// 說明框裡面的按鍵動畫 數量
     currSelectItem = displayState = 0;					// 初始化選單選取項目
     noteDisplayState = statsDisplayState = aboutDisplayState = 0;			// 初始化“遊戲說明”及“統計”選取頁面項目
     statsPRItemNum = 0;									// 初始化統計頁面 最高記錄的選取項目
@@ -92,7 +91,7 @@ void CGameStateInit::OnInit() {
     noteSelected.LoadBitmap("Bitmaps/menu/note/note_selected.bmp", RGB(0, 255, 0));
     ShowInitProgress(15);
 
-    for (int i = 0; i < exkeyNum; i++) {	// 說明框裡面的按鍵動畫
+    for (int i = 0; i < 6; i++) {	// 說明框裡面的按鍵動畫
         char str[50];
         sprintf(str, "Bitmaps/menu/note/note1_exkey_%d.bmp", i + 1);
         noteExkey.AddBitmap(str, RGB(0, 255, 0));
@@ -142,7 +141,8 @@ void CGameStateInit::OnInit() {
     statsArrowV[2].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_down.bmp", RGB(0, 255, 0));
     statsArrowV[3].LoadBitmap("Bitmaps/menu/stats/stats_arrow_v_none.bmp", RGB(0, 255, 0));
 
-    for (int i = 0; i < 4; i++) statsArrowV[i].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
+    for (int i = 0; i < 4; i++)
+        statsArrowV[i].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
 
     statsText[0].LoadBitmap("Bitmaps/menu/stats/stats_text_hl.bmp", RGB(0, 255, 0));
     statsText[1].LoadBitmap("Bitmaps/menu/stats/stats_text_tkc.bmp", RGB(0, 255, 0));
@@ -152,9 +152,6 @@ void CGameStateInit::OnInit() {
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
     about.LoadBitmap("Bitmaps/menu/about/about_text_p2.bmp", RGB(0, 255, 0)); // 介紹文字
     delText.LoadBitmap("Bitmaps/menu/about/about_del_text.bmp", RGB(0, 255, 0));	// 確認刪除視窗
-    //
-    // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
-    //
 }
 
 void CGameStateInit::OnBeginState() {
@@ -169,10 +166,10 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_ESC = 27;
     const char KEY_SPACE = ' ';
     const char KEY_ENTER = 0xD;
-    const char KEY_LEFT = 0x25;	// keyboard左箭頭
-    const char KEY_UP = 0x26;	// keyboard上箭頭
-    const char KEY_RIGHT = 0x27; // keyboard右箭頭
-    const char KEY_DOWN = 0x28; // keyboard下箭頭
+    const char KEY_LEFT	 = 0x25;	// keyboard左箭頭
+    const char KEY_UP	 = 0x26;	// keyboard上箭頭
+    const char KEY_RIGHT = 0x27;	// keyboard右箭頭
+    const char KEY_DOWN  = 0x28;	// keyboard下箭頭
 
     if (!(nChar == KEY_ESC || nChar == KEY_LEFT || nChar == KEY_UP || nChar == KEY_RIGHT || nChar == KEY_DOWN || nChar == KEY_ENTER || nChar == 'D' || nChar == 'Y' || nChar == 'N' || (nChar <= '5' && nChar >= '1'))) {
         wrongKeyNum++;
@@ -262,8 +259,8 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
 }
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point) {}
 void CGameStateInit::OnMove() {
-    noteExkey.OnMove();
     map.OnMove();
+    noteExkey.OnMove();
     PublicData::me.OnMove();
 
     if (text1_count < 400) text1_count++;
@@ -616,7 +613,7 @@ CGameStateOver::CGameStateOver(CGame* g)
     : CGameState(g) {
 }
 void CGameStateOver::OnMove() {
-    if (isHighScore)newHS_text.OnMove();
+    if (isHighScore)	newHS_text.OnMove();	// 移動破紀錄動畫
 
     if (counter < 0)	GotoGameState(GAME_STATE_INIT);
 
@@ -629,7 +626,7 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     (nChar == KEY_ENTER) ? GotoGameState(GAME_STATE_INIT) : 0;	// 按下Enter鍵返回開頭頁面
 }
 void CGameStateOver::OnBeginState() {
-    counter = 1000 * 30;	 // 5 seconds
+    counter = 1000 * 30;
     barCounter = 0;
     isHighScore = false;
     //
@@ -681,12 +678,11 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
         newHS_text.OnShow();
     }
 
-    //
     int tempScore = score, tempLevel = level, tempAccuracy = int (accuracy * 100.0);
     int dotPos = 0;
     int scorePosX = 230, levelPosX = 130, accPosX = 155, // 定義各數字位置偏移量
         scorePosY =  45, levelPosY =  90, accPosY = 108,
-        barPosX = 120, barPosY = 122;
+        barPosX	  = 120, barPosY   = 122;
 
     for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
         numBmp[tempScore % 10].SetTopLeft(x + scorePosX - 20 * i, y + scorePosY);
@@ -778,11 +774,10 @@ void CGameStateRun::OnBeginState() {
     levelChangeFlag = 0;
     levelChangeDelay = -1;
     levelChangeDelayMax = int( 3.5 * 30 );						// 設定關卡間delay 3秒
-    //
 }
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     srand((unsigned)time(NULL));
-    ShowInitProgress(33);	// 接個前一個狀態的進度，此處進度視為33%
+    ShowInitProgress(33);
     //
     // 繼續載入其他資料
     //
@@ -824,7 +819,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     callBossBCounter--;
 
     if (quickCall) {	//【DEBUG區】 將第0關設定生成200只怪物，且召喚delay為0秒
-        //levelEnemyNum[0] = 200;
+        levelEnemyNum[0] = 200;
         levelChangeDelayMax = 0;
         maxCallEnemyCounter = maxCallBossACounter  = maxCallBossBCounter = 0;
     }

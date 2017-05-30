@@ -26,14 +26,12 @@ CBossA::CBossA(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->enemyQueue = enemyQueue;
     this->minVocabLeng = minVL;
     this->maxVocabLeng = maxVL;
-    //this->endX = endX;
-    //this->endY = endY;
     this->letter = letter;
     //
     index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 10 : 0;
     callEnemyCounter = maxCallEnemyCounter = 30 * 5;		// 發動召喚小怪技能的間隔
-    endX = SIZE_X / 2 - 30 + rand() % 60;
-    endY = SIZE_Y;
+    this->endX = SIZE_X / 2 - 30 + rand() % 60;
+    this->endY = SIZE_Y;
     this->letter = letter;
     //
     SetVocab();
@@ -83,7 +81,7 @@ void CBossA::OnMove() {
 void CBossA::LoadBitmap() {
     char str[30];
     const unsigned int bitmapNum = 7;		// 圖檔數量
-    sprintf(str, "Bitmaps/face/face_boss%d.bmp", rand() % bitmapNum + 1);
+    sprintf(str, "Bitmaps/face/face_boss%d.bmp", rand() % bitmapNum + 1);	// 隨機挑選 bitmap
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
     textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  // 載入 光標
     talkBoxL.LoadBitmap("Bitmaps/talk_box_blur/talk_box_left.bmp", RGB(0, 255, 0));

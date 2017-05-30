@@ -44,21 +44,21 @@ void CEmp::Initialize() {
 }
 
 void CEmp::LoadBitmap() {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 7; i++) {		// 載入 電磁波動畫圖
         char str[40];
         sprintf(str, "Bitmaps/big_wave/big_wave%d.bmp", i);
         emp.AddBitmap(str, RGB(0, 255, 0));
     }
 
-    displayBG.LoadBitmap("Bitmaps/emp_text/bg.bmp", RGB(0, 255, 0));
-    displayNumber[0].LoadBitmap("Bitmaps/emp_text/3.bmp", RGB(0, 255, 0));
-    displayNumber[1].LoadBitmap("Bitmaps/emp_text/2.bmp", RGB(0, 255, 0));
-    displayNumber[2].LoadBitmap("Bitmaps/emp_text/1.bmp", RGB(0, 255, 0));
-    displayNumber[3].LoadBitmap("Bitmaps/emp_text/0.bmp", RGB(0, 255, 0));
-    displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
-
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 10; i++) {		// 載入 數字圖
+        char str[40];
+        sprintf(str, "Bitmaps/emp_text/%d.bmp", i);
+        displayNumber[i].LoadBitmap(str, RGB(0, 255, 0));
         displayNumber[i].SetTopLeft(SIZE_X - 80 + 16, SIZE_Y - 80 + 12);
+    }
+
+    displayBG.LoadBitmap("Bitmaps/emp_text/bg.bmp", RGB(0, 255, 0));
+    displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
 }
 
 void CEmp::OnMove() {
@@ -67,7 +67,6 @@ void CEmp::OnMove() {
 
         for (unsigned int i = 0; i < enemyQueue->size(); i++) {
             if (HitRectangle(enemyQueue->at(i)->GetX(), enemyQueue->at(i)->GetY(), enemyQueue->at(i)->GetX2(), enemyQueue->at(i)->GetY2())) {
-                // score->Add(targetEnemy->GetCurrWordLeng());				// 分數+= 怪物長度
                 if (*lock && enemyQueue->at(i) == *targetEnemy) {
                     *lock = 0;
                 }
@@ -93,25 +92,8 @@ void CEmp::SetXY(int nx, int ny) {
 void CEmp::OnShow() {
     emp.SetTopLeft((SIZE_X - 640) / 2, (SIZE_Y - 350));
     emp.OnShow();
-    displayBG.ShowBitmap();
-    displayNumber[4 - empTimes - 1].ShowBitmap();
-
-    if (0) {		// 顯示debug資訊
-        CDC* pDC = CDDraw::GetBackCDC();
-        CFont f, *fp;
-        f.CreatePointFont(100, "Fixedsys");
-        fp = pDC->SelectObject(&f);
-        pDC->SetBkColor(RGB(0, 0, 0));
-        //
-        char temp[100];
-        //sprintf(temp, "DEBUG-- 1.%s  ", (*targetEnemy)->GetVocab().c_str());
-        sprintf(temp, "DEBUG-- empTimes:%d  ", empTimes);
-        pDC->SetTextColor(RGB(200, 0, 0));
-        pDC->TextOut(10, 10, temp);
-        ////
-        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-    }
+    displayBG.ShowBitmap();							// 顯示 背景
+    displayNumber[empTimes].ShowBitmap();	// 顯示 剩餘次數數字
 }
 
 void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy** targetEnemy) {

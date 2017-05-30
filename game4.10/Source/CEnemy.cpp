@@ -56,7 +56,7 @@ void CEnemy::LoadBitmap() {
     char str[30];
     const unsigned int bitmapNum = 7;										// 圖檔總數量
 
-    if (maxVocabLeng == 1 && minVocabLeng == 1)
+    if (maxVocabLeng == 1 && minVocabLeng == 1)								// 隨機挑選 bitmap
         sprintf(str, "Bitmaps/face/face_min%d.bmp", rand() % (4) + 1);		// 1字小怪的bmp
     else {
         sprintf(str, "Bitmaps/face/face%d.bmp", rand() % bitmapNum + 1);	// 一般小怪的bmp
@@ -101,27 +101,27 @@ void CEnemy::OnShow() {
         bmp.SetTopLeft(x + dx, y + dy);
         bmp.ShowBitmap();
 
-        // 改良後顯示talkbox方式, 完全依照單字長度
-        if (currWordLeng < length) {
+        if (currWordLeng < length) {	// 若當前輸入到的字 < 總長度 則顯示對話框
             talkBoxL.SetTopLeft(x + dx + bmp.Width(), y + dy);
-            talkBoxL.ShowBitmap();
+            talkBoxL.ShowBitmap();		// 顯示 對話框左
 
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < length; i++) {		// 顯示 數個對話框中(根據單字長度)
                 talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
                 talkBoxC.ShowBitmap();
             }
 
             talkBoxR.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + length * talkBoxC.Width(), y + dy);
-            talkBoxR.ShowBitmap();
-            textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, y + dy);	// 顯示光標
-            (currWordLeng != 0) ? textCursor.ShowBitmap() : 0;
+            talkBoxR.ShowBitmap();		// 顯示 對話框右
+            textCursor.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + ((currWordLeng ) * 10) - 1, \
+                                  y + dy);
+            (currWordLeng != 0) ? textCursor.ShowBitmap() : 0;	// 若當前輸入到的字!=0 則顯示光標
 
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < length; i++) {	// 顯示單字bmp
                 letter->at(vocab[i] - 97)->SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + letter->at(0)->Width() * i, y + dy + 4);
                 letter->at(vocab[i] - 97)->ShowBitmap();
             }
 
-            for (int i = 0; i < currWordLeng; i++) {	// 讓打過的單字蓋掉 消失不見
+            for (int i = 0; i < currWordLeng; i++) {	// 再次顯示talkBoxC, 讓打過的單字 被蓋掉消失不見
                 talkBoxC.SetTopLeft(x + dx + bmp.Width() + talkBoxL.Width() + i * talkBoxC.Width(), y + dy);
                 talkBoxC.ShowBitmap();
             }
@@ -130,7 +130,7 @@ void CEnemy::OnShow() {
 }
 void CEnemy::kill() {
     is_alive = false;
-    bombList->push_back(new CBomb(GetX(), GetY()));
+    bombList->push_back(new CBomb(GetX(), GetY()));		// new爆炸特效進vecor
     bombList->back()->LoadBitmap();
     is_bombed = true;
 }
@@ -145,19 +145,19 @@ void  CEnemy::SetVocab() {								// 隨機從dict中抓取一個單字到vocab裡面
         }
         else {											// 一般長度怪物
             vocab = dict->GetText();					// 從字典中隨機挑選單字給vocab
-            length = vocab.length();
+            length = vocab.length();					// 長度= 單字長度
         }
 
         if (length >= minVocabLeng && length <= maxVocabLeng) {	 // 長度符合 ,使用break跳出迴圈 確定生成此單字
-            bool firstWordBounceFlag = 0;				// 有撞到第一個單字的flag
+            bool firstWordBounceFlag = 0;						 // 有撞到第一個單字的flag
 
-            for (int i = enemyQueue->size() - 1; i >= 0; i--) {
+            for (int i = enemyQueue->size() - 1; i >= 0; i--) {	 // 與場上所有怪物比較, 確定是否首字單字重複
                 if (vocab[0] == enemyQueue->at(i)->GetFirstWord() && enemyQueue->at(i)->IsAlive())
                     firstWordBounceFlag = 1;
             }
 
-            if (firstWordBounceFlag && !(enemyQueue->size() >= 25)) {}
-            else break;
+            if (!(firstWordBounceFlag && enemyQueue->size() < 25))
+                break;	// 若沒撞到且 場上怪物數量小於26
         }
     }
 }

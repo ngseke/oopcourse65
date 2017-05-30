@@ -1,1 +1,0 @@
-character:Flappy Bird,score:959,level:14,accuracy:90.5534,date:201705291954,totalCorrectKeyCount:949

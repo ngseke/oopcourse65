@@ -10,6 +10,6 @@ class CBossA : public CEnemy {
         void OnMove();
         void LoadBitmap();
     protected:
-        int callEnemyCounter, maxCallEnemyCounter;
+        int callEnemyCounter, maxCallEnemyCounter;	// 發動召喚小怪技能 之 計數器
 };
 }

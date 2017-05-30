@@ -15,7 +15,7 @@ class CEnemy {
         virtual void	OnMove();						// 移動
         bool		IsAlive();							// 是否活著
         void		OnShow();							// 將圖形貼到畫面
-        void		SetXY(int nx, int ny);				// 設定圓心的座標
+        void		SetXY(int nx, int ny);				// 設定坐標
         void		SetIsAlive(bool alive);				// 設定是否活著
         void		SetDelay(int d);					// 設定掉落速度
 
@@ -28,7 +28,7 @@ class CEnemy {
         int			GetCurrWordLeng();					// 回傳int型態的CurrWord
         int			GetVocabLeng();						// 回傳單字總長度
         int			GetX(), GetY();						// 取得X軸(x+dx), Y軸(y+dy)
-        int			GetX2(), GetY2();
+        int			GetX2(), GetY2();					// 取得X2 (x+dx+bmp.width), Y2(y+dy+bmp.height)
         void		MinusIndex(int num);				// 擊退怪物 num為擊退多少index
         bool		HitMe(CMe* me);						// 是否碰到主角
         bool		IsBombed();							// 是否爆炸過了

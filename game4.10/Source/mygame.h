@@ -56,7 +56,7 @@ class CGameStateInit : public CGameState {
         const int NOTE_TEXT_X, NOTE_TEXT_Y;				// 定義 遊戲說明 擺放的位置
         const int MENU_Y;								// 定義 MENU 的Y軸
         const int MENU_ITEM_NUM;						// 定義 MENU 項目的數量
-        const int CHARACTER_Y;
+        const int CHARACTER_Y;							// 定義 角色選擇 之 角色Y軸
         CMovingBitmap typing_logo, taipin;				// typing typing 精美的LOGO
         CMovingBitmap text1;							// 說明文字
         int text1_y, text1_count;						// 說明文字移出效果
@@ -71,7 +71,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
         CMovingBitmap			userBorder, highScoreBorder;	// 最高分的框
         CMovingBitmap			numBmp[10], numBmpSmall[14];	// 數字圖檔
-        CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];		// 數字圖檔（白色）
+        CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];	// 數字圖檔（白色）
 
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
@@ -81,13 +81,13 @@ class CGameStateInit : public CGameState {
         // 角色選擇 元素
         CMovingBitmap			characterBorder, characterArrow;// 角色選擇框 箭頭
         // 統計	   元素
-        CMovingBitmap			statsBorder, statsBg[2];
-        CMovingBitmap			statsArrow[3], statsArrowV[4];
-        CMovingBitmap			statsText [3];
-        CMovingBitmap			statsNoRecord;
+        CMovingBitmap			statsBorder, statsBg[2];		// 統計頁面框, 統計頁面左右頁
+        CMovingBitmap			statsArrow[3], statsArrowV[4];	// 左右箭頭, 上下四種狀態箭頭
+        CMovingBitmap			statsText [3];					// 左頁項目文字
+        CMovingBitmap			statsNoRecord;					// 無記錄 文字
         // 介紹頁面 元素
-        CMovingBitmap			aboutBorder, about;
-        CMovingBitmap			delText;
+        CMovingBitmap			aboutBorder, about;				// 關於框, 關於文字
+        CMovingBitmap			delText;						// 確認刪除文字
 
 };
 
@@ -114,19 +114,18 @@ class CGameStateRun : public CGameState {
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         bool			showDebug = false;				// 是否顯示debug資訊
-        bool			quickCall = false;
-        CAnimation		bomb;
-        CAnimation		target;			// 鎖定的動畫
+        bool			quickCall = false;				// 是否開啟快速召喚
+        CAnimation		target;											// 鎖定的動畫
         vector<CMovingBitmap*>	letter;
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
         vector<CBullet*>bulletList;										// 儲存飛行中的子彈的Vector
-        vector<CBomb*>  bombList;
+        vector<CBomb*>  bombList;										// 儲存爆炸效果的vector
         //
         CEnemy* 		targetEnemy;									// 指標 用於指向瞄準的敵人
         CDict			dictionary;										// 所有怪物共用的字典
         CMap			map;											// 背景圖
         CInteger		score;											// 分數顯示器
-        CEmp			emp;
+        CEmp			emp;											// 電磁波
         CLevel			levelAni;										// 切換關卡時的動畫
         //
         const int		LEVEL;											// 關卡總數
@@ -144,7 +143,7 @@ class CGameStateRun : public CGameState {
         int				currLevel;										// 當前關卡
         int				totalEnemyNum;									// 總召喚的敵人數量
         int				levelChangeFlag, levelChangeDelay, levelChangeDelayMax; // 關卡和關卡間的delay
-        int				totalKeyDownCount;		// 總按鍵數, 總正確按鍵數
+        int				totalKeyDownCount;								// 總按鍵數, 總正確按鍵數
         double			accuracy;										// 正確率
 
 };
@@ -164,16 +163,16 @@ class CGameStateOver : public CGameState {
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-        CMovingBitmap		border;
+        CMovingBitmap		border;								// 框線
         CMovingBitmap		numBmp[10], numBmpSmall[12];		// 數字圖檔
-        CMovingBitmap		bar[2];
-        CAnimation			newHS_text;
-        bool				isHighScore;	//本次遊玩的是否破紀錄
-        int					counter;	// 倒數之計數器
-        int					x, y;
-        int					score, level;
-        double				accuracy;
-        int					barCounter;
+        CMovingBitmap		bar[2];			// 進度條
+        CAnimation			newHS_text;		// 破紀錄文字
+        bool				isHighScore;	// 本次遊玩的是否破紀錄
+        int					counter;		// 倒數之計數器
+        int					x, y;			// 圖檔顯示位置
+        int					score, level;	// 分數, 關卡
+        double				accuracy;		// 正確率
+        int					barCounter;		// 進度條的計數器
 
 };
 
