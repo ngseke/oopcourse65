@@ -59,6 +59,7 @@ void CEmp::LoadBitmap() {
 
     displayBG.LoadBitmap("Bitmaps/emp_text/bg.bmp", RGB(0, 255, 0));
     displayBG.SetTopLeft(SIZE_X - 80, SIZE_Y - 80);
+    CAudio::Instance()->Load(AUDIO_EMP, "sounds\\EMP.wav");
 }
 
 void CEmp::OnMove() {
@@ -107,6 +108,7 @@ void CEmp::CallEmp() {
     if (!state && empTimes != 0) {
         empTimes--;
         state = true;
+        CAudio::Instance()->Play(AUDIO_EMP, false);	// ¼·©ñ ®gÀ»­µ®Ä
     }
 }
 
@@ -128,6 +130,10 @@ bool CEmp::HitRectangle(int tx1, int ty1, int tx2, int ty2) {// 80 160 320 480 4
 }
 void CEmp::SetEmpTimes(int num) {
     this->empTimes =  num;
+}
+
+int CEmp::GetEmpTimes() {
+    return empTimes;
 }
 
 }

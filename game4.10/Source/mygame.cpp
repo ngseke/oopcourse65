@@ -1018,8 +1018,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
 
-        if (nChar == 13)	// 若按下ENTER則發動EMP攻擊
+        if (nChar == 13) {// 若按下ENTER則發動EMP攻擊.
             emp.CallEmp();
+        }
     }
 }
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {

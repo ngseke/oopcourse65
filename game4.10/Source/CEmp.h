@@ -1,6 +1,11 @@
 #pragma once
 
 namespace game_framework {
+
+enum AUDIO_EMP_ID {
+    AUDIO_EMP
+};
+
 class CEmp {
     public:
         CEmp();
@@ -16,6 +21,7 @@ class CEmp {
         void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy** targetEnemy);
         void CallEmp();
         void SetEmpTimes(int);			// 設定電磁波可使用的次數
+        int GetEmpTimes();
     protected:
         CMovingBitmap		displayBG, displayNumber[10];
         CAnimation			emp;				// 衝擊波
