@@ -787,6 +787,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     levelAni.LoadBitmap();	// 載入切換關卡過場動畫
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
+    CAudio::Instance()->Load(AUDIO_ERROR, "sounds\\error.mp3");
     ShowInitProgress(40);
 
     for (int i = 0; i < 26; i++) {		// 載入字型圖片
@@ -993,6 +994,10 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                             break;
                         }
                     }
+                    else {
+                        if (nChar >= 65 && nChar <= 90)
+                            CAudio::Instance()->Play(AUDIO_ERROR, false);	// 撥放 射擊音效
+                    }
                 }
                 else {													// 若已鎖定
                     if (nChar + 32 == targetEnemy->GetVocab()[targetEnemy->GetCurrWordLeng()]) { 	// 若等於當前字母
@@ -1011,6 +1016,10 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         }
 
                         break;
+                    }
+                    else {
+                        if (nChar >= 65 && nChar <= 90)
+                            CAudio::Instance()->Play(AUDIO_ERROR, false);	// 撥放 射擊音效
                     }
                 }
             }
