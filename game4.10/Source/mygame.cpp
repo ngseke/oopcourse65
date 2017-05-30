@@ -53,6 +53,7 @@ void CGameStateInit::OnInit() {
     noteDisplayState = statsDisplayState = aboutDisplayState = 0;			// 初始化“遊戲說明”及“統計”選取頁面項目
     statsPRItemNum = 0;									// 初始化統計頁面 最高記錄的選取項目
     wrongKeyNum = 0;
+    exitGameCount = 0;
 
     if (0) {// DEBUG用
         displayState = 1;
@@ -184,7 +185,10 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (!(displayState == 0))
             displayState = 0;	// 返回主選單
         else {
-            PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 離開遊戲
+            if (exitGameCount != 0 && exitGameCount < 30 * 5)
+                PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 離開遊戲
+            else if (exitGameCount == 0)
+                exitGameCount++;
         }
     }
 
@@ -269,6 +273,11 @@ void CGameStateInit::OnMove() {
     noteExkey.OnMove();
     PublicData::me.OnMove();
 
+    if (exitGameCount != 0 && exitGameCount < 15)
+        exitGameCount++;
+    else
+        exitGameCount = 0;
+
     if (text1_count < 400) text1_count++;
 
     if (text1_count > 5 * 30)  text1_y += int((text1_count - 5 * 30) * 1.1);
@@ -280,7 +289,6 @@ void CGameStateInit::OnMove() {
 
     if (0) GotoGameState(GAME_STATE_OVER);
 }
-
 void CGameStateInit::OnShow() {
     map.OnShow();
     typing_logo.SetTopLeft((SIZE_X - typing_logo.Width()) / 2, 100);
@@ -611,7 +619,6 @@ void CGameStateInit::OnShow() {
         }
     }
 }
-
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的結束狀態(Game Over)
 /////////////////////////////////////////////////////////////////////////////

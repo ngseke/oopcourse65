@@ -70,7 +70,7 @@ class CGameStateInit : public CGameState {
         int noteDisplayState, statsDisplayState, aboutDisplayState;		// 當前顯示的說明狀態
         int statsPRItemNum;								// 遊玩記錄的項目數字
         int wrongKeyNum;								// 錯誤按鍵數
-
+        int exitGameCount;								// 關閉遊戲計數
         //主選單元素
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
