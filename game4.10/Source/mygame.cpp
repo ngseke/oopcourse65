@@ -180,7 +180,13 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         noteDisplayState = statsDisplayState = aboutDisplayState = 0;
     }
 
-    if (nChar == KEY_ESC)   displayState = 0;	// ESC鍵返回主選單
+    if (nChar == KEY_ESC) {		// ESC鍵...
+        if (!(displayState == 0))
+            displayState = 0;	// 返回主選單
+        else {
+            PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 離開遊戲
+        }
+    }
 
     if (displayState == 0 ) {					// 在主選單...
         if (nChar == KEY_UP || nChar == KEY_DOWN) {		// 移動光標
