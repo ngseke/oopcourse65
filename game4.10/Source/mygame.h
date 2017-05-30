@@ -43,6 +43,7 @@ class PublicData {
         static CMe			me;							// 共用變數：主角參數
         static CFile		bestRecord;
         static int			totalCorrectKeyCount;		// 共用變數：正確按鍵數
+        static bool			musicOnOff;
 };
 
 class CGameStateInit : public CGameState {
@@ -93,6 +94,7 @@ class CGameStateInit : public CGameState {
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;				// 關於框, 關於文字
         CMovingBitmap			delText;						// 確認刪除文字
+        CMovingBitmap			musicOnOff[2];
 
 };
 

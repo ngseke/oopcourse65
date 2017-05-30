@@ -34,7 +34,7 @@ double PublicData::accuracy = 0.0;
 CMe	PublicData::me;
 CFile PublicData::bestRecord;
 int PublicData::totalCorrectKeyCount;
-
+bool PublicData::musicOnOff = 1;
 
 
 CGameStateInit::CGameStateInit(CGame* g)
@@ -153,6 +153,8 @@ void CGameStateInit::OnInit() {
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
     about.LoadBitmap("Bitmaps/menu/about/about_text_p2.bmp", RGB(0, 255, 0)); // 介紹文字
     delText.LoadBitmap("Bitmaps/menu/about/about_del_text.bmp", RGB(0, 255, 0));	// 確認刪除視窗
+    musicOnOff[0].LoadBitmap("Bitmaps/menu/about/about_music_on.bmp", RGB(0, 255, 0));
+    musicOnOff[1].LoadBitmap("Bitmaps/menu/about/about_music_off.bmp", RGB(0, 255, 0));
 }
 
 void CGameStateInit::OnBeginState() {
@@ -245,6 +247,10 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
     else if (displayState == 4 ) { // [關於]
         if (aboutDisplayState == 0 && nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+
+        if (aboutDisplayState == 0 && nChar == 'M') {
+            PublicData::musicOnOff = PublicData::musicOnOff ? false : true;
+        }
 
         if (aboutDisplayState == 0 && nChar == 'D' ) {
             aboutDisplayState = 1;    // 顯示清除遊玩紀錄視窗
@@ -593,6 +599,15 @@ void CGameStateInit::OnShow() {
             aboutBorder.ShowBitmap(); // 顯示關於框
             about.SetTopLeft((SIZE_X - aboutBorder.Width()) / 2, NOTE_TEXT_Y + 11);
             about.ShowBitmap();		  // 顯示關於文字
+
+            if (PublicData::musicOnOff) {
+                musicOnOff[0].SetTopLeft((SIZE_X - aboutBorder.Width()) / 2 + 458, NOTE_TEXT_Y + 180);
+                musicOnOff[0].ShowBitmap();
+            }
+            else {
+                musicOnOff[1].SetTopLeft((SIZE_X - aboutBorder.Width()) / 2 + 458, NOTE_TEXT_Y + 180);
+                musicOnOff[1].ShowBitmap();
+            }
         }
         else if (aboutDisplayState == 1) {	// 刪除遊戲紀錄頁
             delText.SetTopLeft((SIZE_X - delText.Width()) / 2, (NOTE_TEXT_Y + delText.Height() / 2) );
