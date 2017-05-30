@@ -26,7 +26,8 @@ enum AUDIO_ID {				// 定義各種音效的編號
     AUDIO_SHOT,             // 4
     AUDIO_ERROR,			// 5
     AUDIO_CONGRATULATION,	// 6
-    AUDIO_CONGRATULATION2	// 6
+    AUDIO_CONGRATULATION2,	// 6
+    AUDIO_GAMEOVER			// 7
 
 };
 
