@@ -788,6 +788,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");	// 載入編號3的聲音The_Coming_Storm.mp3
     CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
     CAudio::Instance()->Load(AUDIO_ERROR, "sounds\\error.mp3");
+    CAudio::Instance()->Load(AUDIO_CONGRATULATION, "sounds\\congratulation.mp3");
+    CAudio::Instance()->Load(AUDIO_CONGRATULATION2, "sounds\\congratulation2.mp3");
     ShowInitProgress(40);
 
     for (int i = 0; i < 26; i++) {		// 載入字型圖片
@@ -931,19 +933,25 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     if (currEnemyNum >= levelEnemyNum[currLevel] && currBossANum >= levelBossANum[currLevel] \
             && currBossBNum >= levelBossBNum[currLevel] && enemyQueue.size() == 0) {
         // 換 關卡
-        if (!levelChangeFlag) {								// 等待delay算完
-            levelAni.Play(currLevel, score.GetInteger());	// 播放切換關卡動畫
+        if (!levelChangeFlag) {											// 等待delay算完
+            levelAni.Play(currLevel, score.GetInteger());				// 播放切換關卡動畫
             levelChangeFlag = true;
-            levelChangeDelay = levelChangeDelayMax;			// 將計數器調回
+            levelChangeDelay = levelChangeDelayMax;						// 將計數器調回
+            CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
+            CAudio::Instance()->Play(AUDIO_CONGRATULATION, false);		// 撥放 過關音效
+            CAudio::Instance()->Play(AUDIO_CONGRATULATION2, false);		// 撥放 過關音效2
         }
 
-        if (levelChangeDelay < 0 && levelChangeFlag) {		// 當delay算完後 再實際切換關卡
+        if (levelChangeDelay < 0 && levelChangeFlag) {					// 當delay算完後 再實際切換關卡
+            CAudio::Instance()->Stop(AUDIO_CONGRATULATION);				//暫停 過關音效
+            CAudio::Instance()->Stop(AUDIO_CONGRATULATION2);			//暫停 過關音效2
+            CAudio::Instance()->Play(AUDIO_ROCK, true);					// 撥放 背景音效
             currLevel++;
 
-            if (currLevel > LEVEL)GotoGameState(GAME_STATE_OVER);	// 若當前關卡大於最大關卡則GOTO遊戲結束的STATE
+            if (currLevel > LEVEL)GotoGameState(GAME_STATE_OVER);		// 若當前關卡大於最大關卡則GOTO遊戲結束的STATE
 
-            currEnemyNum = currBossANum = currBossBNum = 0;	// 重置該關卡已召喚的怪物數量
-            callEnemyCounter = maxCallEnemyCounter;			// 調回召喚怪物的計數器
+            currEnemyNum = currBossANum = currBossBNum = 0;				// 重置該關卡已召喚的怪物數量
+            callEnemyCounter = maxCallEnemyCounter;						// 調回召喚怪物的計數器
             callBossACounter = maxCallBossACounter;
             callBossBCounter = maxCallBossBCounter;
             levelChangeFlag = false;
