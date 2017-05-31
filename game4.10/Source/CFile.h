@@ -37,7 +37,7 @@ class CFile {
         string HighScore_Date;				//最高紀錄的日期
         string HighScore_MeName;			//最高紀錄主角名稱(英文)
         int HighScore_CorrectKeyCount;		//最高紀錄的正確按鍵數量
-        int HighScore_TotalKeyCount();		//總按鍵數（會累積的）
+        int HighScore_TotalKeyCount;		//總按鍵數（會累積的）
         //===================
         vector<CRecord*> record;
         int record_Score;					//得分
