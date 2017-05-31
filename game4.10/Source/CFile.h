@@ -22,7 +22,7 @@ class CFile {
         double ReadRecord_Accuracy(int);					 //回傳第x筆裡面的正確率
         string  ReadRecord_Character(int);				 //回傳第x筆裡面的角色名
         string  ReadRecord_Date(int);						 //回傳第x筆裡面的日期
-        int		ReadRecord_KeyCount(int);		 //回傳第x筆裡面的正確按鍵數量
+        int		ReadRecord_KeyCount(int);			 //回傳第x筆裡面的正確按鍵數量
         int     GetRecordNum();
         //================================
 
@@ -44,7 +44,7 @@ class CFile {
         string record_Date;					//日期
         string record_MeName;				//主角名稱(英文)
         int	   record_SelectedChar;			//主角編號
-        int	   record_TotalCorrectKeyCount; //正確案件數
+        int	   record_TotalCorrectKeyCount; //正確按鍵數
         char ChDate[80];					//char型態的日期
 };
 }
