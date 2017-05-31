@@ -11,12 +11,12 @@ namespace game_framework {
 // CCharacter: еDид
 /////////////////////////////////////////////////////////////////////////////
 
-CCharacter::CCharacter(string name, string subName, string fn, int bmpNum, int x, int y) {
+CCharacter::CCharacter(string name, string subName, string fn, int bmpNum) {
     this->name = name;
     this->subName = subName;
     this->bmpNum = bmpNum;
-    this->x = x;
-    this->y = y;
+    this->x = 0;
+    this->y = 0;
     this->fileName = fn;
     LoadBitmap();
 }

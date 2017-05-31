@@ -30,12 +30,11 @@ namespace game_framework {
 
 int PublicData::score = 0;
 int PublicData::level = 0;
-double PublicData::accuracy = 0.0;
-CMe	PublicData::me;
-CFile PublicData::bestRecord;
 int PublicData::totalCorrectKeyCount;
+double PublicData::accuracy = 0.0;
 bool PublicData::musicOnOff = 1;
-
+CFile PublicData::bestRecord;
+CMe	PublicData::me;
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), NOTE_TEXT_X(60), NOTE_TEXT_Y(280), MENU_Y(320),
@@ -55,10 +54,10 @@ void CGameStateInit::OnInit() {
     wrongKeyNum = 0;
     exitGameCount = 0;
 
-    if (0) {// DEBUG用
-        displayState = 1;
+    if (1) {// DEBUG用
+        displayState = 3;
         noteDisplayState = 0;
-        statsDisplayState = 1;
+        statsDisplayState = 0;
     }
 
     PublicData::me.LoadBitmap();											// 主角
@@ -145,9 +144,10 @@ void CGameStateInit::OnInit() {
     for (int i = 0; i < 4; i++)
         statsArrowV[i].SetTopLeft((SIZE_X - statsArrow[0].Width()) / 2 + 570, NOTE_TEXT_Y + 163);
 
-    statsText[0].LoadBitmap("Bitmaps/menu/stats/stats_text_hl.bmp", RGB(0, 255, 0));
-    statsText[1].LoadBitmap("Bitmaps/menu/stats/stats_text_tkc.bmp", RGB(0, 255, 0));
-    statsText[2].LoadBitmap("Bitmaps/menu/stats/stats_text_acc.bmp", RGB(0, 255, 0));
+    statsText[0].LoadBitmap("Bitmaps/menu/stats/stats_text_tkc.bmp", RGB(0, 255, 0));
+    statsText[1].LoadBitmap("Bitmaps/menu/stats/stats_text_hl.bmp", RGB(0, 255, 0));
+    statsText[2].LoadBitmap("Bitmaps/menu/stats/stats_text_ckc.bmp", RGB(0, 255, 0));
+    statsText[3].LoadBitmap("Bitmaps/menu/stats/stats_text_acc.bmp", RGB(0, 255, 0));
     statsNoRecord.LoadBitmap("Bitmaps/menu/stats/stats_no_record.bmp", RGB(0, 255, 0));
     // 載入關於元素
     aboutBorder.LoadBitmap("Bitmaps/menu/about/about_border.bmp", RGB(0, 255, 0)); // 介紹框線
@@ -365,7 +365,7 @@ void CGameStateInit::OnShow() {
     }
     else if (displayState == 3) {    	// 顯示 統計 頁面
         const int STATS_POS_X = (SIZE_X - statsBorder.Width()) / 2;	// 統計框之位置
-        const int STATS_TEXT_POS_Y = 120, STATS_TEXT_POS_X = 310;	// 統計頁文字之位置
+        const int STATS_TEXT_POS_Y = 110, STATS_TEXT_POS_X = 310;	// 統計頁文字之位置
         const int STATS_TEXT_MARGIN = 30;							// 文字之 行距
         statsBorder.SetTopLeft(STATS_POS_X, NOTE_TEXT_Y);
         statsBorder.ShowBitmap();									// 顯示統計頁之框
@@ -386,8 +386,9 @@ void CGameStateInit::OnShow() {
             }
             else {
                 int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
+                    tempTotalKeyCount = 99999,
                     tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
-                    tempKeyCount = PublicData::bestRecord.ReadHighScore_CorrectKeyCount(),
+                    tempCorrectKeyCount = PublicData::bestRecord.ReadHighScore_CorrectKeyCount(),
                     tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
                 PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
 
@@ -398,13 +399,24 @@ void CGameStateInit::OnShow() {
                     tempScore /= 10;
                 }
 
-                for (int j = 0; j < 3; j++) {					// 顯示項目文字（高關、按鍵、正確）及數字
+                for (int j = 0; j < 4; j++) {					// 顯示項目文字（高關、按鍵、正確）及數字
                     statsText[j].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X, \
                                             NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN  * j);
                     statsText[j].ShowBitmap();					// 顯示項目文字
-                    const int  STATS_TEXT_MARGIN_R = 150;		// 項目文字 與 數字 之距離
+                    const int  STATS_TEXT_MARGIN_R = 170;		// 項目文字 與 數字 之距離
 
-                    if (j == 0) {		// 0為顯示 關卡數字
+                    if (j == 0) {		// 0為顯示 累計總按鍵數
+                        for (int i = 0; i < 7; i++) {		// 顯示總按鍵數數字bmp
+                            numBmpSmall[tempTotalKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
+                                    NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
+                            numBmpSmall[tempTotalKeyCount % 10].ShowBitmap();
+                            tempTotalKeyCount /= 10;
+
+                            if (tempTotalKeyCount == 0)break;
+                        }
+                    }
+
+                    if (j == 1) {		// 1為顯示 關卡數字
                         for (int i = 0; i < 2; i++) {		// 顯示關卡數字bmp
                             numBmpSmall_White[tempLevel % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
                                     NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
@@ -412,15 +424,17 @@ void CGameStateInit::OnShow() {
                             tempLevel /= 10;
                         }
                     }
-                    else if (j == 1) {	// 1為顯示 總按鍵數
+                    else if (j == 2) {	// 2為顯示 總按鍵數
                         for (int i = 0; i < 5; i++) {		// 顯示總按鍵數數字bmp
-                            numBmpSmall_White[tempKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
+                            numBmpSmall_White[tempCorrectKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_TEXT_POS_X + STATS_TEXT_MARGIN_R - 10 * i, \
                                     NOTE_TEXT_Y + STATS_TEXT_POS_Y + STATS_TEXT_MARGIN * j + 1);
-                            numBmpSmall_White[tempKeyCount % 10].ShowBitmap();
-                            tempKeyCount /= 10;
+                            numBmpSmall_White[tempCorrectKeyCount % 10].ShowBitmap();
+                            tempCorrectKeyCount /= 10;
+
+                            if (tempCorrectKeyCount == 0)break;
                         }
                     }
-                    else if (j == 2) {	// 2為顯示 正確率
+                    else if (j == 3) {	// 3為顯示 正確率
                         if (tempAccuracy != 10000) {						//若正確率非100%
                             for (int i = 0, dotPos = 0; i < 4; i++) {		// 顯示正確率bmp
                                 numBmpSmall_White[tempAccuracy % 10].SetTopLeft \
@@ -498,7 +512,7 @@ void CGameStateInit::OnShow() {
 
                 int tempScore = PublicData::bestRecord.ReadRecord_Score(statsPRItemNum + j),
                     tempLevel = PublicData::bestRecord.ReadRecord_Level(statsPRItemNum + j),
-                    tempKeyCount = PublicData::bestRecord.ReadRecord_CorrectKeyCount(statsPRItemNum + j),
+                    tempCorrectKeyCount = PublicData::bestRecord.ReadRecord_CorrectKeyCount(statsPRItemNum + j),
                     tempAccuracy = int(PublicData::bestRecord.ReadRecord_Accuracy(statsPRItemNum + j) * 100.0);
                 string tempDate = PublicData::bestRecord.ReadRecord_Date(statsPRItemNum + j);
                 const int STATS_PR_NUM_POS_X = 135, STATS_PR_NUM_PER_POS_X = 380;
@@ -548,10 +562,10 @@ void CGameStateInit::OnShow() {
                 }
 
                 for (int i = 0; i < 5; i++) {		// 顯示總按鍵數bmp
-                    numBmpSmall_White[tempKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_PR_NUM_POS_X + 306 - 10 * i,
+                    numBmpSmall_White[tempCorrectKeyCount % 10].SetTopLeft(STATS_POS_X + STATS_PR_NUM_POS_X + 306 - 10 * i,
                             NOTE_TEXT_Y + 130 + j * LINE_MARGIN);
-                    numBmpSmall_White[tempKeyCount % 10].ShowBitmap();
-                    tempKeyCount /= 10;
+                    numBmpSmall_White[tempCorrectKeyCount % 10].ShowBitmap();
+                    tempCorrectKeyCount /= 10;
                 }
 
                 if (tempAccuracy != 10000) {						//若正確率非100%
@@ -672,8 +686,11 @@ void CGameStateOver::OnBeginState() {
 
     PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
     PublicData::bestRecord.ReadRecordFile();
-    CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
-    CAudio::Instance()->Play(AUDIO_GAMEOVER, false);						// 暫停 背景音效
+
+    if (PublicData::musicOnOff) {
+        CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
+        CAudio::Instance()->Play(AUDIO_GAMEOVER, false);			// 播放 GAMEOVER音效
+    }
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
@@ -787,7 +804,10 @@ CGameStateRun::~CGameStateRun() {
 }
 void CGameStateRun::OnBeginState() {
     const int SCORE_X = 240, SCORE_Y = 240;
-    CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
+
+    if (PublicData::musicOnOff)
+        CAudio::Instance()->Play(AUDIO_ROCK, true);			// 撥放 MIDI
+
     score.SetInteger(0);								// 設定SCORE為0
     score.SetTopLeft(SCORE_X, SCORE_Y);
     currEnemyNum = currBossANum = currBossBNum = 0;		// 初始化各關敵人已召喚數量
@@ -968,15 +988,21 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
             levelAni.Play(currLevel, score.GetInteger());				// 播放切換關卡動畫
             levelChangeFlag = true;
             levelChangeDelay = levelChangeDelayMax;						// 將計數器調回
-            CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
-            CAudio::Instance()->Play(AUDIO_CONGRATULATION, false);		// 撥放 過關音效
-            CAudio::Instance()->Play(AUDIO_CONGRATULATION2, false);		// 撥放 過關音效2
+
+            if (PublicData::musicOnOff) {
+                //CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
+                //CAudio::Instance()->Play(AUDIO_CONGRATULATION, false);		// 撥放 過關音效
+                //CAudio::Instance()->Play(AUDIO_CONGRATULATION2, false);		// 撥放 過關音效2
+            }
         }
 
         if (levelChangeDelay < 0 && levelChangeFlag) {					// 當delay算完後 再實際切換關卡
-            CAudio::Instance()->Stop(AUDIO_CONGRATULATION);				//暫停 過關音效
-            CAudio::Instance()->Stop(AUDIO_CONGRATULATION2);			//暫停 過關音效2
-            CAudio::Instance()->Play(AUDIO_ROCK, true);					// 撥放 背景音效
+            if (PublicData::musicOnOff) {
+                //CAudio::Instance()->Stop(AUDIO_CONGRATULATION);				//暫停 過關音效
+                //CAudio::Instance()->Stop(AUDIO_CONGRATULATION2);			//暫停 過關音效2
+                //CAudio::Instance()->Play(AUDIO_ROCK, true);					// 撥放 背景音效
+            }
+
             currLevel++;
 
             if (currLevel > LEVEL)GotoGameState(GAME_STATE_OVER);		// 若當前關卡大於最大關卡則GOTO遊戲結束的STATE
@@ -1014,7 +1040,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
                         PublicData::totalCorrectKeyCount++;							// 正確按鍵數+1
                         map.PlayFlash();
-                        CAudio::Instance()->Play(AUDIO_SHOT, false);	// 撥放 射擊音效
+
+                        if (PublicData::musicOnOff)
+                            CAudio::Instance()->Play(AUDIO_SHOT, false);	// 撥放 射擊音效
 
                         if (enemyQueue[i]->GetVocabLeng() == 1) {		// A. 針對1字小怪攻擊
                             targetEnemy = enemyQueue[i];				// targetEnemy為指標->正在攻擊的敵人
@@ -1035,7 +1063,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     }
                     else {
                         if (nChar >= 65 && nChar <= 90)
-                            CAudio::Instance()->Play(AUDIO_ERROR, false);	// 撥放 射擊音效
+                            if (PublicData::musicOnOff)
+                                CAudio::Instance()->Play(AUDIO_ERROR, false);	// 撥放 射擊音效
                     }
                 }
                 else {													// 若已鎖定
@@ -1045,7 +1074,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
                         PublicData::totalCorrectKeyCount++;							// 正確按鍵數+1
                         map.PlayFlash();
-                        CAudio::Instance()->Play(AUDIO_SHOT, false);	// 撥放 射擊音效
+
+                        if (PublicData::musicOnOff)
+                            CAudio::Instance()->Play(AUDIO_SHOT, false);	// 撥放 射擊音效
 
                         if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                             targetEnemy->kill();						// 成功殺害怪物
@@ -1058,7 +1089,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                     }
                     else {
                         if (nChar >= 65 && nChar <= 90)
-                            CAudio::Instance()->Play(AUDIO_ERROR, false);	// 撥放 射擊音效
+                            if (PublicData::musicOnOff)
+                                CAudio::Instance()->Play(AUDIO_ERROR, false);	// 撥放 射擊音效
                     }
                 }
             }

@@ -4,7 +4,7 @@ namespace game_framework {
 
 class CCharacter {
     public:
-        CCharacter(string name, string subName, string fileName, int bmpNum, int, int);
+        CCharacter(string name, string subName, string fileName, int bmpNum);
         // 名稱, 圖片路徑陣列, 圖片數量, X軸, Y軸
         void LoadBitmap();
         void OnMove();

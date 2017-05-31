@@ -89,7 +89,7 @@ class CGameStateInit : public CGameState {
         // 統計	   元素
         CMovingBitmap			statsBorder, statsBg[2];		// 統計頁面框, 統計頁面左右頁
         CMovingBitmap			statsArrow[3], statsArrowV[4];	// 左右箭頭, 上下四種狀態箭頭
-        CMovingBitmap			statsText [3];					// 左頁項目文字
+        CMovingBitmap			statsText [4];					// 左頁項目文字
         CMovingBitmap			statsNoRecord;					// 無記錄 文字
         // 介紹頁面 元素
         CMovingBitmap			aboutBorder, about;				// 關於框, 關於文字

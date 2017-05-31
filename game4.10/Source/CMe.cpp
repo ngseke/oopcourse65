@@ -31,21 +31,21 @@ void CMe::LoadBitmap() {
 }
 
 void CMe::LoadCharacter() {
-    character.push_back(new CCharacter("Iron Man",			"鋼鐵人",		"me_ironman",				2, x, y));
-    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american",		1, x, y));
-    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk",					1, x, y));
-    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper",				1, x, y));
-    character.push_back(new CCharacter("Cow",				"牛",			"me_cow",					1, x, y));
-    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion",				1, x, y));
-    character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie",				1, x, y));
-    character.push_back(new CCharacter("Pikachu",			"皮卡撐",		"me_pikachu",				2, x, y));
-    character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",					2, x, y));
-    character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen",				10, x, y));
-    character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump",					1, x, y));
-    character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom",				1, x, y));
-    character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",					6, x, y));
-    character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird",			2, x, y));
-    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball",					4, x, y));
+    character.push_back(new CCharacter("Iron Man",			"鋼鐵人",		"me_ironman",				2));
+    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american",		1));
+    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk",					1));
+    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper",				1));
+    character.push_back(new CCharacter("Cow",				"牛",			"me_cow",					1));
+    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion",				1));
+    character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie",				1));
+    character.push_back(new CCharacter("Pikachu",			"皮卡撐",		"me_pikachu",				2));
+    character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",					2));
+    character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen",				10));
+    character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump",					1));
+    character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom",				1));
+    character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",					6));
+    character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird",			2));
+    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball",					4));
 }
 
 void CMe::OnMove() {
