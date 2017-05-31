@@ -34,11 +34,10 @@ class CMe {
         //
         void WriteUnlockCharacter();			// 寫入所有已解鎖的角色
         void ReadUnlockCharacter();				// 讀第已解鎖的角色
-        bool GetSelectedCharIsUnlock();
+        bool GetSelectedCharIsUnlock();			// 回傳選定的角色是否已解鎖
 
     protected:
         vector<CCharacter*> character;
-        vector<string>		unlockCharacter;
         CFile*				file;
         string highScoreName, playingRecordName[3];
         CMovingBitmap		unlockSign;

@@ -55,12 +55,8 @@ void CMe::ReadUnlockCharacter() {
                 if (cc->GetName() == temp)
                     cc->SetIsUnlock(true);
             }
-
-            //unlockCharacter.push_back(temp);
         }
     }
-
-    //for (unsigned int i = 0; i < unlockCharacter.size(); i++) TRACE("%s\n", unlockCharacter[i].c_str());
 
     for (CCharacter* cc : character) TRACE("%d\n", cc->GetIsUnlock());
 

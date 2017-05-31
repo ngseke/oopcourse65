@@ -60,7 +60,6 @@ void CGameStateInit::OnInit() {
         statsDisplayState = 0;
     }
 
-    PublicData::me.WriteUnlockCharacter();
     PublicData::me.ReadUnlockCharacter();
     PublicData::me.LoadBitmap();											// ¥D¨¤
     PublicData::me.SetSelectedChar("Iron Man");
@@ -695,6 +694,8 @@ void CGameStateOver::OnBeginState() {
 
     PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
     PublicData::file.ReadRecordFile();
+    //
+    PublicData::me.WriteUnlockCharacter();
 
     if (PublicData::musicOnOff) {
         CAudio::Instance()->Stop(AUDIO_ROCK);						// ¼È°± ­I´º­µ®Ä
