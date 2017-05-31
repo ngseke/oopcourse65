@@ -30,7 +30,8 @@ namespace game_framework {
 
 int PublicData::score = 0;
 int PublicData::level = 0;
-int PublicData::totalCorrectKeyCount = 0;
+int PublicData::CorrectKeyCount = 0;
+int PublicData::totalKeyCount = 0;
 double PublicData::accuracy = 0.0;
 bool PublicData::musicOnOff = 1;
 CFile PublicData::file;
@@ -688,11 +689,11 @@ void CGameStateOver::OnBeginState() {
     PublicData::file.ReadHighScoreFile();
 
     if (score > PublicData::file.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
-        PublicData::file.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
+        PublicData::file.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount);
         isHighScore = true;
     }
 
-    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
+    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount);
     PublicData::file.ReadRecordFile();
     //
     PublicData::me.WriteUnlockCharacter();
@@ -826,7 +827,7 @@ void CGameStateRun::OnBeginState() {
     currLevel = 0;										// 初始化關卡
     enemyQueue.clear();									// 清空EQ
     lives = 3;
-    totalKeyDownCount = PublicData::totalCorrectKeyCount = 0;
+    totalKeyDownCount = PublicData::CorrectKeyCount = 0;
     accuracy = 0;
     emp.SetEQ(&enemyQueue, &score, &lock, &targetEnemy);
     emp.SetEmpTimes(3);
@@ -873,7 +874,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     if (levelChangeDelay >= 0)	levelChangeDelay--;		// 關卡與關卡間延遲的計數器
 
     accuracy = (totalKeyDownCount != 0) ? \
-               100 * double(PublicData::totalCorrectKeyCount) / double(totalKeyDownCount) : \
+               100 * double(PublicData::CorrectKeyCount) / double(totalKeyDownCount) : \
                100;     // 計算正確率
     PublicData::score = score.GetInteger();
     PublicData::level = currLevel;
@@ -1048,7 +1049,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
             if (enemyQueue[i]->IsAlive()) {								// 回傳當前怪物是否存在
                 if (!lock) {											// 尚未鎖定
                     if (nChar + 32 == enemyQueue[i]->GetFirstWord()) {	// 若等於第一個字母:鎖住 and 目前字元位置+1
-                        PublicData::totalCorrectKeyCount++;							// 正確按鍵數+1
+                        PublicData::CorrectKeyCount++;							// 正確按鍵數+1
                         map.PlayFlash();
 
                         if (PublicData::musicOnOff)
@@ -1082,7 +1083,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                         targetEnemy->AddCurrWordLeng();
                         bulletList.push_back(new CBullet(targetEnemy->GetX(), targetEnemy->GetY()));
                         targetEnemy->MinusIndex(rand() % 2 + 1);		// 擊退怪物
-                        PublicData::totalCorrectKeyCount++;							// 正確按鍵數+1
+                        PublicData::CorrectKeyCount++;							// 正確按鍵數+1
                         map.PlayFlash();
 
                         if (PublicData::musicOnOff)
@@ -1179,7 +1180,7 @@ void CGameStateRun::OnShow() {
         //
         char temp[100];
         sprintf(temp, "TotalKeyNum: %d TotalCorrectKeyNum: %d , Accuracy: %.2lf%%", \
-                totalKeyDownCount, PublicData::totalCorrectKeyCount, accuracy);
+                totalKeyDownCount, PublicData::CorrectKeyCount, accuracy);
         pDC->SetTextColor(RGB(50, 200, 200));
         pDC->TextOut(20, 20, temp);
         //

@@ -4,7 +4,7 @@ namespace game_framework {
 
 class CRecord {
     public:
-        CRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount, string date);
+        CRecord(int score, int level, double accuracy, string meName, int CorrectKeyCount, string date);
         int ReadRecordScore_Score();						 //回傳第x筆裡面的分
         int ReadRecordScore_Level();						 //回傳第x筆裡面的關
         double ReadRecordScore_Accuracy();					 //回傳第x筆裡面的正確率

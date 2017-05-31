@@ -42,8 +42,9 @@ class PublicData {
         static double		accuracy;					// ノ跑计タ絋瞯
         static CMe			me;							// ノ跑计à把计
         static CFile		file;
-        static int			totalCorrectKeyCount;		// ノ跑计タ絋龄计
+        static int			CorrectKeyCount;		// ノ跑计タ絋龄计
         static bool			musicOnOff;
+        static int			totalKeyCount;			// ノ跑计タ絋龄计(穦仓縩)
 };
 
 class CGameStateInit : public CGameState {
