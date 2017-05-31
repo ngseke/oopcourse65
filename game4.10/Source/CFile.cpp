@@ -16,7 +16,7 @@ namespace game_framework {
 
 CFile::CFile() {
 }
-void CFile::WriteHighScore(int score, int level, double accuracy, string meName, int totalCorrectKeyCount) {
+void CFile::WriteHighScore(int score, int level, double accuracy, string meName, int correctKeyCount, int totalKeyCount) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -30,7 +30,8 @@ void CFile::WriteHighScore(int score, int level, double accuracy, string meName,
        << ",level:" << level
        << ",accuracy:" << accuracy
        << ",date:" << HighScore_Date
-       << ",totalCorrectKeyCount:" << totalCorrectKeyCount << endl;
+       << ",correctKeyCount:" << correctKeyCount
+       << ",totalKeyCOunt:" << totalKeyCount << endl;
     fp.close();
 }
 void CFile::ReadHighScoreFile() {
@@ -165,7 +166,7 @@ string CFile::ReadRecord_Date(int num) {
     return record.at(num)->ReadRecordScore_Date();
 }
 int	CFile::ReadRecord_CorrectKeyCount(int num) {
-    return record.at(num)->ReadRecordScore_TotalCorrectKeyCount();
+    return record.at(num)->ReadRecordScore_CorrectKeyCount();
 }
 int CFile::GetRecordNum() {
     return int(record.size());
@@ -181,5 +182,9 @@ void CFile::DeleteAllData() {
     fp.close();
     DeleteFile("user/bestRecord.txt");
 }
+int	CFile::ReadHighScore_TotalKeyCount() {
+    return this->HighScore_TotalKeyCount;
+}
+
 
 }

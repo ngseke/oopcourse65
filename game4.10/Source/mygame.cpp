@@ -30,7 +30,7 @@ namespace game_framework {
 
 int PublicData::score = 0;
 int PublicData::level = 0;
-int PublicData::totalCorrectKeyCount;
+int PublicData::totalCorrectKeyCount = 0;
 double PublicData::accuracy = 0.0;
 bool PublicData::musicOnOff = 1;
 CFile PublicData::file;

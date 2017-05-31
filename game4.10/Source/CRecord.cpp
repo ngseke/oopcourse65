@@ -14,12 +14,12 @@
 
 namespace game_framework {
 
-CRecord::CRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount, string date) {
+CRecord::CRecord(int score, int level, double accuracy, string meName, int CorrectKeyCount, string date) {
     this->score = score;
     this->level = level;
     this->accuracy = accuracy;
     this->meName = meName;
-    this->totalCorrectKeyCount = totalCorrectKeyCount;
+    this->CorrectKeyCount = CorrectKeyCount;
     this->date = date;
 }
 
@@ -41,16 +41,8 @@ string CRecord::ReadRecordScore_Date() {
 int CRecord::ReadRecordScore_selectedChar() {
     return selectedChar;
 }
-int CRecord::ReadRecordScore_TotalCorrectKeyCount() {
-    return totalCorrectKeyCount;
+int CRecord::ReadRecordScore_CorrectKeyCount() {
+    return CorrectKeyCount;
 }
-/*
-void CRecord::WriteCharacter(string preCharac) {
-    this->preCharac = preCharac;
-}
-string CRecord::ReadCharacter() {
-    return preCharac;
-}
-*/
 }
 

@@ -11,7 +11,7 @@ class CRecord {
         string  ReadRecordScore_Character();				 //回傳第x筆裡面的角色名
         string  ReadRecordScore_Date();						 //回傳第x筆裡面的日期
         int		ReadRecordScore_selectedChar();				 //回傳第x筆裡面的主角編號
-        int		ReadRecordScore_TotalCorrectKeyCount();		 //回傳第x筆裡面的正確按鍵數量
+        int		ReadRecordScore_CorrectKeyCount();		 //回傳第x筆裡面的正確按鍵數量
         //---------
         //void WriteCharacter(string);	//上次選的角色
         //string ReadCharacter();			//回傳上次選的角色
@@ -23,8 +23,8 @@ class CRecord {
         string meName;				//主角名稱(英文)
         int	   selectedChar;		//主角編號
         char chDate[80];			//char型態的日期
-        int totalCorrectKeyCount;	//正確按鍵數量
-        //string preCharac;			//上一隻主角的名稱
+        int CorrectKeyCount;	    //正確按鍵數量
+
 
 };
 }

@@ -5,7 +5,7 @@ namespace game_framework {
 class CFile {
     public:
         CFile();
-        void WriteHighScore(int score, int level, double accuracy, string meName, int totalCorrectKeyCount);
+        void WriteHighScore(int score, int level, double accuracy, string meName, int correctKeyCount, int totalKeyCount);
         void ReadHighScoreFile();
         int ReadHighScore_Score();							 //回傳最高分裡面的分
         int ReadHighScore_Level();  						 //回傳最高分裡面的關
@@ -16,7 +16,7 @@ class CFile {
         int		ReadHighScore_TotalKeyCount();				 //回傳總按鍵數（會累積）
         bool isHighScoreExist();							 //回傳是否存在最高紀錄
         //================================
-        void WriteRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount);			//寫入:分數 關卡 正確率 主角名稱
+        void WriteRecord(int score, int level, double accuracy, string meName, int correctKeyCount);			//寫入:分數 關卡 正確率 主角名稱
         void ReadRecordFile();
         int ReadRecord_Score(int);						 //回傳第x筆裡面的分
         int ReadRecord_Level(int);						 //回傳第x筆裡面的關
@@ -48,5 +48,6 @@ class CFile {
         int	   record_SelectedChar;			//主角編號
         int	   record_CorrectKeyCount; //正確按鍵數
         char ChDate[80];					//char型態的日期
+        //=====================
 };
 }
