@@ -50,7 +50,7 @@ void CFile::ReadHighScoreFile() {
             else if (i == 5) this->HighScore_Level = stoi(slideTwo[5], nullptr, 10);
             else if (i == 7) this->HighScore_Accuracy = stod(slideTwo[7], nullptr);
             else if (i == 9) this->HighScore_Date = slideTwo[9];
-            else if (i == 11) this->HighScore_TotalCorrectKeyCount = stoi(slideTwo[11], nullptr, 10);
+            else if (i == 11) this->HighScore_CorrectKeyCount = stoi(slideTwo[11], nullptr, 10);
 
             i++;
         }
@@ -77,15 +77,15 @@ string CFile::ReadHighScore_Character() {
 string CFile::ReadHighScore_Date() {
     return this->HighScore_Date;
 }
-int	CFile::ReadHighScore_TotalCorrectKeyCount() {
-    return this->HighScore_TotalCorrectKeyCount;
+int	CFile::ReadHighScore_CorrectKeyCount() {
+    return this->HighScore_CorrectKeyCount;
 }
 bool CFile::isHighScoreExist() {
     if (!(HighScore_Score == 0))return 1;
     else return 0;
 }
 //======================================
-void CFile::WriteRecord(int score, int level, double accuracy, string meName, int totalCorrectKeyCount) {
+void CFile::WriteRecord(int score, int level, double accuracy, string meName, int correctKeyCount) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -99,7 +99,7 @@ void CFile::WriteRecord(int score, int level, double accuracy, string meName, in
        << ",level:" << level
        << ",accuracy:" << accuracy
        << ",date:" << record_Date
-       << ",totalCorrectKeyCount:" << totalCorrectKeyCount << endl;
+       << ",correctKeyCount:" << correctKeyCount << endl;
     fp.close();
 }
 void CFile::ReadRecordFile() {
@@ -135,7 +135,7 @@ void CFile::ReadRecordFile() {
                 else if (i == 5) this->record_Level = stoi(SlideThree[5], nullptr, 10);
                 else if (i == 7) this->record_Accuracy = stod(SlideThree[7], nullptr);
                 else if (i == 9) this->record_Date = SlideThree[9];
-                else if (i == 11) this->record_TotalCorrectKeyCount = stoi(SlideThree[11], nullptr, 10);
+                else if (i == 11) this->record_CorrectKeyCount = stoi(SlideThree[11], nullptr, 10);
 
                 i++;
 
@@ -144,7 +144,7 @@ void CFile::ReadRecordFile() {
         }
 
         if (record_MeName != "")
-            record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_TotalCorrectKeyCount, record_Date));	//從頭插進去
+            record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_CorrectKeyCount, record_Date));	//從頭插進去
     }
 
     TRACE("size[%d]\n", record.size());
@@ -164,7 +164,7 @@ string CFile::ReadRecord_Character(int num) {
 string CFile::ReadRecord_Date(int num) {
     return record.at(num)->ReadRecordScore_Date();
 }
-int	CFile::ReadRecord_KeyCount(int num) {
+int	CFile::ReadRecord_CorrectKeyCount(int num) {
     return record.at(num)->ReadRecordScore_TotalCorrectKeyCount();
 }
 int CFile::GetRecordNum() {

@@ -387,7 +387,7 @@ void CGameStateInit::OnShow() {
             else {
                 int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
                     tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
-                    tempKeyCount = PublicData::bestRecord.ReadHighScore_TotalCorrectKeyCount(),
+                    tempKeyCount = PublicData::bestRecord.ReadHighScore_CorrectKeyCount(),
                     tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
                 PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
 
@@ -498,7 +498,7 @@ void CGameStateInit::OnShow() {
 
                 int tempScore = PublicData::bestRecord.ReadRecord_Score(statsPRItemNum + j),
                     tempLevel = PublicData::bestRecord.ReadRecord_Level(statsPRItemNum + j),
-                    tempKeyCount = PublicData::bestRecord.ReadRecord_KeyCount(statsPRItemNum + j),
+                    tempKeyCount = PublicData::bestRecord.ReadRecord_CorrectKeyCount(statsPRItemNum + j),
                     tempAccuracy = int(PublicData::bestRecord.ReadRecord_Accuracy(statsPRItemNum + j) * 100.0);
                 string tempDate = PublicData::bestRecord.ReadRecord_Date(statsPRItemNum + j);
                 const int STATS_PR_NUM_POS_X = 135, STATS_PR_NUM_PER_POS_X = 380;
