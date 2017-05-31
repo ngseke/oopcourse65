@@ -4,9 +4,12 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
+#include <sstream>
+#include <fstream>
 #include "CEnemy.h"
 #include "CMe.h"
 #include "CRecord.h"
+
 
 namespace game_framework {
 /////////////////////////////////////////////////////////////////////////////
@@ -21,13 +24,50 @@ CMe::CMe(): CHARACTER_POS_Y(320) {
     selectedChar = 0;
     highScoreName = "";
     highScoreCharNum = 0;
+    //file = NULL;
 }
 CMe::~CMe() {
     for (CCharacter* cc : character) delete cc;
 }
 
+
 void CMe::LoadBitmap() {
+    unlockSign.LoadBitmap("Bitmaps/me/me_unlock.bmp", RGB(0, 255, 0));
     LoadCharacter();
+}
+
+void CMe::WriteUnlockCharacter() {
+    fstream	fp;
+    fp.open("user/unlock.txt", ios::out | ios::app);
+    //fp << "\n";
+    fp.close();
+}
+void CMe::ReadUnlockCharacter() {
+    fstream	fp;
+    fp.open("user/unlock.txt", ios::in);
+    char temp[100];
+
+    if (fp) {
+        while (!fp.eof()) {
+            fp.getline(temp, sizeof(temp));
+
+            for (CCharacter* cc : character) {
+                if (cc->GetName() == temp)
+                    cc->SetIsUnlock(true);
+            }
+
+            //unlockCharacter.push_back(temp);
+        }
+    }
+
+    //for (unsigned int i = 0; i < unlockCharacter.size(); i++) TRACE("%s\n", unlockCharacter[i].c_str());
+
+    for (CCharacter* cc : character) TRACE("%d\n", cc->GetIsUnlock());
+
+    fp.close();
+}
+bool CMe::GetSelectedCharIsUnlock() {
+    return character[selectedChar]->GetIsUnlock();
 }
 
 void CMe::LoadCharacter() {
@@ -71,44 +111,68 @@ void CMe::OnShow() {
     }
     else if (currState == 1) {	//選擇角色畫面
         x = (SIZE_X - character[selectedChar]->GetWidth()) / 2;
-        y = CHARACTER_POS_Y + 70;			// 待修改
-        character[selectedChar]->SetXY(x, y);
-        character[selectedChar]->OnShow();
+        y = CHARACTER_POS_Y + 70;
+
+        if (character[selectedChar]->GetIsUnlock()) {					// 中間
+            character[selectedChar]->SetXY(x, y);
+            character[selectedChar]->OnShow();
+        }
+        else {
+            unlockSign.SetTopLeft((SIZE_X - unlockSign.Width()) / 2, y);
+            unlockSign.ShowBitmap();
+        }
 
         for (unsigned int i = 1; i <= 4; i++) {
             const int PADDING_CENTER = 40, PADDING_EACH = 80;
             int position = selectedChar + i;
 
-            if (position >= 0 && position < int(character.size()) ) {
-                character[selectedChar + i]->SetXY(x + PADDING_CENTER + PADDING_EACH * i, y);
-                character[selectedChar + i]->OnShow();
+            if (position >= 0 && position < int(character.size()) ) {	// 右邊
+                if (character[selectedChar + i]->GetIsUnlock()) {	// 若已被解鎖
+                    character[selectedChar + i]->SetXY(x + PADDING_CENTER + PADDING_EACH * i, y);
+                    character[selectedChar + i]->OnShow();
+                }
+                else {												// 尚未被解鎖
+                    unlockSign.SetTopLeft((SIZE_X - unlockSign.Width()) / 2 + PADDING_CENTER + PADDING_EACH * i, y);
+                    unlockSign.ShowBitmap();
+                }
             }
 
             position = selectedChar - i;
 
-            if (position >= 0 && position < int(character.size())) {
-                character[selectedChar - i]->SetXY(x - PADDING_CENTER - PADDING_EACH * i, y);
-                character[selectedChar - i]->OnShow();
+            if (position >= 0 && position < int(character.size())) {	// 左邊
+                if (character[selectedChar - i]->GetIsUnlock()) {
+                    character[selectedChar - i]->SetXY(x - PADDING_CENTER - PADDING_EACH * i, y);
+                    character[selectedChar - i]->OnShow();
+                }
+                else {
+                    unlockSign.SetTopLeft((SIZE_X - unlockSign.Width()) / 2 - PADDING_CENTER - PADDING_EACH * i, y);
+                    unlockSign.ShowBitmap();
+                }
             }
         }
 
         ////
-        CDC* pDC = CDDraw::GetBackCDC();
-        CFont f, *fp;
-        f.CreatePointFont(100, "新細明體");
-        fp = pDC->SelectObject(&f);
-        pDC->SetBkColor(RGB(0, 90, 130));
-        pDC->SetBkMode(TRANSPARENT);
-        char temp[20];
-        pDC->SetTextColor(RGB(200, 200, 200));
-        sprintf(temp, "%s", character[selectedChar]->GetName().c_str());
-        pDC->TextOut(350, CHARACTER_POS_Y + 60 + 60, temp);
-        pDC->SetTextColor(RGB(255, 200, 15));
-        sprintf(temp, "%s", character[selectedChar]->GetSubName().c_str());
-        pDC->TextOut(350, CHARACTER_POS_Y + 60 + 74, temp);
-        pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
-        CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-        ////
+        if (character[selectedChar]->GetIsUnlock()) {
+            CDC* pDC = CDDraw::GetBackCDC();
+            CFont f, *fp;
+            f.CreatePointFont(100, "新細明體");
+            fp = pDC->SelectObject(&f);
+            pDC->SetBkColor(RGB(0, 90, 130));
+            pDC->SetBkMode(TRANSPARENT);
+            char temp[20];
+            pDC->SetTextColor(RGB(200, 200, 200));
+            string name;
+            name = character[selectedChar]->GetIsUnlock() ? character[selectedChar]->GetName() : "? ? ?" ;
+            sprintf(temp, "%s", name.c_str());
+            pDC->TextOut(350, CHARACTER_POS_Y + 60 + 60, temp);
+            pDC->SetTextColor(RGB(255, 200, 15));
+            name = character[selectedChar]->GetIsUnlock() ? character[selectedChar]->GetSubName() : "? ? ?";
+            sprintf(temp, "%s", name.c_str());
+            pDC->TextOut(350, CHARACTER_POS_Y + 60 + 74, temp);
+            pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+            CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+            ////
+        }
     }
 
     if (currState == 2) {	// 遊戲結束顯示

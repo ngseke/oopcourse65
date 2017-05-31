@@ -13,7 +13,8 @@ class CCharacter {
         int  GetX1(), GetY1(), GetX2(), GetY2();
         int  GetWidth(), GetHeight();
         string GetName(), GetSubName();
-
+        void SetIsUnlock(bool);
+        bool GetIsUnlock();
 
     protected:
         CAnimation			animation;							// 主角動畫
@@ -21,5 +22,6 @@ class CCharacter {
         string				fileName;							// 檔名
         string				name, subName;						// 名稱
         int					x, y;
+        bool				isUnlock;
 };
 }

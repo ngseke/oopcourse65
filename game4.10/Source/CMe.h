@@ -22,23 +22,30 @@ class CMe {
         void SetXY(int nx, int ny);		// 設定左上角座標
         void LoadCharacter();			// 載入角色
         void AddSelectedChar(int);		// 選擇角色時移動游標
-        void SetState(int);				// 設定當前顯示的狀
+        void SetState(int);				// 設定當前顯示的狀態
 
         int GetselectedChar();			// 取得選中的角色編號
         void SetselectedChar(int);		// 設定選中的角色編號
         string GetMeName();				// 取得選中的角色名
-        void SetSelectedChar(string);
+        void SetSelectedChar(string);	// 設定遊玩中選擇的角色
         //
-        void SetHighScoreDisplay(string);
-        void SetPlayingRecordDisplay(string, string, string);
+        void SetHighScoreDisplay(string);						// 設定 【最高記錄】頁面的角色顯示
+        void SetPlayingRecordDisplay(string, string, string);	// 設定 【遊玩記錄】頁面的角色顯示×3
+        //
+        void WriteUnlockCharacter();			// 寫入所有已解鎖的角色
+        void ReadUnlockCharacter();				// 讀第已解鎖的角色
+        bool GetSelectedCharIsUnlock();
 
     protected:
+        vector<CCharacter*> character;
+        vector<string>		unlockCharacter;
+        CFile*				file;
+        string highScoreName, playingRecordName[3];
+        CMovingBitmap		unlockSign;
         const int CHARACTER_POS_Y;
         int x, y;						// 圖形左上角座標
-        vector<CCharacter*> character;
         int  selectedChar;				// 選中的角色編號
-        int  currState;					// 0: 遊戲中, 1: 選擇角色畫面, 2: GAMEOVER畫面, 3: 最高分畫面
-        string highScoreName, playingRecordName[3];
+        int  currState;					// 0: 遊戲中, 1: 選擇角色畫面, 2: GAMEOVER畫面, 3: 最高記錄畫面, 4: 遊玩記錄畫面
         int highScoreCharNum, playingRecordCharNum[3];
 };
 }

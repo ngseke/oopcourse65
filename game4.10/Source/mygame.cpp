@@ -33,7 +33,7 @@ int PublicData::level = 0;
 int PublicData::totalCorrectKeyCount;
 double PublicData::accuracy = 0.0;
 bool PublicData::musicOnOff = 1;
-CFile PublicData::bestRecord;
+CFile PublicData::file;
 CMe	PublicData::me;
 
 CGameStateInit::CGameStateInit(CGame* g)
@@ -55,11 +55,13 @@ void CGameStateInit::OnInit() {
     exitGameCount = 0;
 
     if (1) {// DEBUG用
-        displayState = 3;
+        displayState = 2;
         noteDisplayState = 0;
         statsDisplayState = 0;
     }
 
+    PublicData::me.WriteUnlockCharacter();
+    PublicData::me.ReadUnlockCharacter();
     PublicData::me.LoadBitmap();											// 主角
     PublicData::me.SetSelectedChar("Iron Man");
     map.LoadBitmap();														// 背景網狀動畫
@@ -160,12 +162,13 @@ void CGameStateInit::OnInit() {
 void CGameStateInit::OnBeginState() {
     text1_y = 550;
     text1_count = 0;
-    PublicData::bestRecord.ReadHighScoreFile();
-    PublicData::bestRecord.ReadRecordFile();
+    PublicData::file.ReadHighScoreFile();
+    PublicData::file.ReadRecordFile();
     statsPRItemNum = 0;		// 遊玩記錄的項目數字歸零（回到第一筆資料）
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
+    PublicData::me.ReadUnlockCharacter();
     const char KEY_ESC = 27;
     const char KEY_SPACE = ' ';
     const char KEY_ENTER = 0xD;
@@ -184,13 +187,15 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
 
     if (nChar == KEY_ESC) {		// ESC鍵...
-        if (!(displayState == 0))
+        if (!(displayState == 0) && !(displayState == 2 && !PublicData::me.GetSelectedCharIsUnlock()))
             displayState = 0;	// 返回主選單
         else {
+            /*
             if (exitGameCount != 0 && exitGameCount < 30 * 5)
                 PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 離開遊戲
             else if (exitGameCount == 0)
                 exitGameCount++;
+            */
         }
     }
 
@@ -223,7 +228,11 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         }
     }
     else if (displayState == 2) { // [角色選擇]
-        if (nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+        if (nChar == KEY_ENTER) {
+            if (PublicData::me.GetSelectedCharIsUnlock()) {
+                displayState = 0;// ->返回主選單
+            }
+        }
         else if (nChar == KEY_LEFT || nChar == KEY_RIGHT) {
             if		(nChar == KEY_LEFT)   PublicData::me.AddSelectedChar(-1);
             else if (nChar == KEY_RIGHT)  PublicData::me.AddSelectedChar(1);
@@ -241,7 +250,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                 if (statsPRItemNum > 0)statsPRItemNum--;
             }
             else if (nChar == KEY_DOWN) { // 向下查找記錄
-                if (statsPRItemNum < PublicData::bestRecord.GetRecordNum() - 3)statsPRItemNum++;
+                if (statsPRItemNum < PublicData::file.GetRecordNum() - 3)statsPRItemNum++;
             }
         }
     }
@@ -258,9 +267,9 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         if (aboutDisplayState == 1) {
             if (nChar == 'Y') {	// 選YES確認刪除遊戲紀錄
-                PublicData::bestRecord.DeleteAllData();		// 清空txt黨
-                PublicData::bestRecord.ReadHighScoreFile(); // 重新載入遊戲紀錄
-                PublicData::bestRecord.ReadRecordFile();
+                PublicData::file.DeleteAllData();		// 清空txt黨
+                PublicData::file.ReadHighScoreFile(); // 重新載入遊戲紀錄
+                PublicData::file.ReadRecordFile();
                 displayState = 0;							// 返回主選單
             }
             else if (nChar == 'N') {	// 選NO取消
@@ -317,8 +326,8 @@ void CGameStateInit::OnShow() {
         int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
         int HIGHSCORE_POS_Y = MENU_Y + 10;
 
-        if (PublicData::bestRecord.isHighScoreExist()) {					// 顯示最高分(bitmap)
-            int tempScore = PublicData::bestRecord.ReadHighScore_Score();
+        if (PublicData::file.isHighScoreExist()) {					// 顯示最高分(bitmap)
+            int tempScore = PublicData::file.ReadHighScore_Score();
             highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
             highScoreBorder.ShowBitmap();
 
@@ -379,18 +388,18 @@ void CGameStateInit::OnShow() {
 
             //
             //從 CFile 中取得最高分內容並顯示
-            if (!PublicData::bestRecord.isHighScoreExist()) {		// 若最高分不存在
+            if (!PublicData::file.isHighScoreExist()) {		// 若最高分不存在
                 PublicData::me.SetState(5);
                 statsNoRecord.SetTopLeft((SIZE_X - statsNoRecord.Width()) / 2 + 115, NOTE_TEXT_Y + 150);
                 statsNoRecord.ShowBitmap();
             }
             else {
-                int tempScore = PublicData::bestRecord.ReadHighScore_Score(),
+                int tempScore = PublicData::file.ReadHighScore_Score(),
                     tempTotalKeyCount = 99999,
-                    tempLevel = PublicData::bestRecord.ReadHighScore_Level(),
-                    tempCorrectKeyCount = PublicData::bestRecord.ReadHighScore_CorrectKeyCount(),
-                    tempAccuracy = int(PublicData::bestRecord.ReadHighScore_Accuracy() * 100.0);
-                PublicData::me.SetHighScoreDisplay(PublicData::bestRecord.ReadHighScore_Character());
+                    tempLevel = PublicData::file.ReadHighScore_Level(),
+                    tempCorrectKeyCount = PublicData::file.ReadHighScore_CorrectKeyCount(),
+                    tempAccuracy = int(PublicData::file.ReadHighScore_Accuracy() * 100.0);
+                PublicData::me.SetHighScoreDisplay(PublicData::file.ReadHighScore_Character());
 
                 //
                 for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
@@ -480,41 +489,41 @@ void CGameStateInit::OnShow() {
             statsArrow[2].ShowBitmap();
 
             // 設定顯示的箭頭樣式
-            if (PublicData::bestRecord.GetRecordNum() <= 3 && PublicData::bestRecord.GetRecordNum() >= 0) {
+            if (PublicData::file.GetRecordNum() <= 3 && PublicData::file.GetRecordNum() >= 0) {
                 statsArrowV[3].ShowBitmap();		// 箭頭樣式：全暗
             }
             else {
                 if (statsPRItemNum == 0)
                     statsArrowV[2].ShowBitmap();	// 箭頭樣式：下亮
-                else if (statsPRItemNum == PublicData::bestRecord.GetRecordNum() - 3)
+                else if (statsPRItemNum == PublicData::file.GetRecordNum() - 3)
                     statsArrowV[1].ShowBitmap();	// 箭頭樣式：下亮
                 else
                     statsArrowV[0].ShowBitmap();	// 箭頭樣式：全亮
             }
 
-            if (PublicData::bestRecord.GetRecordNum() == 0) {		// 當查無遊戲記錄時
+            if (PublicData::file.GetRecordNum() == 0) {		// 當查無遊戲記錄時
                 PublicData::me.SetState(5);
                 statsNoRecord.SetTopLeft((SIZE_X - statsNoRecord.Width()) / 2, NOTE_TEXT_Y + 163);
                 statsNoRecord.ShowBitmap();
             }
 
             PublicData::me.SetPlayingRecordDisplay	// 顯示該筆紀錄的ME(若不存在則不顯示)
-            (statsPRItemNum >= PublicData::bestRecord.GetRecordNum() ? "" :
-             PublicData::bestRecord.ReadRecord_Character(statsPRItemNum),
-             statsPRItemNum + 1 >= PublicData::bestRecord.GetRecordNum() ? "" :
-             PublicData::bestRecord.ReadRecord_Character(statsPRItemNum + 1),
-             statsPRItemNum + 2 >= PublicData::bestRecord.GetRecordNum() ? "" :
-             PublicData::bestRecord.ReadRecord_Character(statsPRItemNum + 2) );
+            (statsPRItemNum >= PublicData::file.GetRecordNum() ? "" :
+             PublicData::file.ReadRecord_Character(statsPRItemNum),
+             statsPRItemNum + 1 >= PublicData::file.GetRecordNum() ? "" :
+             PublicData::file.ReadRecord_Character(statsPRItemNum + 1),
+             statsPRItemNum + 2 >= PublicData::file.GetRecordNum() ? "" :
+             PublicData::file.ReadRecord_Character(statsPRItemNum + 2) );
 
             for (int j = 0; j < 3; j++) {
-                if (statsPRItemNum + j >= PublicData::bestRecord.GetRecordNum())
+                if (statsPRItemNum + j >= PublicData::file.GetRecordNum())
                     break;
 
-                int tempScore = PublicData::bestRecord.ReadRecord_Score(statsPRItemNum + j),
-                    tempLevel = PublicData::bestRecord.ReadRecord_Level(statsPRItemNum + j),
-                    tempCorrectKeyCount = PublicData::bestRecord.ReadRecord_CorrectKeyCount(statsPRItemNum + j),
-                    tempAccuracy = int(PublicData::bestRecord.ReadRecord_Accuracy(statsPRItemNum + j) * 100.0);
-                string tempDate = PublicData::bestRecord.ReadRecord_Date(statsPRItemNum + j);
+                int tempScore = PublicData::file.ReadRecord_Score(statsPRItemNum + j),
+                    tempLevel = PublicData::file.ReadRecord_Level(statsPRItemNum + j),
+                    tempCorrectKeyCount = PublicData::file.ReadRecord_CorrectKeyCount(statsPRItemNum + j),
+                    tempAccuracy = int(PublicData::file.ReadRecord_Accuracy(statsPRItemNum + j) * 100.0);
+                string tempDate = PublicData::file.ReadRecord_Date(statsPRItemNum + j);
                 const int STATS_PR_NUM_POS_X = 135, STATS_PR_NUM_PER_POS_X = 380;
                 const int LINE_MARGIN = 44;
 
@@ -677,15 +686,15 @@ void CGameStateOver::OnBeginState() {
     accuracy = PublicData::accuracy;
     //
     PublicData::me.SetState(2);
-    PublicData::bestRecord.ReadHighScoreFile();
+    PublicData::file.ReadHighScoreFile();
 
-    if (score > PublicData::bestRecord.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
-        PublicData::bestRecord.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
+    if (score > PublicData::file.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
+        PublicData::file.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
         isHighScore = true;
     }
 
-    PublicData::bestRecord.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
-    PublicData::bestRecord.ReadRecordFile();
+    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
+    PublicData::file.ReadRecordFile();
 
     if (PublicData::musicOnOff) {
         CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效

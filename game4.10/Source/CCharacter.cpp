@@ -18,6 +18,7 @@ CCharacter::CCharacter(string name, string subName, string fn, int bmpNum) {
     this->x = 0;
     this->y = 0;
     this->fileName = fn;
+    this->isUnlock = false;
     LoadBitmap();
 }
 
@@ -48,7 +49,12 @@ void CCharacter::OnShow() {
     animation.SetTopLeft(x, y);
     animation.OnShow();
 }
-
+void CCharacter::SetIsUnlock(bool isUnlock) {
+    this->isUnlock = isUnlock;
+}
+bool CCharacter::GetIsUnlock() {
+    return isUnlock;
+}
 void CCharacter::SetXY(int x, int y) {
     this->x = x;
     this->y = y;
