@@ -11,7 +11,7 @@ namespace game_framework {
 // CCharacter: еDид
 /////////////////////////////////////////////////////////////////////////////
 
-CCharacter::CCharacter(string name, string subName, string fn, int bmpNum) {
+CCharacter::CCharacter(string name, string subName, string fn, int bmpNum, int ur0, int ur1, int ur2, int ur3) {
     this->name = name;
     this->subName = subName;
     this->bmpNum = bmpNum;
@@ -19,6 +19,10 @@ CCharacter::CCharacter(string name, string subName, string fn, int bmpNum) {
     this->y = 0;
     this->fileName = fn;
     this->isUnlock = false;
+    unlockRequirement[0] = ur0;
+    unlockRequirement[1] = ur1;
+    unlockRequirement[2] = ur2;
+    unlockRequirement[3] = ur3;
     LoadBitmap();
 }
 
@@ -49,6 +53,10 @@ void CCharacter::OnShow() {
     animation.SetTopLeft(x, y);
     animation.OnShow();
 }
+int CCharacter::GetUnlockRequirement(int num) {
+    return num < 4 ? unlockRequirement[num] : 0;
+}
+
 void CCharacter::SetIsUnlock(bool isUnlock) {
     this->isUnlock = isUnlock;
 }

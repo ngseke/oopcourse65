@@ -32,8 +32,9 @@ class CMe {
         void SetHighScoreDisplay(string);						// 設定 【最高記錄】頁面的角色顯示
         void SetPlayingRecordDisplay(string, string, string);	// 設定 【遊玩記錄】頁面的角色顯示×3
         //
-        void WriteUnlockCharacter();			// 寫入所有已解鎖的角色
-        void ReadUnlockCharacter();				// 讀第已解鎖的角色
+        void WriteUnlockCharacter(string);		// 寫入已解鎖的角色
+        void ReadUnlockCharacter();				// 讀已解鎖的角色
+        bool JudgeUnlock(int, int, int, int);	// 帶入本次遊玩的成績, 查看是否符合解鎖條件, 並回傳一個bool
         bool GetSelectedCharIsUnlock();			// 回傳選定的角色是否已解鎖
 
     protected:

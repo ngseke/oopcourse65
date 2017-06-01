@@ -42,9 +42,12 @@ class PublicData {
         static double		accuracy;					// 共用變數：正確率
         static CMe			me;							// 共用變數：主角參數
         static CFile		file;
+
         static int			CorrectKeyCount;		// 共用變數：正確按鍵數
-        static bool			musicOnOff;
         static int			totalKeyCount;			// 共用變數：正確按鍵數(會累積的)
+        static bool			musicOnOff;					// 共用變數：音樂開關
+        static bool			newUnlock;					// 共用變數：是否有新的解鎖角色
+
 };
 
 class CGameStateInit : public CGameState {
@@ -79,7 +82,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			userBorder, highScoreBorder;	// 最高分的框
         CMovingBitmap			numBmp[10], numBmpSmall[14];	// 數字圖檔
         CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];	// 數字圖檔（白色）
-
+        CMovingBitmap			new_text;
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
@@ -175,7 +178,9 @@ class CGameStateOver : public CGameState {
         CMovingBitmap		numBmp[10], numBmpSmall[12];		// 數字圖檔
         CMovingBitmap		bar[2];			// 進度條
         CAnimation			newHS_text;		// 破紀錄文字
+        CAnimation			newChar_text;
         bool				isHighScore;	// 本次遊玩的是否破紀錄
+        bool				isUnlock;		// 本次遊玩的是否解鎖新角色
         int					counter;		// 倒數之計數器
         int					x, y;			// 圖檔顯示位置
         int					score, level;	// 分數, 關卡

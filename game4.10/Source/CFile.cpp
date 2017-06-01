@@ -151,10 +151,9 @@ void CFile::ReadRecordFile() {
                 else if (i == 9) this->record_Date = SlideThree[9];
                 else if (i == 11) this->record_CorrectKeyCount = stoi(SlideThree[11], nullptr, 10);
 
-                //else if (i == 13) this->record_TotalKeyCount = stoi(SlideThree[13], nullptr, 10);
                 i++;
 
-                if (i == 14) i = 0;
+                if (i == 12) i = 0;
             }
         }
 
@@ -193,6 +192,9 @@ void CFile::DeleteAllData() {
     fp.close();
     fp.open("user/record.txt", ios::out);
     fp << "";
+    fp.close();
+    fp.open("user/unlock.txt", ios::out);
+    fp << "Iron Man\n";
     fp.close();
     DeleteFile("user/bestRecord.txt");
 }
