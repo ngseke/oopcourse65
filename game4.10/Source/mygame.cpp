@@ -736,7 +736,9 @@ void CGameStateOver::OnInit() {
     x = (SIZE_X - border.Width()) / 2;
     y = (SIZE_Y - border.Height()) / 2;
     ShowInitProgress(100);
-    CAudio::Instance()->Load(AUDIO_GAMEOVER, "sounds\\gameover.mp3");
+
+    if (PublicData::musicOnOff)
+        CAudio::Instance()->Load(AUDIO_GAMEOVER, "sounds\\gameover.mp3");
 }
 void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
     border.SetTopLeft(x, y);
@@ -857,11 +859,15 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     map.LoadBitmap();		// 載入背景
     emp.LoadBitmap();		// 載入EMP
     levelAni.LoadBitmap();	// 載入切換關卡過場動畫
-    CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");
-    CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
-    CAudio::Instance()->Load(AUDIO_ERROR, "sounds\\error.mp3");
-    CAudio::Instance()->Load(AUDIO_CONGRATULATION, "sounds\\congratulation.mp3");
-    CAudio::Instance()->Load(AUDIO_CONGRATULATION2, "sounds\\congratulation2.mp3");
+
+    if (PublicData::musicOnOff) {
+        CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");
+        CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
+        CAudio::Instance()->Load(AUDIO_ERROR, "sounds\\error.mp3");
+        CAudio::Instance()->Load(AUDIO_CONGRATULATION, "sounds\\congratulation.mp3");
+        CAudio::Instance()->Load(AUDIO_CONGRATULATION2, "sounds\\congratulation2.mp3");
+    }
+
     ShowInitProgress(40);
 
     for (int i = 0; i < 26; i++) {		// 載入字型圖片

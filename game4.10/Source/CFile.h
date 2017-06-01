@@ -30,6 +30,10 @@ class CFile {
         void	WriteSelectedCharacter(string);				//寫入上一次所選角色
         string  ReadSelectedCharacter();					//讀取上一次所選角色
         //================================
+        void	WriteMusicOnOff(bool);
+        bool	ReadMusicOnOff();
+        //================================
+
         void DeleteAllData();					//清除所有記錄
 
     private:
@@ -53,5 +57,8 @@ class CFile {
         char ChDate[80];					//char型態的日期
         //=====================
         string	preSelectedChar;			//上一隻角色
+        //================================
+        bool  musicState;
+
 };
 }

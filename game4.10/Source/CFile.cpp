@@ -217,4 +217,29 @@ void CFile::WriteSelectedCharacter(string preSelectedChar) {
     fp << "preSelectedChar:" << preSelectedChar;
     fp.close();
 }
+void CFile::WriteMusicOnOff(bool musicState) {
+    fstream fp;
+    fp.open("user/musicState.txt", ios::out);
+    fp << "musicState:" << musicState;
+    fp.close();
+}
+bool CFile::ReadMusicOnOff() {
+    fstream	fp;
+    fp.open("user/musicState.txt", ios::in);
+    int i = 0;
+    char line[200];
+    string SlideOne;
+
+    while (fp.getline(line, sizeof(line), ':')) {
+        SlideOne = line;
+        stringstream ss(SlideOne);
+
+        if (i == 1) ss >> musicState;
+
+        i++;
+    }
+
+    fp.close();
+    return this->musicState;
+}
 }

@@ -7,3 +7,7 @@ character:Bouncing Ball,score:6,level:0,accuracy:100,date:201706011309,correctKe
 character:Iron Man,score:7,level:0,accuracy:87.5,date:201706011312,correctKeyCount:7,totalKeyCount:99
 character:Creeper,score:0,level:0,accuracy:66.6667,date:201706011313,correctKeyCount:2,totalKeyCount:101
 character:Minion,score:0,level:0,accuracy:100,date:201706011314,correctKeyCount:0,totalKeyCount:101
+character:Iron Man,score:0,level:0,accuracy:100,date:201706011332,correctKeyCount:0,totalKeyCount:101
+character:Tsai Ing-wen,score:0,level:0,accuracy:100,date:201706011812,correctKeyCount:0,totalKeyCount:101
+character:Kirby,score:0,level:0,accuracy:100,date:201706011820,correctKeyCount:0,totalKeyCount:101
+character:Iron Man,score:0,level:0,accuracy:100,date:201706011822,correctKeyCount:0,totalKeyCount:101
