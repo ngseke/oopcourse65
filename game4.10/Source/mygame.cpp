@@ -66,6 +66,7 @@ void CGameStateInit::OnInit() {
     PublicData::me.ReadUnlockCharacter();
     PublicData::me.LoadBitmap();											// 主角
     PublicData::me.SetSelectedChar(PublicData::file.ReadSelectedCharacter());	// 讀取上次選取的角色
+    PublicData::musicOnOff = PublicData::file.ReadMusicOnOff();					// 讀取上次音樂的狀態
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
@@ -94,6 +95,7 @@ void CGameStateInit::OnInit() {
     noteArrow.LoadBitmap ("Bitmaps/menu/note/note_text_arraw.bmp", RGB(0, 255, 0));	// 說明箭頭
     noteUnselected.LoadBitmap("Bitmaps/menu/note/note_unselected.bmp", RGB(0, 255, 0));
     noteSelected.LoadBitmap("Bitmaps/menu/note/note_selected.bmp", RGB(0, 255, 0));
+    exit.LoadBitmap("Bitmaps/menu/exit.bmp", RGB(0, 255, 0));
     ShowInitProgress(15);
 
     for (int i = 0; i < 6; i++) {	// 說明框裡面的按鍵動畫
@@ -182,7 +184,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_DOWN  = 0x28;	// keyboard下箭頭
 
     if (!(nChar == KEY_ESC || nChar == KEY_LEFT || nChar == KEY_UP || nChar == KEY_RIGHT || nChar == KEY_DOWN || nChar == KEY_ENTER || nChar == 'D' || nChar == 'Y' || nChar == 'N' || (nChar <= '5' && nChar >= '1'))) {
-        wrongKeyNum++;
+        //wrongKeyNum++;
     }
 
     if ((nChar <= '5' && nChar >= '1')) {		// 提供以數字鍵1～5來操縱選單
@@ -194,13 +196,13 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (!(displayState == 0) && !(displayState == 2 && !PublicData::me.GetSelectedCharIsUnlock()))
             displayState = 0;	// 返回主選單
         else {
-            /*
-            if (exitGameCount != 0 && exitGameCount < 30 * 5)
-                PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 離開遊戲
-            else if (exitGameCount == 0)
-                exitGameCount++;
-            */
+            exitState = true;
         }
+    }
+
+    if (exitState) {
+        if (nChar == 'N')		exitState = false;
+        else if (nChar == 'Y')	PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);
     }
 
     if (displayState == 0 ) {					// 在主選單...
@@ -264,8 +266,9 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     else if (displayState == 4 ) { // [關於]
         if (aboutDisplayState == 0 && nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
 
-        if (aboutDisplayState == 0 && nChar == 'M') {
+        if (aboutDisplayState == 0 && nChar == 'M') {						// 開關音樂
             PublicData::musicOnOff = PublicData::musicOnOff ? false : true;
+            PublicData::file.WriteMusicOnOff(PublicData::musicOnOff);
         }
 
         if (aboutDisplayState == 0 && nChar == 'D' ) {
@@ -320,35 +323,41 @@ void CGameStateInit::OnShow() {
     taipin.ShowBitmap();
 
     if (displayState == 0) {	// 顯示主選單
-        const int MENU_MARGIN_BTM = 40;
-        menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_Y + MENU_MARGIN_BTM * currSelectItem);
-        menuBorder_ckecked.ShowBitmap();
+        if (!exitState) {
+            const int MENU_MARGIN_BTM = 40;
+            menuBorder_ckecked.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_Y + MENU_MARGIN_BTM * currSelectItem);
+            menuBorder_ckecked.ShowBitmap();
 
-        for (int i = 0; i < MENU_ITEM_NUM; i++) {
-            menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_Y + MENU_MARGIN_BTM * i);
-            menuBorder.ShowBitmap();
-            menuText[i]->SetTopLeft((SIZE_X - menuText[i]->Width()) / 2, MENU_Y + 7 + MENU_MARGIN_BTM * i);
-            menuText[i]->ShowBitmap();
-        }
+            for (int i = 0; i < MENU_ITEM_NUM; i++) {
+                menuBorder.SetTopLeft((SIZE_X - menuBorder.Width()) / 2, MENU_Y + MENU_MARGIN_BTM * i);
+                menuBorder.ShowBitmap();
+                menuText[i]->SetTopLeft((SIZE_X - menuText[i]->Width()) / 2, MENU_Y + 7 + MENU_MARGIN_BTM * i);
+                menuText[i]->ShowBitmap();
+            }
 
-        int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
-        int HIGHSCORE_POS_Y = MENU_Y + 10;
+            int HIGHSCORE_POS_X = (SIZE_X + menuBorder.Width()) / 2 + 8;
+            int HIGHSCORE_POS_Y = MENU_Y + 10;
 
-        if (PublicData::file.isHighScoreExist()) {					// 顯示最高分(bitmap)
-            int tempScore = PublicData::file.ReadHighScore_Score();
-            highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
-            highScoreBorder.ShowBitmap();
+            if (PublicData::file.isHighScoreExist()) {					// 顯示最高分(bitmap)
+                int tempScore = PublicData::file.ReadHighScore_Score();
+                highScoreBorder.SetTopLeft(HIGHSCORE_POS_X, HIGHSCORE_POS_Y);
+                highScoreBorder.ShowBitmap();
 
-            for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
-                numBmpSmall[tempScore % 10].SetTopLeft( HIGHSCORE_POS_X - 10 * i + 130, HIGHSCORE_POS_Y + 5);
-                numBmpSmall[tempScore % 10].ShowBitmap();
-                tempScore /= 10;
+                for (int i = 0; i < 5; i++) {					// 顯示分數數字bmp
+                    numBmpSmall[tempScore % 10].SetTopLeft( HIGHSCORE_POS_X - 10 * i + 130, HIGHSCORE_POS_Y + 5);
+                    numBmpSmall[tempScore % 10].ShowBitmap();
+                    tempScore /= 10;
+                }
+            }
+
+            if (PublicData::newUnlock) {
+                new_text.SetTopLeft((SIZE_X - menuBorder.Width()) / 2 + 130, MENU_Y + MENU_MARGIN_BTM * 2);
+                new_text.ShowBitmap();
             }
         }
-
-        if (PublicData::newUnlock) {
-            new_text.SetTopLeft((SIZE_X - menuBorder.Width()) / 2 + 130, MENU_Y + MENU_MARGIN_BTM * 2);
-            new_text.ShowBitmap();
+        else {
+            exit.SetTopLeft((SIZE_X - exit.Width()) / 2, (NOTE_TEXT_Y + exit.Height() / 2));
+            exit.ShowBitmap();
         }
     }
     else if (displayState == 1) {	// 顯示說明文字

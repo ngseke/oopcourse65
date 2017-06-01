@@ -76,6 +76,7 @@ class CGameStateInit : public CGameState {
         int statsPRItemNum;								// 遊玩記錄的項目數字
         int wrongKeyNum;								// 錯誤按鍵數
         int exitGameCount;								// 關閉遊戲計數
+        bool exitState = false;
         //主選單元素
         vector<CMovingBitmap*>	menuText;						// 選單文字VECTOR
         CMovingBitmap			menuBorder, menuBorder_ckecked;	// 頁面指示燈
@@ -83,6 +84,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			numBmp[10], numBmpSmall[14];	// 數字圖檔
         CMovingBitmap			numBmp_White[10], numBmpSmall_White[14];	// 數字圖檔（白色）
         CMovingBitmap			new_text;
+        CMovingBitmap			exit;
         // 遊戲說明 元素
         CAnimation				noteExkey;						// 遊戲說明裡面的 打字動畫
         CMovingBitmap			noteBorder, noteArrow;			// 框線, 箭頭
