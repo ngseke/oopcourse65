@@ -165,6 +165,7 @@ void CGameStateInit::OnBeginState() {
     PublicData::file.ReadHighScoreFile();
     PublicData::file.ReadRecordFile();
     statsPRItemNum = 0;		// 遊玩記錄的項目數字歸零（回到第一筆資料）
+    PublicData::totalKeyCount = PublicData::file.ReadHighScore_TotalKeyCount();
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -395,7 +396,7 @@ void CGameStateInit::OnShow() {
             }
             else {
                 int tempScore = PublicData::file.ReadHighScore_Score(),
-                    tempTotalKeyCount = 99999,
+                    tempTotalKeyCount = PublicData::totalKeyCount,
                     tempLevel = PublicData::file.ReadHighScore_Level(),
                     tempCorrectKeyCount = PublicData::file.ReadHighScore_CorrectKeyCount(),
                     tempAccuracy = int(PublicData::file.ReadHighScore_Accuracy() * 100.0);
@@ -691,7 +692,7 @@ void CGameStateOver::OnBeginState() {
     if (PublicData::file.GetRecordNum() == 0)
         PublicData::totalKeyCount = PublicData::CorrectKeyCount;
     else {
-        PublicData::totalKeyCount = PublicData::file.ReadRecord_TotalKeyCount(0);
+        PublicData::totalKeyCount = PublicData::file.ReadHighScore_TotalKeyCount();
         PublicData::totalKeyCount += PublicData::CorrectKeyCount;
     }
 
@@ -700,7 +701,7 @@ void CGameStateOver::OnBeginState() {
         isHighScore = true;
     }
 
-    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount, PublicData::totalKeyCount);
+    PublicData::file.WriteTotalKeyCount( PublicData::totalKeyCount);
     PublicData::file.ReadRecordFile();
     //
     PublicData::me.WriteUnlockCharacter();

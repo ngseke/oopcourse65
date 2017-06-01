@@ -6,6 +6,7 @@ class CFile {
     public:
         CFile();
         void WriteHighScore(int score, int level, double accuracy, string meName, int correctKeyCount, int totalKeyCount);
+        void WriteTotalKeyCount(int);
         void ReadHighScoreFile();
         int ReadHighScore_Score();							 //回傳最高分裡面的分
         int ReadHighScore_Level();  						 //回傳最高分裡面的關
@@ -24,7 +25,6 @@ class CFile {
         string  ReadRecord_Character(int);					 //回傳第x筆裡面的角色名
         string  ReadRecord_Date(int);						 //回傳第x筆裡面的日期
         int		ReadRecord_CorrectKeyCount(int);			 //回傳第x筆裡面的正確按鍵數量
-        int		ReadRecord_TotalKeyCount(int);
         int     GetRecordNum();								 //回傳record大小
         //================================
         void	WriteSelectedCharacter(string);				//寫入上一次所選角色
@@ -53,7 +53,6 @@ class CFile {
         string record_MeName;				//主角名稱(英文)
         int	   record_SelectedChar;			//主角編號
         int	   record_CorrectKeyCount;		//正確按鍵數
-        int	   record_TotalKeyCount;		//累積按鍵數
         char ChDate[80];					//char型態的日期
         //=====================
         string	preSelectedChar;			//上一隻角色

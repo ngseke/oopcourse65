@@ -34,6 +34,18 @@ void CFile::WriteHighScore(int score, int level, double accuracy, string meName,
        << ",totalKeyCount:" << totalKeyCount << endl;
     fp.close();
 }
+void CFile::WriteTotalKeyCount(int num) {
+    fstream	fp;
+    fp.open("user/bestRecord.txt", ios::out);
+    fp << "character:" << HighScore_MeName
+       << ",score:" << HighScore_Score
+       << ",level:" << HighScore_Level
+       << ",accuracy:" << HighScore_Accuracy
+       << ",date:" << HighScore_Date
+       << ",correctKeyCount:" << HighScore_CorrectKeyCount
+       << ",totalKeyCount:" << num << endl;
+    fp.close();
+}
 void CFile::ReadHighScoreFile() {
     string slideOne, slideTwo[14];
     char temp[200];
@@ -101,8 +113,7 @@ void CFile::WriteRecord(int score, int level, double accuracy, string meName, in
        << ",level:" << level
        << ",accuracy:" << accuracy
        << ",date:" << record_Date
-       << ",correctKeyCount:" << correctKeyCount
-       << ",totalKeyCount:" << totalKeyCount << endl;
+       << ",correctKeyCount:" << correctKeyCount << endl;
     fp.close();
 }
 void CFile::ReadRecordFile() {
@@ -139,8 +150,8 @@ void CFile::ReadRecordFile() {
                 else if (i == 7) this->record_Accuracy = stod(SlideThree[7], nullptr);
                 else if (i == 9) this->record_Date = SlideThree[9];
                 else if (i == 11) this->record_CorrectKeyCount = stoi(SlideThree[11], nullptr, 10);
-                else if (i == 13) this->record_TotalKeyCount = stoi(SlideThree[13], nullptr, 10);
 
+                //else if (i == 13) this->record_TotalKeyCount = stoi(SlideThree[13], nullptr, 10);
                 i++;
 
                 if (i == 14) i = 0;
@@ -148,7 +159,7 @@ void CFile::ReadRecordFile() {
         }
 
         if (record_MeName != "")
-            record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_CorrectKeyCount, record_Date, record_TotalKeyCount));	//從頭插進去
+            record.insert(record.begin(), new CRecord(record_Score, record_Level, record_Accuracy, record_MeName, record_CorrectKeyCount, record_Date));	//從頭插進去
     }
 
     TRACE("size[%d]\n", record.size());
@@ -189,9 +200,7 @@ int	CFile::ReadHighScore_TotalKeyCount() {
     return this->HighScore_TotalKeyCount;
 }
 
-int	CFile::ReadRecord_TotalKeyCount(int num) {
-    return record.at(num)->ReadRecordScore_TotalKeyCount();
-}
+
 
 string CFile::ReadSelectedCharacter() {
     fstream	fp;
