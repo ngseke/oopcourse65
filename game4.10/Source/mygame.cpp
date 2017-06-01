@@ -690,8 +690,10 @@ void CGameStateOver::OnBeginState() {
 
     if (PublicData::file.GetRecordNum() == 0)
         PublicData::totalKeyCount = PublicData::CorrectKeyCount;
-    else
-        PublicData::totalKeyCount = PublicData::CorrectKeyCount + PublicData::file.ReadRecord_TotalKeyCount(PublicData::file.GetRecordNum() - 1);
+    else {
+        PublicData::totalKeyCount = PublicData::file.ReadRecord_TotalKeyCount(0);
+        PublicData::totalKeyCount += PublicData::CorrectKeyCount;
+    }
 
     if (score > PublicData::file.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
         PublicData::file.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount, PublicData::totalKeyCount);
