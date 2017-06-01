@@ -74,7 +74,7 @@ bool CMe::JudgeUnlock(int ur0, int ur1, int ur2, int ur3) {
         bool allGoodToUnlock = true;		// 先設定 “全達解鎖條件” 為 true
 
         for (int i = 0; i < 4; i++) {		// 迴圈跑4項解鎖條件
-            if (!(data[i] > cc->GetUnlockRequirement(i)))
+            if (!(data[i] >= cc->GetUnlockRequirement(i)))
                 allGoodToUnlock = false;	// 若其中一項不符合 “全達解鎖條件” 便設定為false
         }
 
@@ -94,9 +94,9 @@ bool CMe::GetSelectedCharIsUnlock() {
 void CMe::LoadCharacter() {
     // 解鎖條件(依序)： 1.累計總正確按鍵數 2.單場分數 3.單場正確率 4.單場達到最高關卡
     character.push_back(new CCharacter("Iron Man",			"鋼鐵人",		"me_ironman", 2,			 0, 0, 0, 0));
-    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american", 1,	200, 0, 0, 0));
-    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk", 1,				400, 0, 0, 0));
-    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper", 1,			500, 0, 0, 0));
+    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american", 1,	 0, 50, 0, 0));
+    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk", 1,				 0, 100, 0, 0));
+    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper", 1,			 0, 300, 0, 0));
     character.push_back(new CCharacter("Cow",				"牛",			"me_cow", 1,				1000, 0, 0, 0));
     character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion", 1,				1000, 0, 0, 0));
     character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie", 1,				1000, 0, 0, 0));
@@ -138,7 +138,6 @@ void CMe::OnShow() {
         character[selectedChar]->OnShow();
     }
     else if (currState == 1) {	//選擇角色畫面
-        character[0]->SetIsUnlock(1);									// 第一只角色永遠解鎖
         x = (SIZE_X - character[selectedChar]->GetWidth()) / 2;
         y = CHARACTER_POS_Y + 70;
 

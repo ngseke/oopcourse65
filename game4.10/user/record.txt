@@ -1,0 +1,7 @@
+character:Iron Man,score:0,level:0,accuracy:100,date:201706011822,correctKeyCount:0
+character:Iron Man,score:50,level:0,accuracy:100,date:201706011822,correctKeyCount:0
+character:Iron Man,score:100,level:0,accuracy:100,date:201706011823,correctKeyCount:0
+character:Hulk,score:160,level:0,accuracy:100,date:201706011823,correctKeyCount:0
+character:Hulk,score:120,level:0,accuracy:100,date:201706011823,correctKeyCount:0
+character:Iron Man,score:70,level:0,accuracy:100,date:201706011824,correctKeyCount:0
+character:Iron Man,score:300,level:0,accuracy:100,date:201706011824,correctKeyCount:0

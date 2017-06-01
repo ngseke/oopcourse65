@@ -180,7 +180,7 @@ void CFile::DeleteAllData() {
     fp << "";
     fp.close();
     fp.open("user/unlock.txt", ios::out);
-    fp << "";
+    fp << "Iron Man\n";
     fp.close();
     DeleteFile("user/bestRecord.txt");
 }

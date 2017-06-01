@@ -690,7 +690,7 @@ void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 void CGameStateOver::OnBeginState() {
     counter = 1000 * 30;
     barCounter = 0;
-    isHighScore = false;
+    isHighScore = isUnlock = false;
     //
     score = PublicData::score;
     level = PublicData::level;
@@ -708,7 +708,7 @@ void CGameStateOver::OnBeginState() {
     PublicData::file.ReadRecordFile();
 
     //
-    if (PublicData::me.JudgeUnlock(1000, score, int(accuracy), level)) {// 判斷是否達成解鎖要素
+    if (PublicData::me.JudgeUnlock(10, score, int(accuracy), level)) {// 判斷是否達成解鎖要素
         isUnlock = PublicData::newUnlock = true;
     }
 
@@ -719,7 +719,6 @@ void CGameStateOver::OnBeginState() {
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
-    isHighScore = isUnlock = false;
     border.LoadBitmap("Bitmaps/gameover/gameover_border.bmp", RGB(0, 255, 0));
     newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs1.bmp", RGB(0, 255, 0));
     newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs2.bmp", RGB(0, 255, 0));
@@ -728,6 +727,7 @@ void CGameStateOver::OnInit() {
     newChar_text.AddBitmap("Bitmaps/gameover/gameover_new_char2.bmp", RGB(0, 255, 0));
     newChar_text.SetDelayCount(20);
     ShowInitProgress(80);
+    isHighScore = isUnlock = 0;
 
     for (int i = 0; i < 10; i++) {		// 載入數字圖
         char str[80];
@@ -1163,6 +1163,8 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (nChar == '5')GotoGameState(GAME_STATE_OVER);		// 按5 GOTO 遊戲結束畫面
 
         if (nChar == '6')quickCall = quickCall ? false : true;	// 按6 開關快速召喚
+
+        if (nChar == '7')score.Add(10);							// 按7 加十分
     }
 }
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {}
