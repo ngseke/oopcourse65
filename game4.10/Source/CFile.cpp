@@ -200,8 +200,6 @@ int	CFile::ReadHighScore_TotalKeyCount() {
     return this->HighScore_TotalKeyCount;
 }
 
-
-
 string CFile::ReadSelectedCharacter() {
     fstream	fp;
     fp.open("user/preSelectedChar.txt", ios::in);

@@ -56,14 +56,14 @@ void CGameStateInit::OnInit() {
     exitGameCount = 0;
 
     if (1) {// DEBUG用
-        displayState = 2;
+        displayState = 0;
         noteDisplayState = 0;
         statsDisplayState = 0;
     }
 
     PublicData::me.ReadUnlockCharacter();
     PublicData::me.LoadBitmap();											// 主角
-    PublicData::me.SetSelectedChar("Iron Man");
+    PublicData::me.SetSelectedChar(PublicData::file.ReadSelectedCharacter());	// 讀取上次選取的角色
     map.LoadBitmap();														// 背景網狀動畫
     typing_logo.LoadBitmap("Bitmaps/start_logo1.bmp", RGB(0, 255, 0));		// logo
     taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
@@ -231,6 +231,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     else if (displayState == 2) { // [角色選擇]
         if (nChar == KEY_ENTER) {
             if (PublicData::me.GetSelectedCharIsUnlock()) {
+                PublicData::file.WriteSelectedCharacter(PublicData::me.GetMeName());
                 displayState = 0;// ->返回主選單
             }
         }
@@ -701,6 +702,7 @@ void CGameStateOver::OnBeginState() {
         isHighScore = true;
     }
 
+    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount, PublicData::totalKeyCount);
     PublicData::file.WriteTotalKeyCount( PublicData::totalKeyCount);
     PublicData::file.ReadRecordFile();
     //
@@ -710,9 +712,6 @@ void CGameStateOver::OnBeginState() {
         CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
         CAudio::Instance()->Play(AUDIO_GAMEOVER, false);			// 播放 GAMEOVER音效
     }
-
-    PublicData::file.WriteSelectedCharacter(PublicData::me.GetMeName());
-    PublicData::file.ReadSelectedCharacter();
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
