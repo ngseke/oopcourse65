@@ -16,7 +16,7 @@ namespace game_framework {
 
 CFile::CFile() {
 }
-void CFile::WriteHighScore(int score, int level, double accuracy, string meName, int correctKeyCount, int totalKeyCount) {
+void CFile::WriteHighScore(int score, int level, double accuracy, string meName, int correctKeyCount) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -30,22 +30,28 @@ void CFile::WriteHighScore(int score, int level, double accuracy, string meName,
        << ",level:" << level
        << ",accuracy:" << accuracy
        << ",date:" << HighScore_Date
-       << ",correctKeyCount:" << correctKeyCount
-       << ",totalKeyCount:" << totalKeyCount << endl;
+       << ",correctKeyCount:" << correctKeyCount << endl;
     fp.close();
 }
 void CFile::WriteTotalKeyCount(int num) {
     fstream	fp;
-    fp.open("user/bestRecord.txt", ios::out);
-    fp << "character:" << HighScore_MeName
-       << ",score:" << HighScore_Score
-       << ",level:" << HighScore_Level
-       << ",accuracy:" << HighScore_Accuracy
-       << ",date:" << HighScore_Date
-       << ",correctKeyCount:" << HighScore_CorrectKeyCount
-       << ",totalKeyCount:" << num << endl;
+    fp.open("user/tkc.txt", ios::out);
+    fp << num;
     fp.close();
 }
+int CFile::ReadTotalKeyCount() {
+    fstream	fp;
+    fp.open("user/tkc.txt", ios::in);
+    string temp;
+
+    if (fp) {
+        while (fp >> temp) {}
+    }
+
+    return stoi(temp);
+    fp.close();
+}
+
 void CFile::ReadHighScoreFile() {
     string slideOne, slideTwo[14];
     char temp[200];
@@ -64,7 +70,6 @@ void CFile::ReadHighScoreFile() {
             else if (i == 7) this->HighScore_Accuracy = stod(slideTwo[7], nullptr);
             else if (i == 9) this->HighScore_Date = slideTwo[9];
             else if (i == 11) this->HighScore_CorrectKeyCount = stoi(slideTwo[11], nullptr, 10);
-            else if (i == 13) this->HighScore_TotalKeyCount = stoi(slideTwo[13], nullptr, 10);
 
             i++;
         }
@@ -75,7 +80,6 @@ void CFile::ReadHighScoreFile() {
     fp.close();
     TRACE("%d, %d\n", HighScore_Score, HighScore_Level);
 }
-
 int CFile::ReadHighScore_Score() {
     return this->HighScore_Score;
 }
@@ -99,7 +103,7 @@ bool CFile::isHighScoreExist() {
     else return 0;
 }
 //======================================
-void CFile::WriteRecord(int score, int level, double accuracy, string meName, int correctKeyCount, int totalKeyCount) {
+void CFile::WriteRecord(int score, int level, double accuracy, string meName, int correctKeyCount) {
     struct tm* T = NULL;
     time_t t;
     time(&t);
@@ -184,7 +188,6 @@ int	CFile::ReadRecord_CorrectKeyCount(int num) {
 int CFile::GetRecordNum() {
     return int(record.size());
 }
-
 void CFile::DeleteAllData() {
     fstream	fp, test;
     fp.open("user/bestRecord.txt", ios::out);
@@ -196,12 +199,14 @@ void CFile::DeleteAllData() {
     fp.open("user/unlock.txt", ios::out);
     fp << "Iron Man\n";
     fp.close();
+    fp.open("user/tkc.txt", ios::out);
+    fp << "0";
+    fp.close();
     DeleteFile("user/bestRecord.txt");
 }
 int	CFile::ReadHighScore_TotalKeyCount() {
     return this->HighScore_TotalKeyCount;
 }
-
 string CFile::ReadSelectedCharacter() {
     fstream	fp;
     fp.open("user/preSelectedChar.txt", ios::in);

@@ -41,7 +41,8 @@ class CMe {
         vector<CCharacter*> character;
         CFile*				file;
         string highScoreName, playingRecordName[3];
-        CMovingBitmap		unlockSign;
+        CMovingBitmap		unlockSign, unlock_border;
+
         const int CHARACTER_POS_Y;
         int x, y;						// 圖形左上角座標
         int  selectedChar;				// 選中的角色編號

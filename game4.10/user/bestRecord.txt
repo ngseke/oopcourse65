@@ -1,1 +1,1 @@
-character:Donald Trump,score:379,level:7,accuracy:96.0265,date:201706011149,correctKeyCount:290,totalKeyCount:18
+character:Iron Man,score:18,level:0,accuracy:100,date:201706012058,correctKeyCount:18

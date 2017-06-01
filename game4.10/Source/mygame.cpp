@@ -57,7 +57,7 @@ void CGameStateInit::OnInit() {
     exitGameCount = 0;
 
     if (1) {// DEBUG用
-        displayState = 0;
+        displayState = 2;
         noteDisplayState = 0;
         statsDisplayState = 0;
         PublicData::newUnlock = 1;
@@ -168,7 +168,7 @@ void CGameStateInit::OnBeginState() {
     PublicData::file.ReadHighScoreFile();
     PublicData::file.ReadRecordFile();
     statsPRItemNum = 0;		// 遊玩記錄的項目數字歸零（回到第一筆資料）
-    PublicData::totalKeyCount = PublicData::file.ReadHighScore_TotalKeyCount();
+    PublicData::totalKeyCount = PublicData::file.ReadTotalKeyCount();
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -274,9 +274,10 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         if (aboutDisplayState == 1) {
             if (nChar == 'Y') {	// 選YES確認刪除遊戲紀錄
-                PublicData::file.DeleteAllData();		// 清空txt黨
-                PublicData::file.ReadHighScoreFile(); // 重新載入遊戲紀錄
+                PublicData::file.DeleteAllData();			// 清空txt檔
+                PublicData::file.ReadHighScoreFile();		// 重新載入遊戲紀錄
                 PublicData::file.ReadRecordFile();
+                PublicData::me.SetSelectedChar("Iron Man");	// 重置選取的角色為IronMan
                 displayState = 0;							// 返回主選單
             }
             else if (nChar == 'N') {	// 選NO取消
@@ -702,24 +703,24 @@ void CGameStateOver::OnBeginState() {
     PublicData::me.SetState(2);
     PublicData::file.ReadHighScoreFile();
 
-    if (PublicData::file.GetRecordNum() == 0)
+    if (PublicData::file.GetRecordNum() == 0)					// 若不曾有遊玩記錄
         PublicData::totalKeyCount = PublicData::CorrectKeyCount;
     else {
-        PublicData::totalKeyCount = PublicData::file.ReadHighScore_TotalKeyCount();
+        PublicData::totalKeyCount = PublicData::file.ReadTotalKeyCount();
         PublicData::totalKeyCount += PublicData::CorrectKeyCount;
     }
 
     if (score > PublicData::file.ReadHighScore_Score()) {		// 若本次分數大於 最高分則寫入
-        PublicData::file.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount, PublicData::totalKeyCount);
+        PublicData::file.WriteHighScore(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount);
         isHighScore = true;
     }
 
-    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount, PublicData::totalKeyCount);
-    PublicData::file.WriteTotalKeyCount( PublicData::totalKeyCount);
-    PublicData::file.ReadRecordFile();
+    PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::CorrectKeyCount);	// 寫入 單筆遊玩記錄
+    PublicData::file.WriteTotalKeyCount(PublicData::totalKeyCount);		// 寫入 總按鍵數
+    PublicData::file.ReadRecordFile();									// 讀 遊玩記錄
 
     //
-    if (PublicData::me.JudgeUnlock(10, score, int(accuracy), level)) {// 判斷是否達成解鎖要素
+    if (PublicData::me.JudgeUnlock(PublicData::totalKeyCount, score, int(accuracy), level)) {// 判斷是否達成解鎖要素
         isUnlock = PublicData::newUnlock = true;
     }
 

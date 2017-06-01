@@ -33,6 +33,7 @@ CMe::~CMe() {
 
 void CMe::LoadBitmap() {
     unlockSign.LoadBitmap("Bitmaps/me/me_unlock.bmp", RGB(0, 255, 0));
+    unlock_border.LoadBitmap("Bitmaps/menu/character/character_unlock_border.bmp", RGB(0, 255, 0));
     LoadCharacter();
 }
 
@@ -95,25 +96,25 @@ void CMe::LoadCharacter() {
     // 解鎖條件(依序)： 1.累計總正確按鍵數 2.單場分數 3.單場正確率 4.單場達到最高關卡
     character.push_back(new CCharacter("Iron Man",			"鋼鐵人",		"me_ironman", 2,			 0, 0, 0, 0));
     character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american", 1,	 0, 50, 0, 0));
-    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk", 1,				 0, 100, 0, 0));
-    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper", 1,			 0, 300, 0, 0));
-    character.push_back(new CCharacter("Cow",				"牛",			"me_cow", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion", 1,				1000, 0, 0, 0));
+    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk", 1,				 0, 100, 60, 0));
+    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper", 1,			 0, 300, 60, 0));
+    character.push_back(new CCharacter("Cow",				"牛",			"me_cow", 1,				 500, 0, 0, 0));
+    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion", 1,				 0, 100, 70, 10));
     character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Pikachu",			"皮卡撐",		"me_pikachu", 2,			1000, 0, 0, 0));
-    character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",	2,				1000, 0, 0, 0));
+    character.push_back(new CCharacter("Pikachu",			"皮卡撐",		"me_pikachu", 2,			1500, 0, 0, 0));
+    character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",	2,				0, 487, 0, 0));
     character.push_back(new CCharacter("Mike Wazowski",		"反霸凌博士",	"me_mike",	2,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen", 10,			1000, 0, 0, 0));
-    character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom", 1,			1000, 0, 0, 0));
-    character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",	6,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Finn",				"阿寶",			"me_finn", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird", 2,		1000, 0, 0, 0));
-    character.push_back(new CCharacter("ROC",				"中華民國",		"me_roc", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("PRC",				"中華人民共和國", "me_prc", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Japan",				"日本",			"me_japan", 1,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball", 4,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Eraser",			"擦子",			"me_eraser", 4,				1000, 0, 0, 0));
+    character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen", 10,			0, 1000, 95, 0));
+    character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump", 1,				0, 500, 90, 0));
+    character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom", 1,			2500, 0, 0, 0));
+    character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",	6,				3000, 0, 0, 0));
+    character.push_back(new CCharacter("Finn",				"阿寶",			"me_finn", 1,				4000, 0, 0, 0));
+    character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird", 2,		5000, 0, 0, 0));
+    character.push_back(new CCharacter("ROC",				"中華民國",		"me_roc", 1,				10000, 0, 0, 0));
+    character.push_back(new CCharacter("PRC",				"中華人民共和國", "me_prc", 1,				44260, 0, 0, 0));
+    character.push_back(new CCharacter("Japan",				"日本",			"me_japan", 1,				50000, 0, 0, 0));
+    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball", 4,				0, 0, 95, 5));
+    character.push_back(new CCharacter("Eraser",			"擦子",			"me_eraser", 4,				0, 0, 90, 15));
 }
 
 void CMe::OnMove() {
@@ -181,25 +182,42 @@ void CMe::OnShow() {
 
         ////
         if (character[selectedChar]->GetIsUnlock()) {
+        }
+        else {	// 顯示解鎖條件
+            const int UNLOCK_BORDER_X = 470, UNLOCK_BORDER_Y = 280;
+            unlock_border.SetTopLeft(UNLOCK_BORDER_X, UNLOCK_BORDER_Y);
+            unlock_border.ShowBitmap();
+            //
             CDC* pDC = CDDraw::GetBackCDC();
             CFont f, *fp;
-            f.CreatePointFont(100, "新細明體");
+            f.CreatePointFont(80, "新細明體");
             fp = pDC->SelectObject(&f);
-            pDC->SetBkColor(RGB(0, 90, 130));
             pDC->SetBkMode(TRANSPARENT);
-            char temp[20];
+            char temp[100];
             pDC->SetTextColor(RGB(200, 200, 200));
-            string name;
-            name = character[selectedChar]->GetIsUnlock() ? character[selectedChar]->GetName() : "? ? ?" ;
-            sprintf(temp, "%s", name.c_str());
-            pDC->TextOut(350, CHARACTER_POS_Y + 60 + 60, temp);
-            pDC->SetTextColor(RGB(255, 200, 15));
-            name = character[selectedChar]->GetIsUnlock() ? character[selectedChar]->GetSubName() : "? ? ?";
-            sprintf(temp, "%s", name.c_str());
-            pDC->TextOut(350, CHARACTER_POS_Y + 60 + 74, temp);
+            int ulrPrintNum = 0;
+            // 解鎖條件(依序)： 1.累計總正確按鍵數 2.單場分數 3.單場正確率 4.單場達到最高關卡
+
+            for (int i = 0; i < 4; i++) {
+                int num = character[selectedChar]->GetUnlockRequirement(i);
+
+                if (i == 0)  sprintf(temp, "%s%d%s", "累計總按鍵數達 ", num, " 次");
+                else if (i == 1) sprintf(temp, "%s%d%s", "單場分數達 ", num, " 分");
+                else if (i == 2) sprintf(temp, "%s%d%s", "單場正確率高於 ", num, " %");
+                else if (i == 3) sprintf(temp, "%s%d%s", "單場達到第 ", num, " 關卡");
+
+                if (num != 0) {
+                    if (i == 0) pDC->SetTextColor(RGB(255, 200, 15));
+                    else		pDC->SetTextColor(RGB(200, 200, 200));
+
+                    pDC->TextOut(UNLOCK_BORDER_X + 20, UNLOCK_BORDER_Y + 25 + ulrPrintNum * 14, temp);
+                    ulrPrintNum++;
+                }
+            }
+
+            //
             pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
             CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
-            ////
         }
     }
 
@@ -233,12 +251,15 @@ void CMe::OnShow() {
 
     if (currState == 5) {}
 }
+
 void CMe::AddSelectedChar(int num) {
     int result = selectedChar + num;
 
     if (result >= 0 && result < int(character.size()) ) selectedChar = result;
 }
 void CMe::SetSelectedChar(string characterName) {
+    selectedChar = 0;
+
     for (unsigned int i = 0; i < character.size(); i++) {
         if (characterName == character[i]->GetName()) {
             selectedChar = i;
@@ -281,19 +302,15 @@ void CMe::SetPlayingRecordDisplay(string s0, string s1, string s2) {
 int CMe::GetX1() {
     return character[selectedChar]->GetX1();
 }
-
 int CMe::GetY1() {
     return character[selectedChar]->GetY1();
 }
-
 int CMe::GetX2() {
     return character[selectedChar]->GetX2();
 }
-
 int CMe::GetY2() {
     return character[selectedChar]->GetY2();
 }
-
 void CMe::SetState(int state) {
     currState = state;
 }

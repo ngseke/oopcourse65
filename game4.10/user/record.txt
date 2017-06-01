@@ -1,4 +1,2 @@
-character:Iron Man,score:4,level:0,accuracy:100,date:201706011859,correctKeyCount:4
-character:Iron Man,score:6,level:0,accuracy:100,date:201706011859,correctKeyCount:6
-character:Iron Man,score:2,level:0,accuracy:100,date:201706011859,correctKeyCount:2
-character:Creeper,score:6,level:0,accuracy:100,date:201706011901,correctKeyCount:6
+character:Iron Man,score:5,level:0,accuracy:100,date:201706012058,correctKeyCount:5
+character:Iron Man,score:18,level:0,accuracy:100,date:201706012058,correctKeyCount:18
