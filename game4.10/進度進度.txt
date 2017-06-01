@@ -19,7 +19,7 @@ void ReadHighScore_TotalKeyCount();		// 讀取總累積按鍵數
 void WriteSelectedCharacter(string);		// 寫入所選取的角色
 string ReadSelectedCharacter();			// 讀之前所選取的角色
 void WriteMusicOnOff(bool);			// 寫入音樂開關
-bool ReadMusicOnOff();			// 讀音樂開關
+bool ReadMusicOnOff();				// 讀音樂開關
 //
 void WriteUnlockCharacter()			// 寫入所有已解鎖的角色			
 void ReadUnlockCharacter(int)			// 讀第x個已解鎖的角色

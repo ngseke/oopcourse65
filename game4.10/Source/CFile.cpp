@@ -193,5 +193,28 @@ int	CFile::ReadRecord_TotalKeyCount(int num) {
     return record.at(num)->ReadRecordScore_TotalKeyCount();
 }
 
+string CFile::ReadSelectedCharacter() {
+    fstream	fp;
+    fp.open("user/preSelectedChar.txt", ios::in);
+    int i = 0;
+    char line[200];
+    string SlideOne;
 
+    while (fp.getline(line, sizeof(line), ':')) {
+        SlideOne = line;
+
+        if (i == 1) this->preSelectedChar = SlideOne;
+
+        i++;
+    }
+
+    fp.close();
+    return this->preSelectedChar;
+}
+void CFile::WriteSelectedCharacter(string preSelectedChar) {
+    fstream	fp;
+    fp.open("user/preSelectedChar.txt", ios::out);
+    fp << "preSelectedChar:" << preSelectedChar;
+    fp.close();
+}
 }

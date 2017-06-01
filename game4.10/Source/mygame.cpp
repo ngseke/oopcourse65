@@ -709,6 +709,9 @@ void CGameStateOver::OnBeginState() {
         CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
         CAudio::Instance()->Play(AUDIO_GAMEOVER, false);			// 播放 GAMEOVER音效
     }
+
+    PublicData::file.WriteSelectedCharacter(PublicData::me.GetMeName());
+    PublicData::file.ReadSelectedCharacter();
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%

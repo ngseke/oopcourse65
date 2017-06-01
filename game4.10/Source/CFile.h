@@ -27,7 +27,8 @@ class CFile {
         int		ReadRecord_TotalKeyCount(int);
         int     GetRecordNum();								 //回傳record大小
         //================================
-
+        void	WriteSelectedCharacter(string);				//寫入上一次所選角色
+        string  ReadSelectedCharacter();					//讀取上一次所選角色
         //================================
         void DeleteAllData();					//清除所有記錄
 
@@ -51,5 +52,6 @@ class CFile {
         int	   record_TotalKeyCount;		//累積按鍵數
         char ChDate[80];					//char型態的日期
         //=====================
+        string	preSelectedChar;			//上一隻角色
 };
 }
