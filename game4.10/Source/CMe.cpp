@@ -76,12 +76,16 @@ void CMe::LoadCharacter() {
     character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie",				1));
     character.push_back(new CCharacter("Pikachu",			"皮卡撐",		"me_pikachu",				2));
     character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",					2));
+    character.push_back(new CCharacter("Mike Wazowski",		"反霸凌博士",	"me_mike",					2));
     character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen",				10));
     character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump",					1));
     character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom",				1));
     character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",					6));
     character.push_back(new CCharacter("Finn",				"阿寶",			"me_finn",					1));
     character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird",			2));
+    character.push_back(new CCharacter("ROC",				"中華民國",		"me_roc",					1));
+    character.push_back(new CCharacter("PRC",				"中華人民共和國", "me_prc",					1));
+    character.push_back(new CCharacter("Japan",				"日本",			"me_japan",					1));
     character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball",					4));
     character.push_back(new CCharacter("Eraser",			"擦子",			"me_eraser",				4));
 }
