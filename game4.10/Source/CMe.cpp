@@ -43,6 +43,10 @@ void CMe::WriteUnlockCharacter(string name) {
     fp.close();
 }
 void CMe::ReadUnlockCharacter() {
+    for (CCharacter* cc : character)
+        cc->SetIsUnlock(0);
+
+    //
     fstream	fp;
     fp.open("user/unlock.txt", ios::in);
     char temp[100];
@@ -74,12 +78,13 @@ bool CMe::JudgeUnlock(int ur0, int ur1, int ur2, int ur3) {
                 allGoodToUnlock = false;	// 若其中一項不符合 “全達解鎖條件” 便設定為false
         }
 
-        if (allGoodToUnlock) {				// 若 “全達解鎖條件” 則解鎖該角色
+        if (allGoodToUnlock && !cc->GetIsUnlock()) {	// 若 “全達解鎖條件” 且 尚未被解鎖過 則解鎖該角色
             WriteUnlockCharacter(cc->GetName());	// 解鎖該角色手段為 寫入txt
             atLeastOneUnlockFlag = true;			// 設定“至少解鎖一角色為 true”
         }
     }
 
+    ReadUnlockCharacter();
     return atLeastOneUnlockFlag;
 }
 bool CMe::GetSelectedCharIsUnlock() {
@@ -133,6 +138,7 @@ void CMe::OnShow() {
         character[selectedChar]->OnShow();
     }
     else if (currState == 1) {	//選擇角色畫面
+        character[0]->SetIsUnlock(1);									// 第一只角色永遠解鎖
         x = (SIZE_X - character[selectedChar]->GetWidth()) / 2;
         y = CHARACTER_POS_Y + 70;
 

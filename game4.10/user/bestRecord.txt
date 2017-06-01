@@ -1,1 +1,0 @@
-character:Iron Man,score:17,level:0,accuracy:89.4737,date:201705311433,totalCorrectKeyCount:17

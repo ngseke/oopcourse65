@@ -55,10 +55,11 @@ void CGameStateInit::OnInit() {
     wrongKeyNum = 0;
     exitGameCount = 0;
 
-    if (0) {// DEBUG用
-        displayState = 2;
+    if (1) {// DEBUG用
+        displayState = 0;
         noteDisplayState = 0;
         statsDisplayState = 0;
+        PublicData::newUnlock = 1;
     }
 
     PublicData::me.ReadUnlockCharacter();
@@ -216,7 +217,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                 displayState = currSelectItem;				// 前往所選取的state
                 noteDisplayState = statsDisplayState = aboutDisplayState = 0;	// 初始化說明文字的選取項目 及 遊玩記錄的項目數字
 
-                if (currSelectItem == 3) PublicData::newUnlock = false;
+                if (currSelectItem == 2) PublicData::newUnlock = false;
             }
         }
     }
@@ -341,7 +342,7 @@ void CGameStateInit::OnShow() {
             }
         }
 
-        if (1) {
+        if (PublicData::newUnlock) {
             new_text.SetTopLeft((SIZE_X - menuBorder.Width()) / 2 + 130, MENU_Y + MENU_MARGIN_BTM * 2);
             new_text.ShowBitmap();
         }

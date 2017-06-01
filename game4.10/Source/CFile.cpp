@@ -179,6 +179,9 @@ void CFile::DeleteAllData() {
     fp.open("user/record.txt", ios::out);
     fp << "";
     fp.close();
+    fp.open("user/unlock.txt", ios::out);
+    fp << "";
+    fp.close();
     DeleteFile("user/bestRecord.txt");
 }
 
