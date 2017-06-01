@@ -182,6 +182,25 @@ void CMe::OnShow() {
 
         ////
         if (character[selectedChar]->GetIsUnlock()) {
+            CDC* pDC = CDDraw::GetBackCDC();
+            CFont f, *fp;
+            f.CreatePointFont(100, "新細明體");
+            fp = pDC->SelectObject(&f);
+            pDC->SetBkColor(RGB(0, 90, 130));
+            pDC->SetBkMode(TRANSPARENT);
+            char temp[20];
+            pDC->SetTextColor(RGB(200, 200, 200));
+            string name;
+            name = character[selectedChar]->GetIsUnlock() ? character[selectedChar]->GetName() : "? ? ?";
+            sprintf(temp, "%s", name.c_str());
+            pDC->TextOut(350, CHARACTER_POS_Y + 60 + 60, temp);
+            pDC->SetTextColor(RGB(255, 200, 15));
+            name = character[selectedChar]->GetIsUnlock() ? character[selectedChar]->GetSubName() : "? ? ?";
+            sprintf(temp, "%s", name.c_str());
+            pDC->TextOut(350, CHARACTER_POS_Y + 60 + 74, temp);
+            pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+            CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+            ////
         }
         else {	// 顯示解鎖條件
             const int UNLOCK_BORDER_X = 470, UNLOCK_BORDER_Y = 280;
