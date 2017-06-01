@@ -16,15 +16,16 @@ class CFile {
         int		ReadHighScore_TotalKeyCount();				 //回傳總按鍵數（會累積）
         bool isHighScoreExist();							 //回傳是否存在最高紀錄
         //================================
-        void WriteRecord(int score, int level, double accuracy, string meName, int correctKeyCount);			//寫入:分數 關卡 正確率 主角名稱
+        void WriteRecord(int score, int level, double accuracy, string meName, int correctKeyCount, int totalKeyCount);			//寫入:分數 關卡 正確率 主角名稱
         void ReadRecordFile();
-        int ReadRecord_Score(int);						 //回傳第x筆裡面的分
-        int ReadRecord_Level(int);						 //回傳第x筆裡面的關
+        int ReadRecord_Score(int);							 //回傳第x筆裡面的分
+        int ReadRecord_Level(int);							 //回傳第x筆裡面的關
         double ReadRecord_Accuracy(int);					 //回傳第x筆裡面的正確率
-        string  ReadRecord_Character(int);				 //回傳第x筆裡面的角色名
+        string  ReadRecord_Character(int);					 //回傳第x筆裡面的角色名
         string  ReadRecord_Date(int);						 //回傳第x筆裡面的日期
         int		ReadRecord_CorrectKeyCount(int);			 //回傳第x筆裡面的正確按鍵數量
-        int     GetRecordNum();
+        int		ReadRecord_TotalKeyCount(int);
+        int     GetRecordNum();								 //回傳record大小
         //================================
 
         //================================
@@ -46,7 +47,8 @@ class CFile {
         string record_Date;					//日期
         string record_MeName;				//主角名稱(英文)
         int	   record_SelectedChar;			//主角編號
-        int	   record_CorrectKeyCount; //正確按鍵數
+        int	   record_CorrectKeyCount;		//正確按鍵數
+        int	   record_TotalKeyCount;		//累積按鍵數
         char ChDate[80];					//char型態的日期
         //=====================
 };
