@@ -80,6 +80,7 @@ void CMe::LoadCharacter() {
     character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump",					1));
     character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom",				1));
     character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",					6));
+    character.push_back(new CCharacter("Finn",				"阿寶",			"me_finn",					1));
     character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird",			2));
     character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball",					4));
 }
