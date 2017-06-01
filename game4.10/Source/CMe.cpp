@@ -83,6 +83,7 @@ void CMe::LoadCharacter() {
     character.push_back(new CCharacter("Finn",				"阿寶",			"me_finn",					1));
     character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird",			2));
     character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball",					4));
+    character.push_back(new CCharacter("Eraser",			"擦子",			"me_eraser",				4));
 }
 
 void CMe::OnMove() {

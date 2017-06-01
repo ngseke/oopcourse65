@@ -15,3 +15,4 @@ Kirby
 Flappy Bird
 Bouncing Ball
 Finn
+Eraser
