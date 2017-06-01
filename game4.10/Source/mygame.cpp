@@ -56,7 +56,7 @@ void CGameStateInit::OnInit() {
     wrongKeyNum = 0;
     exitGameCount = 0;
 
-    if (1) {// DEBUG用
+    if (0) {// DEBUG用
         displayState = 2;
         noteDisplayState = 0;
         statsDisplayState = 0;
@@ -1100,7 +1100,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
                             targetEnemy = enemyQueue[i];				// targetEnemy為指標->正在攻擊的敵人
                             bulletList.push_back(new CBullet(targetEnemy->GetX() + 10, targetEnemy->GetY() + 10));	// 射子彈
                             targetEnemy->kill();						// 成功殺害怪物
-                            score.Add(targetEnemy->GetVocabLeng());		// 分數+= 怪物長度
+                            score.Add(int(targetEnemy->GetVocabLeng() * (1 + accuracy / 100)));		// 分數+= 怪物長度
                             targetEnemy = NULL;
                             break;
                         }
@@ -1132,7 +1132,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
                         if (targetEnemy->GetCurrWordLeng() == targetEnemy->GetVocabLeng()) {	 // 若當前長度 等於 字母的長度
                             targetEnemy->kill();						// 成功殺害怪物
-                            score.Add(targetEnemy->GetVocabLeng());		// 分數+= 怪物長度
+                            score.Add(int(targetEnemy->GetVocabLeng() * (1 + accuracy / 100)));		// 分數+= 怪物長度
                             targetEnemy = NULL;							// 因怪物已被殺害，將targetEnemy指標指向NULL
                             lock = false;								// 取消鎖定怪物
                         }

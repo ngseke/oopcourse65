@@ -1,2 +1,4 @@
 character:Iron Man,score:5,level:0,accuracy:100,date:201706012058,correctKeyCount:5
 character:Iron Man,score:18,level:0,accuracy:100,date:201706012058,correctKeyCount:18
+character:Iron Man,score:105,level:3,accuracy:91.3043,date:201706012108,correctKeyCount:105
+character:Iron Man,score:33,level:0,accuracy:90.4762,date:201706012112,correctKeyCount:19
