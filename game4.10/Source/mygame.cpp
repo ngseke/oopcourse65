@@ -33,6 +33,7 @@ int PublicData::level = 0;
 int PublicData::totalCorrectKeyCount;
 double PublicData::accuracy = 0.0;
 bool PublicData::musicOnOff = 1;
+bool PublicData::newUnlock = false;
 CFile PublicData::file;
 CMe	PublicData::me;
 
@@ -54,7 +55,7 @@ void CGameStateInit::OnInit() {
     wrongKeyNum = 0;
     exitGameCount = 0;
 
-    if (1) {// DEBUG用
+    if (0) {// DEBUG用
         displayState = 2;
         noteDisplayState = 0;
         statsDisplayState = 0;
@@ -68,6 +69,7 @@ void CGameStateInit::OnInit() {
     taipin.LoadBitmap("Bitmaps/taipin.bmp", RGB(0, 255, 0));
     text1.LoadBitmap("Bitmaps/text1_start.bmp", RGB(0, 255, 0));			// 操作方式提示bitmap
     highScoreBorder.LoadBitmap("Bitmaps/menu/highscore_border.bmp", RGB(0, 255, 0));
+    new_text.LoadBitmap("Bitmaps/menu/menu_new_text.bmp", RGB(0, 255, 0));
     /////
     //
     // 載入選單元素
@@ -213,6 +215,8 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else {
                 displayState = currSelectItem;				// 前往所選取的state
                 noteDisplayState = statsDisplayState = aboutDisplayState = 0;	// 初始化說明文字的選取項目 及 遊玩記錄的項目數字
+
+                if (currSelectItem == 3) PublicData::newUnlock = false;
             }
         }
     }
@@ -335,6 +339,11 @@ void CGameStateInit::OnShow() {
                 numBmpSmall[tempScore % 10].ShowBitmap();
                 tempScore /= 10;
             }
+        }
+
+        if (1) {
+            new_text.SetTopLeft((SIZE_X - menuBorder.Width()) / 2 + 130, MENU_Y + MENU_MARGIN_BTM * 2);
+            new_text.ShowBitmap();
         }
     }
     else if (displayState == 1) {	// 顯示說明文字
@@ -665,6 +674,8 @@ CGameStateOver::CGameStateOver(CGame* g)
 void CGameStateOver::OnMove() {
     if (isHighScore)	newHS_text.OnMove();	// 移動破紀錄動畫
 
+    //if (isUnlock)newChar_text.OnMove();
+
     if (counter < 0)	GotoGameState(GAME_STATE_INIT);
 
     if (barCounter < 200 && barCounter < accuracy) {
@@ -694,8 +705,11 @@ void CGameStateOver::OnBeginState() {
 
     PublicData::file.WriteRecord(score, level, accuracy, PublicData::me.GetMeName(), PublicData::totalCorrectKeyCount);
     PublicData::file.ReadRecordFile();
+
     //
-    PublicData::me.WriteUnlockCharacter();
+    if (PublicData::me.JudgeUnlock(1000, score, int(accuracy), level)) {// 判斷是否達成解鎖要素
+        isUnlock = PublicData::newUnlock = true;
+    }
 
     if (PublicData::musicOnOff) {
         CAudio::Instance()->Stop(AUDIO_ROCK);						// 暫停 背景音效
@@ -704,10 +718,14 @@ void CGameStateOver::OnBeginState() {
 }
 void CGameStateOver::OnInit() {
     ShowInitProgress(66);	// 接個前一個狀態的進度，此處進度視為66%
+    isHighScore = isUnlock = false;
     border.LoadBitmap("Bitmaps/gameover/gameover_border.bmp", RGB(0, 255, 0));
     newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs1.bmp", RGB(0, 255, 0));
     newHS_text.AddBitmap("Bitmaps/gameover/gameover_new_hs2.bmp", RGB(0, 255, 0));
     newHS_text.SetDelayCount(20);
+    newChar_text.AddBitmap("Bitmaps/gameover/gameover_new_char1.bmp", RGB(0, 255, 0));
+    newChar_text.AddBitmap("Bitmaps/gameover/gameover_new_char2.bmp", RGB(0, 255, 0));
+    newChar_text.SetDelayCount(20);
     ShowInitProgress(80);
 
     for (int i = 0; i < 10; i++) {		// 載入數字圖
@@ -734,6 +752,11 @@ void CGameStateOver::OnShow() {		// GAMEOVER 畫面顯示
     if (isHighScore) {	// 顯示破紀錄動畫
         newHS_text.SetTopLeft((SIZE_X - newHS_text.Width()) / 2, y + border.Height() + 20);
         newHS_text.OnShow();
+    }
+
+    if (isUnlock) {
+        newChar_text.SetTopLeft((SIZE_X - newHS_text.Width()) / 2, y + border.Height() + 20 + 35 * isHighScore);
+        newChar_text.OnShow();
     }
 
     int tempScore = score, tempLevel = level, tempAccuracy = int (accuracy * 100.0);
