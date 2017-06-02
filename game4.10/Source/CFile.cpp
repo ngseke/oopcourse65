@@ -193,6 +193,9 @@ void CFile::DeleteAllData() {
     fp.open("user/bestRecord.txt", ios::out);
     fp << "";
     fp.close();
+    fp.open("user/preSelectedChar.txt", ios::out);
+    fp << "";
+    fp.close();
     fp.open("user/record.txt", ios::out);
     fp << "";
     fp.close();
