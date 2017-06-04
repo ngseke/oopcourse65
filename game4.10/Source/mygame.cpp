@@ -195,7 +195,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_ESC) {		// ESC鍵...
         if (!(displayState == 0) && !(displayState == 2 && !PublicData::me.GetSelectedCharIsUnlock()))
             displayState = 0;	// 返回主選單
-        else {
+        else if (!(displayState == 2)) {
             exitState = true;
         }
     }
