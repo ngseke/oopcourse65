@@ -1,2 +1,1 @@
-character:Captain American,score:0,level:0,accuracy:100,date:201706062141,correctKeyCount:0
 character:Captain American,score:6,level:0,accuracy:66.6667,date:201706062142,correctKeyCount:4
