@@ -56,9 +56,9 @@ void CGameStateInit::OnInit() {
     wrongKeyNum = 0;
     exitGameCount = 0;
 
-    if (0) {// DEBUG用
-        displayState = 2;
-        noteDisplayState = 0;
+    if (1) {// DEBUG用
+        displayState = 1;
+        noteDisplayState = 6;
         statsDisplayState = 0;
         PublicData::newUnlock = 1;
     }
@@ -106,7 +106,7 @@ void CGameStateInit::OnInit() {
 
     noteExkey.SetDelayCount(10);
 
-    for (int i = 0; i < 8; i++) {		// 多頁的說明文字
+    for (int i = 0; i < 9; i++) {		// 多頁的說明文字
         char str[50];
         sprintf(str, "Bitmaps/menu/note/note_text_p%d.bmp", i + 1);
         note.push_back(new CMovingBitmap);
