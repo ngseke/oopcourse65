@@ -48,6 +48,7 @@ class PublicData {
         static bool			musicOnOff;					// 共用變數：音樂開關
         static bool			newUnlock;					// 共用變數：是否有新的解鎖角色
 
+        static bool			debugMode;
 };
 
 class CGameStateInit : public CGameState {
@@ -98,6 +99,7 @@ class CGameStateInit : public CGameState {
         CMovingBitmap			statsText [4];					// 左頁項目文字
         CMovingBitmap			statsNoRecord;					// 無記錄 文字
         // 介紹頁面 元素
+        string					cheatCode;						// 儲存作弊碼
         CMovingBitmap			aboutBorder, about;				// 關於框, 關於文字
         CMovingBitmap			delText;						// 確認刪除文字
         CMovingBitmap			musicOnOff[2];

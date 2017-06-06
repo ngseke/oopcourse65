@@ -35,6 +35,7 @@ int PublicData::totalKeyCount = 0;
 double PublicData::accuracy = 0.0;
 bool PublicData::musicOnOff = 1;
 bool PublicData::newUnlock = false;
+bool PublicData::debugMode = false;
 CFile PublicData::file;
 CMe	PublicData::me;
 
@@ -55,6 +56,7 @@ void CGameStateInit::OnInit() {
     statsPRItemNum = 0;									// 初始化統計頁面 最高記錄的選取項目
     wrongKeyNum = 0;
     exitGameCount = 0;
+    cheatCode = "";
 
     if (0) {// DEBUG用
         displayState = 1;
@@ -192,6 +194,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         currSelectItem = displayState = nChar - '1';
         noteDisplayState = statsDisplayState = aboutDisplayState = 0;
+        cheatCode = "";
     }
 
     if (nChar == KEY_ESC) {		// ESC鍵...
@@ -223,6 +226,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
             else {
                 displayState = currSelectItem;				// 前往所選取的state
                 noteDisplayState = statsDisplayState = aboutDisplayState = 0;	// 初始化說明文字的選取項目 及 遊玩記錄的項目數字
+                cheatCode = "";
 
                 if (currSelectItem == 2) PublicData::newUnlock = false;
             }
@@ -268,6 +272,21 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     }
     else if (displayState == 4 ) { // [關於]
         if (aboutDisplayState == 0 && nChar == KEY_ENTER) displayState = 0;	// ->返回主選單
+
+        if (aboutDisplayState == 0) {
+            cheatCode = cheatCode + char(nChar);
+
+            if (cheatCode == "104590029") {						// 作弊碼:解鎖所有角色
+                PublicData::me.JudgeUnlock(99999, 99999, 100, 30);
+                displayState = 0;
+                cheatCode = "";
+            }
+            else if (cheatCode == "104590020") {				// 作弊碼:允許debug模式
+                PublicData::debugMode = true;
+                displayState = 0;
+                cheatCode = "";
+            }
+        }
 
         if (aboutDisplayState == 0 && nChar == 'M') {						// 開關音樂
             PublicData::musicOnOff = PublicData::musicOnOff ? false : true;
@@ -1185,7 +1204,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == 'B' && pause) GotoGameState(GAME_STATE_INIT);
 
-    if (1) {	// 允許使用DEBUG按鍵
+    if (PublicData::debugMode) {	// 允許使用DEBUG按鍵
         if (nChar == '1')showDebug = showDebug ? false : true;  // 按1 開關debug
 
         if (nChar == '2' && enemyQueue.size() > 0) {			// 按2 清除EQ最後一隻敵人
@@ -1205,7 +1224,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
         if (nChar == '6')quickCall = quickCall ? false : true;	// 按6 開關快速召喚
 
-        if (nChar == '7')score.Add(10);							// 按7 加十分
+        if (nChar == '7')score.Add(100);						// 按7 加百分
     }
 }
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {}
