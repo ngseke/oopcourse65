@@ -128,6 +128,7 @@ class CGameStateRun : public CGameState {
     private:
         bool			showDebug = false;				// 是否顯示debug資訊
         bool			quickCall = false;				// 是否開啟快速召喚
+        CMovingBitmap	pause_text;
         CAnimation		target;											// 鎖定的動畫
         vector<CMovingBitmap*>	letter;
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector
@@ -144,8 +145,9 @@ class CGameStateRun : public CGameState {
         const int		LEVEL;											// 關卡總數
         char			key;											// 記錄所按下的按鍵 用於防止彈跳
         bool			lock;											// 判斷是否鎖住第一個字母了
+        bool			pause;
         int				lives;											// 生命值
-        int				levelEnemyNum[30] = { 4,  5,  5,  6,  7,  7,  7,  7,  8,  9, 10, 10, 11, 12, 13, 14, 15, 15, 15, 16, 17, 18, 19, 20, 20, 20, 20, 21, 21, 25 };		// 該關卡最大的敵人數
+        int				levelEnemyNum[30] = { 4,  5,  5,  6,  7,  7,  7,  7,  8,  9, 10, 10, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 15, 20 };		// 該關卡最大的敵人數
         int				levelBossANum[30] = { 0,  0,  1,  1,  1,  2,  1,  1,  1,  2,  1,  2,  2,  2,  3,  3,  3,  3,  3,  3,  4,  4,  4,  5,  5,  5,  5,  5,  5,  7 };
         int				levelBossBNum[30] = { 0,  0,  0,  0,  0,  0,  1,  2,  2,  1,  2,  2,  2,  2,  2,  2,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  4,  5,  5 };
         int				callEnemyCounter, maxCallEnemyCounter;			// 召喚怪物間隔計數器, 召喚怪物間隔; maxCallEnemyCounter 決定怪物生成速度 越小速度越快

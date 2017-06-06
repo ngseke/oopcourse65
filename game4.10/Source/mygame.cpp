@@ -882,6 +882,7 @@ void CGameStateRun::OnBeginState() {
     levelChangeFlag = 0;
     levelChangeDelay = -1;
     levelChangeDelayMax = int( 3.5 * 30 );						// 設定關卡間delay 3秒
+    pause = false;
 }
 void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     srand((unsigned)time(NULL));
@@ -893,6 +894,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     map.LoadBitmap();		// 載入背景
     emp.LoadBitmap();		// 載入EMP
     levelAni.LoadBitmap();	// 載入切換關卡過場動畫
+    pause_text.LoadBitmap("Bitmaps/menu/pause.bmp", RGB(0, 255, 0));
 
     if (PublicData::musicOnOff) {
         CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");
@@ -921,6 +923,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     ShowInitProgress(50);
 }
 void CGameStateRun::OnMove() {			// 移動遊戲元素
+    if (pause)return;
+
     if (levelChangeDelay >= 0)	levelChangeDelay--;		// 關卡與關卡間延遲的計數器
 
     accuracy = (totalKeyDownCount != 0) ? \
@@ -1092,6 +1096,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
 
+    if (pause) return;
+
     if (key != nChar) {
         key = nChar;	// 變數key來儲存按下的按鍵，防止按鍵彈跳
 
@@ -1169,7 +1175,12 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
+    const char KEY_ESC = 27;
     key = NULL;
+
+    if (nChar == KEY_ESC) pause = pause ? false : true;
+
+    if (nChar == 'B' && pause) GotoGameState(GAME_STATE_INIT);
 
     if (1) {	// 允許使用DEBUG按鍵
         if (nChar == '1')showDebug = showDebug ? false : true;  // 按1 開關debug
@@ -1221,6 +1232,11 @@ void CGameStateRun::OnShow() {
             target.SetTopLeft(targetEnemy->GetX() + 8, targetEnemy->GetY() + 8);	// 設定BOSS 瞄準動畫的位置
 
         target.OnShow();															// 顯示瞄準動畫
+    }
+
+    if (pause) {
+        pause_text.SetTopLeft((SIZE_X - pause_text.Width()) / 2, (SIZE_Y - pause_text.Height() ) / 2);
+        pause_text.ShowBitmap();
     }
 
     if (showDebug) {		// 顯示debug資訊
