@@ -934,7 +934,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     callBossBCounter--;
 
     if (quickCall) {	//【DEBUG區】 將第0關設定生成200只怪物，且召喚delay為0秒
-        levelEnemyNum[0] = 200;
+        //levelEnemyNum[0] = 200;
         levelChangeDelayMax = 0;
         maxCallEnemyCounter = maxCallBossACounter  = maxCallBossBCounter = 0;
     }
