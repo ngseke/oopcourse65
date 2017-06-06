@@ -56,7 +56,7 @@ void CGameStateInit::OnInit() {
     wrongKeyNum = 0;
     exitGameCount = 0;
 
-    if (1) {// DEBUG用
+    if (0) {// DEBUG用
         displayState = 1;
         noteDisplayState = 6;
         statsDisplayState = 0;
@@ -187,7 +187,9 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
         //wrongKeyNum++;
     }
 
-    if ((nChar <= '5' && nChar >= '1')) {		// 提供以數字鍵1～5來操縱選單
+    if ((nChar <= '5' && nChar >= '1') && displayState == 0) {		// 提供以數字鍵1～5來操縱選單
+        if (nChar == '1')  GotoGameState(GAME_STATE_RUN);
+
         currSelectItem = displayState = nChar - '1';
         noteDisplayState = statsDisplayState = aboutDisplayState = 0;
     }
@@ -195,13 +197,14 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (nChar == KEY_ESC) {		// ESC鍵...
         if (!(displayState == 0) && !(displayState == 2 && !PublicData::me.GetSelectedCharIsUnlock()))
             displayState = 0;	// 返回主選單
-        else if (!(displayState == 2)) {
+        else if (!(displayState == 2) && !exitState) {
             exitState = true;
+            return;
         }
     }
 
     if (exitState) {
-        if (nChar == 'N')		exitState = false;
+        if (nChar == 'N' || nChar == KEY_ESC)exitState = false;
         else if (nChar == 'Y')	PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);
     }
 

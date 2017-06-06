@@ -95,26 +95,26 @@ bool CMe::GetSelectedCharIsUnlock() {
 void CMe::LoadCharacter() {
     // 解鎖條件(依序)： 1.累計總正確按鍵數 2.單場分數 3.單場正確率 4.單場達到最高關卡
     character.push_back(new CCharacter("Iron Man",			"鋼鐵人",		"me_ironman", 2,			 0, 0, 0, 0));
-    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american", 1,	 0, 50, 0, 0));
-    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk", 1,				 0, 100, 60, 0));
-    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper", 1,			 0, 300, 60, 0));
+    character.push_back(new CCharacter("Captain American",	"美利堅隊長",	"me_captain_american", 1,	 0, 300, 92, 0));
+    character.push_back(new CCharacter("Hulk",				"浩克",			"me_hulk", 1,				 0, 600, 87, 0));
+    character.push_back(new CCharacter("Creeper",			"苦力怕",		"me_creeper", 1,			 0, 1000, 80, 0));
     character.push_back(new CCharacter("Cow",				"牛",			"me_cow", 1,				 500, 0, 0, 0));
-    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion", 1,				 0, 100, 70, 10));
+    character.push_back(new CCharacter("Minion",			"小小兵",		"me_minion", 1,				 0, 1500, 80, 10));
+    character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",	2,				0, 2000, 78, 0));
+    character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen", 10,			0, 3000, 75, 0));
+    character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump", 1,				0, 5000, 70, 0));
+    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball", 4,				0, 0, 97, 5));
+    character.push_back(new CCharacter("Eraser",			"擦子",			"me_eraser", 4,				0, 0, 92, 15));
     character.push_back(new CCharacter("Zombie Brain",		"殭屍腦",		"me_zombie", 1,				1000, 0, 0, 0));
     character.push_back(new CCharacter("Pikachu",			"皮卡撐",		"me_pikachu", 2,			1500, 0, 0, 0));
-    character.push_back(new CCharacter("Doge",				"狗狗",			"me_doge",	2,				0, 487, 0, 0));
-    character.push_back(new CCharacter("Mike Wazowski",		"反霸凌博士",	"me_mike",	2,				1000, 0, 0, 0));
-    character.push_back(new CCharacter("Tsai Ing-wen",		"蔡英文",		"me_Ing_wen", 10,			0, 1000, 95, 0));
-    character.push_back(new CCharacter("Donald Trump",		"川普",			"me_trump", 1,				0, 500, 90, 0));
+    character.push_back(new CCharacter("Mike Wazowski",		"反霸凌博士",	"me_mike", 2,				2000, 0, 0, 0));
     character.push_back(new CCharacter("Mushroom",			"馬力歐裡面的菇", "me_mushroom", 1,			2500, 0, 0, 0));
     character.push_back(new CCharacter("Kirby",				"卡比",			"me_kirby",	6,				3000, 0, 0, 0));
     character.push_back(new CCharacter("Finn",				"阿寶",			"me_finn", 1,				4000, 0, 0, 0));
     character.push_back(new CCharacter("Flappy Bird",		"像素鳥",		"me_flappy_bird", 2,		5000, 0, 0, 0));
     character.push_back(new CCharacter("ROC",				"中華民國",		"me_roc", 1,				10000, 0, 0, 0));
-    character.push_back(new CCharacter("PRC",				"中華人民共和國", "me_prc", 1,				44260, 0, 0, 0));
+    character.push_back(new CCharacter("PRC",				"中華人民共和國", "me_prc", 1,				34260, 0, 0, 0));
     character.push_back(new CCharacter("Japan",				"日本",			"me_japan", 1,				50000, 0, 0, 0));
-    character.push_back(new CCharacter("Bouncing Ball",		"跳動的球",		"me_ball", 4,				0, 0, 95, 5));
-    character.push_back(new CCharacter("Eraser",			"擦子",			"me_eraser", 4,				0, 0, 90, 15));
 }
 
 void CMe::OnMove() {
