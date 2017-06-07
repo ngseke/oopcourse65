@@ -281,7 +281,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
                 displayState = 0;
                 cheatCode = "";
             }
-            else if (cheatCode == "104590020") {				// 国絏:す砛debug家Α
+            else if (cheatCode == "104590025") {				// 国絏:す砛debug家Α
                 PublicData::debugMode = true;
                 displayState = 0;
                 cheatCode = "";
