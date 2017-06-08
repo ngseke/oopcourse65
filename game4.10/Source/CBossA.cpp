@@ -83,10 +83,10 @@ void CBossA::LoadBitmap() {
     const unsigned int bitmapNum = 7;		// 圖檔數量
     sprintf(str, "Bitmaps/face/face_boss%d.bmp", rand() % bitmapNum + 1);	// 隨機挑選 bitmap
     bmp.LoadBitmap(str, RGB(0, 255, 0)); // 載入 怪物SKIN
-    textCursor.LoadBitmap("Bitmaps/text_cursor.bmp", RGB(0, 255, 0));  // 載入 光標
-    talkBoxL.LoadBitmap("Bitmaps/talk_box_blur/talk_box_left.bmp", RGB(0, 255, 0));
-    talkBoxC.LoadBitmap("Bitmaps/talk_box_blur/talk_box_center.bmp", RGB(0, 255, 0));
-    talkBoxR.LoadBitmap("Bitmaps/talk_box_blur/talk_box_right.bmp", RGB(0, 255, 0));
+    textCursor.LoadBitmap(IDB_TEXT_CURSOR, RGB(0, 255, 0));		// 載入 光標
+    talkBoxL.LoadBitmap(IDB_TALK_BOX_LEFT, RGB(0, 255, 0));		// 載入 對話框左
+    talkBoxC.LoadBitmap(IDB_TALK_BOX_CENTER, RGB(0, 255, 0));	// 載入 對話框中
+    talkBoxR.LoadBitmap(IDB_TALK_BOX_RIGHT, RGB(0, 255, 0));	// 載入 對話框右
 }
 
 }

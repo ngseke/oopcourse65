@@ -918,7 +918,7 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     levelAni.LoadBitmap();	// 載入切換關卡過場動畫
     pause_text.LoadBitmap("Bitmaps/menu/pause.bmp", RGB(0, 255, 0));
 
-    if (PublicData::musicOnOff) {
+    if (1) {
         CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");
         CAudio::Instance()->Load(AUDIO_SHOT, "sounds\\shot.mp3");
         CAudio::Instance()->Load(AUDIO_ERROR, "sounds\\error.mp3");
@@ -1202,7 +1202,10 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
     if (nChar == KEY_ESC) pause = pause ? false : true;
 
-    if (nChar == 'B' && pause) GotoGameState(GAME_STATE_INIT);
+    if (nChar == 'B' && pause) {
+        CAudio::Instance()->Pause();
+        GotoGameState(GAME_STATE_INIT);
+    }
 
     if (PublicData::debugMode) {	// 允許使用DEBUG按鍵
         if (nChar == '1')showDebug = showDebug ? false : true;  // 按1 開關debug
