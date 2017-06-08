@@ -104,11 +104,12 @@ void CEmp::SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnem
     this->targetEnemy = targetEnemy;
 }
 
-void CEmp::CallEmp() {
+void CEmp::CallEmp(bool music) {
     if (!state && empTimes != 0) {
         empTimes--;
         state = true;
-        CAudio::Instance()->Play(AUDIO_EMP, false);	// 撥放 射擊音效
+
+        if (music)CAudio::Instance()->Play(AUDIO_EMP, false);	// 撥放 射擊音效
     }
 }
 

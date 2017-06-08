@@ -975,7 +975,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     if (callEnemyCounter < 0 && currEnemyNum < levelEnemyNum[currLevel]) {	// counter 數到0後就開始召喚新怪
         callEnemyCounter = maxCallEnemyCounter;				// 把counter 調回max繼續數
         int randX = (rand() % (SIZE_X - 100)) ;				// SIZE_X - 100 為了不讓怪物的單字超出螢幕太多
-        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 6, &enemyQueue, &bombList, \
+        enemyQueue.push_back(new CEnemy(randX, 0, 3, true, &dictionary, 2, 5, &enemyQueue, &bombList, \
                                         PublicData::me.GetX1() - 30 + rand() % 60, PublicData::me.GetY1(), &letter) ); // 將召喚的新怪放入vecotr內
         enemyQueue.back()->LoadBitmap();	// 載入召喚的新怪
         currEnemyNum++;						// 在本關卡已召喚的怪物計數器
@@ -986,7 +986,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     if (callBossACounter < 0 && currBossANum < levelBossANum[currLevel]) {
         callBossACounter = maxCallBossACounter;
         int randX = (rand() % (SIZE_X - 350) + 200);
-        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
+        enemyQueue.push_back(new CBossA(randX, 0, 5, true, &dictionary, 6, 12, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossANum++;
         totalEnemyNum++;
@@ -996,7 +996,7 @@ void CGameStateRun::OnMove() {			// 移動遊戲元素
     if (callBossBCounter < 0 && currBossBNum < levelBossBNum[currLevel]) {
         callBossBCounter = maxCallBossBCounter;
         int randX = (rand() % (SIZE_X - 350) + 200);
-        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 7, 20, &enemyQueue, &bombList, &letter));
+        enemyQueue.push_back(new CBossB(randX, 0, 5, true, &dictionary, 6, 12, &enemyQueue, &bombList, &letter));
         enemyQueue.back()->LoadBitmap();
         currBossBNum++;
         totalEnemyNum++;
@@ -1188,7 +1188,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
         if (nChar >= 65 && nChar <= 90) totalKeyDownCount++;			// 總按鍵數++
 
         if (nChar == 13) {// 若按下ENTER則發動EMP攻擊.
-            emp.CallEmp();
+            emp.CallEmp(PublicData::musicOnOff);
         }
     }
 }

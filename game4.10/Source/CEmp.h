@@ -19,7 +19,7 @@ class CEmp {
         void OnShow();
         void SetXY(int nx, int ny);		// 設定左上角座標
         void SetEQ(vector<CEnemy*>* enemyQueue, CInteger* score, bool* lock, CEnemy** targetEnemy);
-        void CallEmp();
+        void CallEmp(bool);
         void SetEmpTimes(int);			// 設定電磁波可使用的次數
         int GetEmpTimes();
     protected:
