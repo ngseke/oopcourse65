@@ -130,7 +130,8 @@ class CGameStateRun : public CGameState {
     private:
         bool			showDebug = false;				// 是否顯示debug資訊
         bool			quickCall = false;				// 是否開啟快速召喚
-        CMovingBitmap	pause_text;
+        CMovingBitmap	pauseText;										// 暫停視窗文字
+        CMovingBitmap	debugText;										// debug提示文字
         CAnimation		target;											// 鎖定的動畫
         vector<CMovingBitmap*>	letter;
         vector<CEnemy*> enemyQueue;										// 儲存所有敵人的Vector

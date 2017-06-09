@@ -916,7 +916,8 @@ void CGameStateRun::OnInit() {								// 遊戲的初值及圖形設定
     map.LoadBitmap();		// 載入背景
     emp.LoadBitmap();		// 載入EMP
     levelAni.LoadBitmap();	// 載入切換關卡過場動畫
-    pause_text.LoadBitmap("Bitmaps/menu/pause.bmp", RGB(0, 255, 0));
+    pauseText.LoadBitmap("Bitmaps/menu/pause.bmp", RGB(0, 255, 0));
+    debugText.LoadBitmap("Bitmaps/debug_text.bmp", RGB(0, 255, 0));
 
     if (1) {
         CAudio::Instance()->Load(AUDIO_ROCK, "sounds\\The_Coming_Storm.mp3");
@@ -1259,9 +1260,14 @@ void CGameStateRun::OnShow() {
         target.OnShow();															// 顯示瞄準動畫
     }
 
-    if (pause) {
-        pause_text.SetTopLeft((SIZE_X - pause_text.Width()) / 2, (SIZE_Y - pause_text.Height() ) / 2);
-        pause_text.ShowBitmap();
+    if (PublicData::debugMode) {													// 顯示debug操作說明
+        debugText.SetTopLeft(SIZE_X - debugText.Width() - 20, 20);
+        debugText.ShowBitmap();
+    }
+
+    if (pause) {																	// 顯示暫停視窗
+        pauseText.SetTopLeft((SIZE_X - pauseText.Width()) / 2, (SIZE_Y - pauseText.Height() ) / 2);
+        pauseText.ShowBitmap();
     }
 
     if (showDebug) {		// 顯示debug資訊
