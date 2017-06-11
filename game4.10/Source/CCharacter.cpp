@@ -7,9 +7,7 @@
 #include "CCharacter.h"
 
 namespace game_framework {
-/////////////////////////////////////////////////////////////////////////////
 // CCharacter: еDид
-/////////////////////////////////////////////////////////////////////////////
 
 CCharacter::CCharacter(string name, string subName, string fn, int bmpNum, int ur0, int ur1, int ur2, int ur3) {
     this->name = name;

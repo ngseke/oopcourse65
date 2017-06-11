@@ -17,8 +17,6 @@ class CCharacter {
         void SetIsUnlock(bool);
         bool GetIsUnlock();
         int GetUnlockRequirement(int);	// 回傳第X個解鎖條件, X=0~3
-
-
     protected:
         CAnimation			animation;							// 主角動畫
         int					bmpNum;								// 圖檔數量

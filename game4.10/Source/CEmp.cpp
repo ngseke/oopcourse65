@@ -9,9 +9,7 @@
 
 
 namespace game_framework {
-/////////////////////////////////////////////////////////////////////////////
 // CEmp: EMP(筿合猧)
-/////////////////////////////////////////////////////////////////////////////
 
 CEmp::CEmp() {
     Initialize();
@@ -122,9 +120,7 @@ bool CEmp::HitRectangle(int tx1, int ty1, int tx2, int ty2) {// 80 160 320 480 4
         y1 = y + (320 - (80 * arr[i]) / 2);
         x2 = x + (320 + (80 * arr[i]) / 2);
         y2 = y + (320 + (80 * arr[i]) / 2);
-        //
         // 浪代┣face痻籔把计痻琌Τユ栋
-        //
         return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
     }
     else return 0;

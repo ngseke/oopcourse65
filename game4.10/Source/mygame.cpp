@@ -1,19 +1,3 @@
-/*
-3/24
-已知BUG :		[解決了] 1. 當有連續的單字(bee), 打到第二個e就會直接消失. 可能是keydown太靈敏.
-				[解決了] 2. 比如場上兩隻單字頂真(appl"e" "e"gg), 在打完apple最後的"e"時, 他會直接接到egg開頭的"e"
-				[解決了] 3. 為了讓單字不和場上重複, 會有已經new完怪物後, 但卻需要重新讓emeny SetVocab,
-	    					這造成了eneny在LoadBitmap, 對話框長度是停留在原先的length, 而非新SetVocab
-							後的那個單字長度. 但也不能重新LoadBitmap, 會出錯, 暫時讓對話框長度都一樣.
-				[解決了] 4. 怪物越多的時候會開始當掉 -> 是因為使用老師內建顯示文字的關係,
-					應該所有單字都做成bitmap的話就可以解決
-				[解決了] 5. float的陷阱, 在計算dx的時候發生的
-				[解決了] 6. #pragma once
-
-[Q&A]			1. ERROR: "將警告視為錯誤處理 - 沒有產生 'object' 檔案",
-					可能是使用for迴圈和.size()時, 沒有把跑迴圈用的i設定成 unsigned int.
-
-*/
 #include "stdafx.h"
 #include "Resource.h"
 #include <mmsystem.h>

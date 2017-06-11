@@ -12,10 +12,6 @@ class CRecord {
         string  ReadRecordScore_Date();						 //回傳第x筆裡面的日期
         int		ReadRecordScore_selectedChar();				 //回傳第x筆裡面的主角編號
         int		ReadRecordScore_CorrectKeyCount();			 //回傳第x筆裡面的正確按鍵數量
-        //int		ReadRecordScore_TotalKeyCount();			 //回傳第x筆裡面的正確按鍵數量(會累積
-        //---------
-        //void WriteCharacter(string);	//上次選的角色
-        //string ReadCharacter();			//回傳上次選的角色
     private:
         int score;					//得分
         int level;					//關卡
@@ -25,7 +21,6 @@ class CRecord {
         int	   selectedChar;		//主角編號
         char chDate[80];			//char型態的日期
         int correctKeyCount;	    //正確按鍵數量
-        //int totalKeyCount;			//累積按鍵數量
 
 
 
