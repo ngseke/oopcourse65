@@ -1,9 +1,0 @@
-character:Captain American,score:0,level:0,accuracy:100,date:201706062141,correctKeyCount:0
-character:Captain American,score:6,level:0,accuracy:66.6667,date:201706062142,correctKeyCount:4
-character:Mushroom,score:0,level:0,accuracy:100,date:201706081600,correctKeyCount:0
-character:Mike Wazowski,score:0,level:0,accuracy:100,date:201706081601,correctKeyCount:0
-character:Mike Wazowski,score:0,level:0,accuracy:100,date:201706081601,correctKeyCount:0
-character:Mike Wazowski,score:2353,level:20,accuracy:90.56,date:201706081601,correctKeyCount:5000
-character:Flappy Bird,score:1500,level:15,accuracy:77.53,date:201706081602,correctKeyCount:3000
-character:Iron Man,score:865,level:10,accuracy:89.12,date:201706081602,correctKeyCount:1500
-character:Iron Man,score:1464,level:13,accuracy:93.2367,date:201706081611,correctKeyCount:772

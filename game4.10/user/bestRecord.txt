@@ -1,1 +1,0 @@
-character:Mike Wazowski,score:9487,level:25,accuracy:93.45,date:201706062142,correctKeyCount:5000

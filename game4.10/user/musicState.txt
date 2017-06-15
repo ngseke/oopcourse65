@@ -1,1 +1,1 @@
-musicState:0
+musicState:1
