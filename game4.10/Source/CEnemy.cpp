@@ -37,7 +37,7 @@ CEnemy::CEnemy(int x, int y, int delay, bool alive, CDict* d, int minVL, int max
     this->endY = endY;
     this->letter = letter;
     SetVocab();
-    index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 10 : 0;
+    index = (maxVocabLeng == 1 && minVocabLeng == 1) ? 30 : 0;
 }
 
 bool CEnemy::HitRectangle(int tx1, int ty1, int tx2, int ty2) {
