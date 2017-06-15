@@ -328,6 +328,7 @@ void CGameStateInit::OnShow() {
     taipin.SetTopLeft((SIZE_X + typing_logo.Width()) / 2 - 60, 100 + 31);
     taipin.ShowBitmap();
 
+    //
     if (displayState == 0) {	// 顯示主選單
         if (!exitState) {
             const int MENU_MARGIN_BTM = 40;
