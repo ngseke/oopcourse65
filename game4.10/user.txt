@@ -1,1 +1,0 @@
-character:0,score:-842150451,level:-842150451,accuracy:-6.27744e+66,date:2017,0526014630
